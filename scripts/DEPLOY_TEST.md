@@ -101,7 +101,7 @@ docker compose logs -f api
 ### 是否需要构建？
 
 **不需要构建的情况（推荐）**：
-- 使用预构建的 Docker 镜像（`ghcr.io/danny-avila/librechat-dev:latest`）
+- 使用预构建的 Docker 镜像（通过 `.env` 中的 `DOCKER_REGISTRY`, `DOCKER_REGISTRY_USER`, `IMAGE_PREFIX` 配置）
 - 镜像中已包含构建好的前端文件
 - 适合快速测试部署
 
