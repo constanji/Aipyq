@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 // @ts-ignore
 import path from 'path';
+// @ts-ignore
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vite';
 import { compression } from 'vite-plugin-compression2';
@@ -58,8 +59,8 @@ export default defineConfig(({ command }) => ({
       },
       includeAssets: [],
       manifest: {
-        name: 'LibreChat',
-        short_name: 'LibreChat',
+        name: 'AI朋友圈',
+        short_name: 'AI朋友圈',
         display: 'standalone',
         background_color: '#000000',
         theme_color: '#009688',
@@ -93,7 +94,7 @@ export default defineConfig(({ command }) => ({
         ],
       },
     }),
-    sourcemapExclude({ excludeNodeModules: true }),
+    sourcemapExclude({ excludeNodeModules: true }) as Plugin,
     compression({
       threshold: 10240,
     }),

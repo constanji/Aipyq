@@ -83,6 +83,52 @@
   - 多用户支持，安全认证（兼容 OAuth2、LDAP 及邮箱登录）
   - 内置内容审核与 Token 消耗管理工具
 
+---
+
+## 🚀 快速开始
+
+### 前置要求
+
+- Docker 和 Docker Compose
+- Git
+- 至少 4GB 可用磁盘空间
+
+### 快速部署
+
+1. **克隆项目**
+   ```bash
+   git clone <your-repo-url>
+   cd Aipyq
+   ```
+
+2. **配置环境变量**
+   ```bash
+   cp .env.example.min .env
+   # 编辑 .env 文件，设置必要的配置（JWT_SECRET、MEILI_MASTER_KEY 等）
+   ```
+
+3. **启动服务**
+   ```bash
+   # 使用测试部署脚本（推荐）
+   ./scripts/test-deploy.sh
+   
+   # 或手动启动
+   docker compose up -d
+   ```
+
+4. **访问应用**
+   - 打开浏览器访问：`http://localhost:3080`
+
+### 测试环境部署
+
+详细说明请参考 [DEPLOY_TEST.md](./DEPLOY_TEST.md)
+
+### 清理测试环境
+
+```bash
+./scripts/clean-test.sh
+```
+
 
 
 

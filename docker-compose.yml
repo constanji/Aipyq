@@ -33,6 +33,11 @@ services:
       - ./uploads:/app/uploads
       - ./logs:/app/api/logs
       - ./logs:/app/logs
+      # 挂载本地构建的静态资源（如果存在）
+      # 取消下面的注释以使用本地构建的 dist 文件夹覆盖镜像中的静态资源
+      - ./client/dist:/app/client/dist
+      - ./client/public/assets:/app/client/public/assets
+      - ./client/public/fonts:/app/client/public/fonts
   mongodb:
     container_name: PYQ-MongoDB
     image: mongo
