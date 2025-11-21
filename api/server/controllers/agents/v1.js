@@ -661,48 +661,6 @@ const revertAgentVersionHandler = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-/**
- * Get all agent categories with counts
- *
- * @param {Object} _req - Express request object (unused)
- * @param {Object} res - Express response object
- */
-const getAgentCategories = async (_req, res) => {
-  try {
-    const categories = await getCategoriesWithCounts();
-    const promotedCount = await countPromotedAgents();
-    const formattedCategories = categories.map((category) => ({
-      value: category.value,
-      label: category.label,
-      count: category.agentCount,
-      description: category.description,
-    }));
-
-    if (promotedCount > 0) {
-      formattedCategories.unshift({
-        value: 'promoted',
-        label: 'Promoted',
-        count: promotedCount,
-        description: 'Our recommended agents',
-      });
-    }
-
-    formattedCategories.push({
-      value: 'all',
-      label: 'All',
-      description: 'All available agents',
-    });
-
-    res.status(200).json(formattedCategories);
-  } catch (error) {
-    logger.error('[/Agents/Marketplace] Error fetching agent categories:', error);
-    res.status(500).json({
-      error: 'Failed to fetch agent categories',
-      userMessage: 'Unable to load categories. Please refresh the page.',
-      suggestion: 'Try refreshing the page or check your network connection',
-    });
-  }
-};
 module.exports = {
   createAgent: createAgentHandler,
   getAgent: getAgentHandler,
@@ -712,5 +670,4 @@ module.exports = {
   getListAgents: getListAgentsHandler,
   uploadAgentAvatar: uploadAgentAvatarHandler,
   revertAgentVersion: revertAgentVersionHandler,
-  getAgentCategories,
 };

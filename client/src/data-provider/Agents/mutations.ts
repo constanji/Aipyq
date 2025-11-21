@@ -35,7 +35,6 @@ export const useCreateAgentMutation = (
           });
         });
       })(allAgentViewAndEditQueryKeys);
-      invalidateAgentMarketplaceQueries(queryClient);
 
       return options?.onSuccess?.(newAgent, variables, context);
     },
@@ -87,7 +86,6 @@ export const useUpdateAgentMutation = (
           [QueryKeys.agent, variables.agent_id, 'expanded'],
           updatedAgent,
         );
-        invalidateAgentMarketplaceQueries(queryClient);
 
         return options?.onSuccess?.(updatedAgent, variables, context);
       },
@@ -131,7 +129,6 @@ export const useDeleteAgentMutation = (
 
         queryClient.removeQueries([QueryKeys.agent, variables.agent_id]);
         queryClient.removeQueries([QueryKeys.agent, variables.agent_id, 'expanded']);
-        invalidateAgentMarketplaceQueries(queryClient);
 
         return options?.onSuccess?.(_data, variables, data);
       },
@@ -169,7 +166,6 @@ export const useDuplicateAgentMutation = (
         const existingActions = queryClient.getQueryData<t.Action[]>([QueryKeys.actions]) || [];
 
         queryClient.setQueryData<t.Action[]>([QueryKeys.actions], existingActions.concat(actions));
-        invalidateAgentMarketplaceQueries(queryClient);
 
         return options?.onSuccess?.({ agent, actions }, variables, context);
       },
@@ -371,6 +367,3 @@ export const useRevertAgentVersionMutation = (
   );
 };
 
-export const invalidateAgentMarketplaceQueries = (queryClient: QueryClient) => {
-  queryClient.invalidateQueries([QueryKeys.marketplaceAgents]);
-};

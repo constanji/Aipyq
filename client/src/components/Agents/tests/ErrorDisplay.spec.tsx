@@ -29,7 +29,7 @@ const mockLocalize = jest.fn((key: string, options?: any) => {
     com_agents_error_not_found_title: 'Not Found',
     com_agents_error_not_found_message: 'The requested content could not be found.',
     com_agents_error_not_found_suggestion:
-      'Try browsing other options or go back to the marketplace.',
+      'Try browsing other options.',
     com_agents_error_invalid_request: 'Invalid Request',
     com_agents_error_bad_request_message: 'The request could not be processed.',
     com_agents_error_bad_request_suggestion: 'Please check your input and try again.',

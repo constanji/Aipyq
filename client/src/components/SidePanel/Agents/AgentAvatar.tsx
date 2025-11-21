@@ -18,7 +18,6 @@ import {
   useUploadAgentAvatarMutation,
   useGetFileConfig,
   allAgentViewAndEditQueryKeys,
-  invalidateAgentMarketplaceQueries,
 } from '~/data-provider';
 import { AgentAvatarRender, NoImage, AvatarMenu } from './Images';
 import { useLocalize } from '~/hooks';
@@ -84,7 +83,6 @@ function Avatar({
           });
         });
       })(allAgentViewAndEditQueryKeys);
-      invalidateAgentMarketplaceQueries(queryClient);
       setProgress(1);
     },
     onError: (error) => {
