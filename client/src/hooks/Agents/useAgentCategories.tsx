@@ -13,7 +13,7 @@ export interface ProcessedAgentCategory {
 
 /**
  * Custom hook that provides processed and translated agent categories
- * Note: Marketplace feature removed, returning empty categories
+ * Note: Marketplace functionality has been removed, this now returns empty categories
  *
  * @returns Object containing categories, emptyCategory, and loading state
  */
@@ -43,3 +43,4 @@ const useAgentCategories = () => {
 };
 
 export default useAgentCategories;
+
