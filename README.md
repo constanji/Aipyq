@@ -103,7 +103,7 @@
 
 2. **配置环境变量**
    ```bash
-   cp .env.example.min .env
+   cp .env.example .env
    # 编辑 .env 文件，设置必要的配置（JWT_SECRET、MEILI_MASTER_KEY 等）
    ```
 
@@ -141,18 +141,7 @@ docker compose logs -f api
 docker compose restart api
 ```
 
-### 可选：使用自动化脚本
-
-如果需要自动化部署流程，可以使用 `scripts` 目录下的脚本：
-- `scripts/test-deploy.sh` - 自动化测试部署（包含健康检查）
-- `scripts/clean-test.sh` - 清理测试环境
-- `scripts/docker-build.sh` - 构建自定义镜像
-- `scripts/docker-push.sh` - 推送自定义镜像
-
-**注意**：如果只使用预构建的 Docker 镜像，这些脚本都不是必需的。
-
-
-
+docker镜像叫aipyq（？一小时了，我再检查一下构建好没有）
 
 ---
 
