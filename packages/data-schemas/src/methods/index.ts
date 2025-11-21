@@ -6,8 +6,6 @@ import { createUserMethods, type UserMethods } from './user';
 import { createMemoryMethods, type MemoryMethods } from './memory';
 /* Agent Categories */
 import { createAgentCategoryMethods, type AgentCategoryMethods } from './agentCategory';
-/* Plugin Auth */
-import { createPluginAuthMethods, type PluginAuthMethods } from './pluginAuth';
 /* Permissions */
 import { createAccessRoleMethods, type AccessRoleMethods } from './accessRole';
 import { createUserGroupMethods, type UserGroupMethods } from './userGroup';
@@ -24,7 +22,6 @@ export type AllMethods = UserMethods &
   AclEntryMethods &
   ShareMethods &
   AccessRoleMethods &
-  PluginAuthMethods;
 
 /**
  * Creates all database methods for all collections
@@ -41,7 +38,6 @@ export function createMethods(mongoose: typeof import('mongoose')): AllMethods {
     ...createUserGroupMethods(mongoose),
     ...createAclEntryMethods(mongoose),
     ...createShareMethods(mongoose),
-    ...createPluginAuthMethods(mongoose),
   };
 }
 
@@ -56,5 +52,4 @@ export type {
   AclEntryMethods,
   ShareMethods,
   AccessRoleMethods,
-  PluginAuthMethods,
 };

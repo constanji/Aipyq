@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil';
 import { Settings2 } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { Root, Anchor } from '@radix-ui/react-popover';
-import { PluginStoreDialog, TooltipAnchor } from '@librechat/client';
+import { TooltipAnchor } from '@librechat/client';
 import { useUserKeyQuery } from 'librechat-data-provider/react-query';
 import { EModelEndpoint, isParamEndpoint, tConvoUpdateSchema } from 'librechat-data-provider';
 import type { TPreset, TInterfaceConfig } from 'librechat-data-provider';
@@ -23,9 +23,6 @@ export default function HeaderOptions({
   const { data: endpointsConfig } = useGetEndpointsQuery();
 
   const [saveAsDialogShow, setSaveAsDialogShow] = useState<boolean>(false);
-  const [showPluginStoreDialog, setShowPluginStoreDialog] = useRecoilState(
-    store.showPluginStoreDialog,
-  );
   const localize = useLocalize();
 
   const { showPopover, conversation, setShowPopover } = useChatContext();
@@ -120,12 +117,6 @@ export default function HeaderOptions({
                     ...conversation,
                   }) as TPreset
                 }
-              />
-            )}
-            {interfaceConfig?.parameters === true && (
-              <PluginStoreDialog
-                isOpen={showPluginStoreDialog}
-                setIsOpen={setShowPluginStoreDialog}
               />
             )}
           </span>

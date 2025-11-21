@@ -77,7 +77,6 @@ export type AgentListItem = {
   avatar: t.Agent['avatar'];
 };
 
-export type TPluginMap = Record<string, t.TPlugin>;
 
 export type GenericSetter<T> = (value: T | ((currentValue: T) => T)) => void;
 
@@ -325,8 +324,6 @@ export type TSetOptionsPayload = {
   removeExample: () => void;
   setAgentOption: TSetOption;
   // getConversation: () => t.TConversation | t.TPreset | null;
-  checkPluginSelection: (value: string) => boolean;
-  setTools: (newValue: string, remove?: boolean) => void;
   setOptions?: TSetOptions;
 };
 
@@ -447,7 +444,7 @@ export type TDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export type TPluginStoreDialogProps = {
+export type TToolDialogProps = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 };

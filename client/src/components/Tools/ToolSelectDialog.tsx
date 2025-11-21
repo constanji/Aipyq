@@ -11,7 +11,7 @@ import type {
   TPlugin,
   TError,
 } from 'librechat-data-provider';
-import type { AgentForm, TPluginStoreDialogProps } from '~/common';
+import type { AgentForm, TToolDialogProps } from '~/common';
 import { PluginPagination, PluginAuthForm } from '~/components/Plugins/Store';
 import { useAgentPanelContext } from '~/Providers/AgentPanelContext';
 import { useLocalize, usePluginDialogHelpers } from '~/hooks';
@@ -21,7 +21,7 @@ function ToolSelectDialog({
   isOpen,
   endpoint,
   setIsOpen,
-}: TPluginStoreDialogProps & {
+}: TToolDialogProps & {
   endpoint: AssistantsEndpoint | EModelEndpoint.agents;
 }) {
   const localize = useLocalize();
