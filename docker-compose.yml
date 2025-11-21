@@ -1,9 +1,11 @@
-#不要直接编辑这个文件。可以编辑 ‘docker-compose.override.yaml’ 文件。
-#参考 `docker-compose.override.yaml.example’ 文件获取一些示例配置。
+#不要直接编辑这个文件。可以编辑 'docker-compose.override.yaml' 文件。
+#参考 `docker-compose.override.yaml.example' 文件获取一些示例配置。
+
+name: aipyq
 
 services:
   api:
-    container_name: LibreChat
+    container_name: AIpyq
     ports:
       - "${PORT}:${PORT}"
     depends_on:
@@ -29,7 +31,7 @@ services:
       - ./logs:/app/api/logs
       - ./logs:/app/logs
   mongodb:
-    container_name: chat-mongodb
+    container_name: PYQ-MongoDB
     image: mongo
     restart: always
     user: "${UID}:${GID}"
@@ -39,7 +41,7 @@ services:
       - ./data-node:/data/db
     command: mongod --noauth
   meilisearch:
-    container_name: chat-meilisearch
+    container_name: PYQ-Meilisearch
     image: getmeili/meilisearch:v1.12.3
     restart: always
     user: "${UID}:${GID}"
