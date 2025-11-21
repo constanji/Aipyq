@@ -3,14 +3,18 @@ import path from 'path';
 /**
  * Determine the log directory in a cross-compatible way.
  * Priority:
- * 1. LIBRECHAT_LOG_DIR environment variable
- * 2. If running within LibreChat monorepo (when cwd ends with /api), use api/logs
- * 3. If api/logs exists relative to cwd, use that (for running from project root)
- * 4. Otherwise, use logs directory relative to process.cwd()
+ * 1. AIPYQ_LOG_DIR environment variable (优先)
+ * 2. LIBRECHAT_LOG_DIR environment variable (兼容旧版本)
+ * 3. If running within LibreChat monorepo (when cwd ends with /api), use api/logs
+ * 4. If api/logs exists relative to cwd, use that (for running from project root)
+ * 5. Otherwise, use logs directory relative to process.cwd()
  *
  * This avoids using __dirname which is not available in ESM modules
  */
 export const getLogDirectory = (): string => {
+  if (process.env.AIPYQ_LOG_DIR) {
+    return process.env.AIPYQ_LOG_DIR;
+  }
   if (process.env.LIBRECHAT_LOG_DIR) {
     return process.env.LIBRECHAT_LOG_DIR;
   }
@@ -26,9 +30,9 @@ export const getLogDirectory = (): string => {
   // We'll just use the path and let the file system create it if needed
   const apiLogsPath = path.join(cwd, 'api', 'logs');
 
-  // For LibreChat project structure, use api/logs
+  // For AipyqChat project structure, use api/logs
   // For external consumers, they should set LIBRECHAT_LOG_DIR
-  if (cwd.includes('LibreChat')) {
+  if (cwd.includes('Aipyq') || cwd.includes('LibreChat')) {
     return apiLogsPath;
   }
 
