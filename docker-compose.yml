@@ -25,7 +25,16 @@ services:
       - RAG_PORT=${RAG_PORT:-8000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
       - AIPYQ_LOG_DIR=/app/api/logs
+
+
+
+      # 旧版本兼容，等镜像创建好后删除
       - LIBRECHAT_LOG_DIR=/app/api/logs
+    
+    
+    
+    
+    
     volumes:
       - type: bind
         source: ./.env
