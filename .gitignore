@@ -84,6 +84,8 @@ owner.yml
 archive
 .vscode/settings.json
 src/style - official.css
+# E2E tests (not needed for local Docker deployment)
+e2e/
 /e2e/specs/.test-results/
 /e2e/playwright-report/
 /playwright/.cache/
