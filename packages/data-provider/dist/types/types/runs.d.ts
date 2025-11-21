@@ -1,0 +1,21 @@
+export declare enum ContentTypes {
+    TEXT = "text",
+    THINK = "think",
+    TEXT_DELTA = "text_delta",
+    TOOL_CALL = "tool_call",
+    IMAGE_FILE = "image_file",
+    IMAGE_URL = "image_url",
+    AGENT_UPDATE = "agent_update",
+    ERROR = "error"
+}
+export declare enum StepTypes {
+    TOOL_CALLS = "tool_calls",
+    MESSAGE_CREATION = "message_creation"
+}
+export declare enum ToolCallTypes {
+    FUNCTION = "function",
+    RETRIEVAL = "retrieval",
+    FILE_SEARCH = "file_search",
+    CODE_INTERPRETER = "code_interpreter",
+    TOOL_CALL = "tool_call"
+}

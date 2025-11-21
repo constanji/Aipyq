@@ -1,0 +1,276 @@
+2025-11-11T04:45:17.629Z info: Mongo Connection options
+2025-11-11T04:45:17.630Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:20.200Z info: Mongo Connection options
+2025-11-11T04:45:20.201Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:22.339Z info: Mongo Connection options
+2025-11-11T04:45:22.340Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:24.809Z info: Mongo Connection options
+2025-11-11T04:45:24.810Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:27.973Z info: Mongo Connection options
+2025-11-11T04:45:27.974Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:33.128Z info: Mongo Connection options
+2025-11-11T04:45:33.129Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:41.164Z info: Mongo Connection options
+2025-11-11T04:45:41.165Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:45:56.249Z info: Mongo Connection options
+2025-11-11T04:45:56.251Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:46:23.571Z info: Mongo Connection options
+2025-11-11T04:46:23.572Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:47:16.560Z info: Mongo Connection options
+2025-11-11T04:47:16.561Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:48:18.203Z info: Mongo Connection options
+2025-11-11T04:48:18.204Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:49:19.769Z info: Mongo Connection options
+2025-11-11T04:49:19.769Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:21.407Z info: Mongo Connection options
+2025-11-11T04:50:21.408Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:32.138Z info: Mongo Connection options
+2025-11-11T04:50:32.139Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:33.819Z info: Mongo Connection options
+2025-11-11T04:50:33.820Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:35.550Z info: Mongo Connection options
+2025-11-11T04:50:35.551Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:37.529Z info: Mongo Connection options
+2025-11-11T04:50:37.530Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:39.889Z info: Mongo Connection options
+2025-11-11T04:50:39.890Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:43.041Z info: Mongo Connection options
+2025-11-11T04:50:43.042Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:47.849Z info: Mongo Connection options
+2025-11-11T04:50:47.850Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:50:55.836Z info: Mongo Connection options
+2025-11-11T04:50:55.837Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:51:10.165Z info: Mongo Connection options
+2025-11-11T04:51:10.165Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:51:37.288Z info: Mongo Connection options
+2025-11-11T04:51:37.289Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:53:53.808Z info: Mongo Connection options
+2025-11-11T04:53:53.809Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:53:55.516Z info: Mongo Connection options
+2025-11-11T04:53:55.517Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:53:57.312Z info: Mongo Connection options
+2025-11-11T04:53:57.313Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:53:59.309Z info: Mongo Connection options
+2025-11-11T04:53:59.310Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:54:01.747Z info: Mongo Connection options
+2025-11-11T04:54:01.748Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:54:04.917Z info: Mongo Connection options
+2025-11-11T04:54:04.918Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:54:09.683Z info: Mongo Connection options
+2025-11-11T04:54:09.684Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:54:17.655Z info: Mongo Connection options
+2025-11-11T04:54:17.656Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:54:32.100Z info: Mongo Connection options
+2025-11-11T04:54:32.101Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:54:59.439Z info: Mongo Connection options
+2025-11-11T04:54:59.440Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:56:53.808Z info: Mongo Connection options
+2025-11-11T04:56:53.809Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:57:55.448Z info: Mongo Connection options
+2025-11-11T04:57:55.449Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:58:56.986Z info: Mongo Connection options
+2025-11-11T04:58:56.988Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T04:59:58.489Z info: Mongo Connection options
+2025-11-11T04:59:58.490Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:01:00.047Z info: Mongo Connection options
+2025-11-11T05:01:00.048Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:37.003Z info: Mongo Connection options
+2025-11-11T05:03:37.005Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:38.651Z info: Mongo Connection options
+2025-11-11T05:03:38.652Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:40.344Z info: Mongo Connection options
+2025-11-11T05:03:40.345Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:42.283Z info: Mongo Connection options
+2025-11-11T05:03:42.284Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:44.601Z info: Mongo Connection options
+2025-11-11T05:03:44.602Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:47.946Z info: Mongo Connection options
+2025-11-11T05:03:47.947Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:03:52.758Z info: Mongo Connection options
+2025-11-11T05:03:52.759Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-11T05:04:00.730Z info: Mongo Connection options
+2025-11-11T05:04:00.731Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}

@@ -1,0 +1,450 @@
+# 更多信息请参阅配置指南：
+# https://www.librechat.ai/docs/configuration/librechat_yaml
+
+# 配置版本（必需）
+version: 1.2.1
+
+# 缓存设置：设置为 true 启用缓存
+cache: true
+
+# 文件存储配置
+# 所有文件类型的单一策略（旧格式，仍支持）
+# fileStrategy: "s3"
+
+# 细粒度文件存储策略（新格式 - 推荐）
+# 允许为不同文件类型设置不同的存储策略
+# fileStrategy:
+#   avatar: "s3"        # 用户/代理头像图片的存储
+#   image: "firebase"   # 聊天中上传图片的存储
+#   document: "local"   # 文档上传的存储（PDF、文本文件等）
+
+# 可用策略："local", "s3", "firebase"
+# 如果未指定，所有文件类型默认为 "local"
+# 您可以根据需要混合搭配策略：
+# - 使用 S3 存储头像以实现快速全球访问
+# - 使用 Firebase 存储图片并自动优化
+# - 使用本地存储文档以满足隐私/合规要求
+
+# 自定义界面配置
+interface:
+  customWelcome: '欢迎使用 AI朋友圈！祝您体验愉快。'
+  # 启用/禁用文件搜索作为聊天区域选项（默认：true）
+  # 注意：此设置不会禁用代理的文件搜索能力。
+  # 要禁用代理能力，请参阅代理端点配置。
+  fileSearch: true
+  # 隐私政策设置
+  privacyPolicy:
+    externalUrl: 'https://librechat.ai/privacy-policy'
+    openNewTab: true
+
+  # 服务条款
+  termsOfService:
+    externalUrl: 'https://librechat.ai/tos'
+    openNewTab: true
+    modalAcceptance: true
+    modalTitle: 'AIPYQ 服务条款'
+    modalContent: |
+      # AI朋友圈 服务条款
+      *生效日期：2025年11月19日*
+
+      欢迎访问 AI朋友圈，这是一个基础的聊天平台的信息网站（目前连ai都没有）
+
+      ## 1. 所有权
+
+      目前没想好
+
+      ## 2. 用户数据
+
+      我们不收集个人数据，例如您的姓名、电子邮件地址和支付信息。
+
+      ## 3. 非个人数据收集
+
+      本网站使用 cookie 来增强用户体验、分析网站使用情况并促进某些功能。使用本网站即表示您同意根据我们的隐私政策使用 cookie。
+
+      ## 4. 网站使用
+
+      您同意仅将本网站用于合法目的，并以不侵犯、限制或抑制他人使用和享受本网站权利的方式使用。禁止的行为包括骚扰或给任何人造成困扰或不便、传播淫秽或冒犯性内容、或破坏网站内的正常对话流程。
+
+      ## 5. 条款变更
+
+      我们保留随时修改这些条款的权利。我们将通过电子邮件通知用户任何变更。您在收到此类变更通知后继续使用本网站即表示您同意此类变更。
+
+      ## 6. 联系信息
+
+      如果您对这些条款有任何疑问，请通过 Constanjint@github 联系我们。
+
+      使用本网站即表示您已阅读这些服务条款并同意受其约束。
+
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+  peoplePicker:
+    users: true
+    groups: true
+    roles: true
+  marketplace:
+      use: false
+  fileCitations: true
+  # 临时聊天保留时间（小时）（默认：720，最小值：1，最大值：8760）
+  # temporaryChatRetention: 1
+
+# Cloudflare Turnstile 示例（可选）
+#turnstile:
+#  siteKey: "您的站点密钥"
+#  options:
+#    language: "auto"    # "auto" 或 ISO 639-1 语言代码（例如 en）
+#    size: "normal"      # 选项："normal", "compact", "flexible", 或 "invisible"
+
+# 注册对象结构示例（可选）
+registration:
+  socialLogins: ['github', 'google', 'discord', 'openid', 'facebook', 'apple', 'saml']
+  # allowedDomains:
+  # - "gmail.com"
+
+# 余额设置示例
+# balance:
+#   enabled: false
+#   startBalance: 20000
+#   autoRefillEnabled: false
+#   refillIntervalValue: 30
+#   refillIntervalUnit: 'days'
+#   refillAmount: 10000
+
+# 交易设置示例
+# 控制是否将交易记录保存到数据库
+# 默认为 true（启用）
+#transactions:
+#  enabled: false
+# 注意：如果 balance.enabled 为 true，则无论此设置如何，交易将始终启用以确保余额跟踪正常工作
+
+# 语音配置示例：
+# speech:
+#   tts:
+#     openai:
+#       url: ''
+#       apiKey: '${TTS_API_KEY}'
+#       model: ''
+#       voices: ['']
+#
+#   stt:
+#     openai:
+#       url: ''
+#       apiKey: '${STT_API_KEY}'
+#       model: ''
+
+# 速率限制示例：
+# rateLimits:
+#   fileUploads:
+#     ipMax: 100
+#     ipWindowInMinutes: 60  # 每个 IP 文件上传的速率限制窗口
+#     userMax: 50
+#     userWindowInMinutes: 60  # 每个用户文件上传的速率限制窗口
+#   conversationsImport:
+#     ipMax: 100
+#     ipWindowInMinutes: 60  # 每个 IP 对话导入的速率限制窗口
+#     userMax: 50
+#     userWindowInMinutes: 60  # 每个用户对话导入的速率限制窗口
+
+# 操作对象结构示例
+actions:
+  allowedDomains:
+    - 'swapi.dev'
+    - 'librechat.ai'
+    - 'google.com'
+
+# MCP 服务器对象结构示例
+# mcpServers:
+#   everything:
+#     # type: sse # type 可以省略
+#     url: http://localhost:3001/sse
+#     timeout: 60000  # 此服务器的超时时间为 1 分钟，这是 MCP 服务器的默认超时时间。
+#   puppeteer:
+#     type: stdio
+#     command: npx
+#     args:
+#       - -y
+#       - "@modelcontextprotocol/server-puppeteer"
+#     timeout: 300000  # 此服务器的超时时间为 5 分钟
+#   filesystem:
+#     # type: stdio
+#     command: npx
+#     args:
+#       - -y
+#       - "@modelcontextprotocol/server-filesystem"
+#       - /home/user/LibreChat/
+#     iconPath: /home/user/LibreChat/client/public/assets/logo.svg
+#   mcp-obsidian:
+#     command: npx
+#     args:
+#       - -y
+#       - "mcp-obsidian"
+#       - /path/to/obsidian/vault
+
+# 自定义端点定义
+endpoints:
+  # assistants:
+  #   disableBuilder: false # 通过设置为 `true` 来禁用 Assistants 构建器界面
+  #   pollIntervalMs: 3000  # 检查助手更新的轮询间隔
+  #   timeoutMs: 180000  # 助手操作超时时间
+  #   # 应该只有其中一个，`supportedIds` 或 `excludedIds`
+  #   supportedIds: ["asst_supportedAssistantId1", "asst_supportedAssistantId2"]
+  #   # excludedIds: ["asst_excludedAssistantId"]
+  #   # 仅显示用户创建或外部创建的助手（例如在 Assistants playground 中）。
+  #   # privateAssistants: false # 与 `supportedIds` 或 `excludedIds` 不兼容
+  #   # （可选）支持检索的模型，默认为支持该功能的最新已知 OpenAI 模型
+  #   retrievalModels: ["gpt-4-turbo-preview"]
+  #   # （可选）对所有用户可用的助手能力。省略您希望排除的能力。默认为以下列表。
+  #   capabilities: ["code_interpreter", "retrieval", "actions", "tools", "image_vision"]
+  # agents:
+  #   # （可选）代理的默认递归深度，默认为 25
+  #   recursionLimit: 50
+  #   # （可选）代理的最大递归深度，默认为 25
+  #   maxRecursionLimit: 100
+  #   # （可选）禁用代理的构建器界面
+  #   disableBuilder: false
+  #   # （可选）代理响应中包含的最大总引用数，默认为 30
+  #   maxCitations: 30
+  #   # （可选）代理响应中每个文件的最大引用数，默认为 7
+  #   maxCitationsPerFile: 7
+  #   # （可选）源包含在响应中的最小相关性分数，默认为 0.45（45% 相关性阈值）
+  #   # 设置为 0.0 显示所有源（无过滤），或设置为更高值如 0.7 进行更严格的过滤
+  #   minRelevanceScore: 0.45
+  #   # （可选）对所有用户可用的代理能力。省略您希望排除的能力。默认为以下列表。
+  #   capabilities: ["execute_code", "file_search", "actions", "tools"]
+  custom:
+    # Groq 示例
+    - name: 'groq'
+      apiKey: '${GROQ_API_KEY}'
+      baseURL: 'https://api.groq.com/openai/v1/'
+      models:
+        default:
+          - 'llama3-70b-8192'
+          - 'llama3-8b-8192'
+          - 'llama2-70b-4096'
+          - 'mixtral-8x7b-32768'
+          - 'gemma-7b-it'
+        fetch: false
+      titleConvo: true
+      titleModel: 'mixtral-8x7b-32768'
+      modelDisplayLabel: 'groq'
+
+    # ModelScope 示例   魔搭模型
+    - name: 'modelscope'
+      apiKey: '${MODELSCOPE_API_KEY}'
+      baseURL: 'https://api-inference.modelscope.cn/v1/'
+      models:
+        default:
+          - 'qwen-max'
+          - 'qwen-plus'
+        fetch: false
+      dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
+      modelDisplayLabel: 'ModelScope'   # 模型显示标签
+    # Mistral AI 示例
+    - name: 'Mistral' # 端点的唯一名称
+      # 对于 `apiKey` 和 `baseURL`，您可以使用您定义的环境变量。
+      # 推荐的环境变量：
+      apiKey: '${MISTRAL_API_KEY}'
+      baseURL: 'https://api.mistral.ai/v1'
+
+      # 模型配置
+      models:
+        # 要使用的默认模型列表。至少需要一个值。
+        default: ['mistral-tiny', 'mistral-small', 'mistral-medium']
+        # 获取选项：设置为 true 从 API 获取模型。
+        fetch: true # 默认为 false。
+
+      # 可选配置
+
+      # 标题对话设置
+      titleConvo: true # 设置为 true 启用标题对话
+
+      # 标题方法：在 "completion" 或 "functions" 之间选择。
+      # titleMethod: "completion"  # 如果省略，默认为 "completion"。
+
+      # 标题模型：指定用于标题的模型。
+      titleModel: 'mistral-tiny' # 如果省略，默认为 "gpt-3.5-turbo"。
+
+      # 摘要设置：设置为 true 启用摘要。
+      # summarize: false
+
+      # 摘要模型：如果启用了摘要，指定要使用的模型。
+      # summaryModel: "mistral-tiny"  # 如果省略，默认为 "gpt-3.5-turbo"。
+
+      # 强制提示设置：如果为 true，发送 `prompt` 参数而不是 `messages`。
+      # forcePrompt: false
+
+      # 在消息中为 AI 模型显示的标签。
+      modelDisplayLabel: 'Mistral' # 未设置时默认为 "AI"。
+
+      # 向请求添加额外参数。默认参数将被覆盖。
+      # addParams:
+      # safe_prompt: true # 此字段特定于 Mistral AI：https://docs.mistral.ai/api/
+
+      # 从请求中删除默认参数。请参阅下面指南链接中的默认参数。
+      # 注意：对于 Mistral，必须删除以下参数，否则会遇到 422 错误：
+      dropParams: ['stop', 'user', 'frequency_penalty', 'presence_penalty']
+
+    # OpenRouter 示例
+    - name: 'OpenRouter'
+      # 对于 `apiKey` 和 `baseURL`，您可以使用您定义的环境变量。
+      # 推荐的环境变量：
+      apiKey: '${OPENROUTER_KEY}'
+      baseURL: 'https://openrouter.ai/api/v1'
+      headers:
+          x-librechat-body-parentmessageid: '{{LIBRECHAT_BODY_PARENTMESSAGEID}}'
+      models:
+        default: ['meta-llama/llama-3-70b-instruct']
+        fetch: true
+      titleConvo: true
+      titleModel: 'meta-llama/llama-3-70b-instruct'
+      # 推荐：从请求中删除 stop 参数，因为 Openrouter 模型使用各种停止标记。
+      dropParams: ['stop']
+      modelDisplayLabel: 'OpenRouter'
+
+    # Portkey AI 示例
+    - name: 'Portkey'
+      apiKey: 'dummy'
+      baseURL: 'https://api.portkey.ai/v1'
+      headers:
+        x-portkey-api-key: '${PORTKEY_API_KEY}'
+        x-portkey-virtual-key: '${PORTKEY_OPENAI_VIRTUAL_KEY}'
+      models:
+        default: ['gpt-4o-mini', 'gpt-4o', 'chatgpt-4o-latest']
+        fetch: true
+      titleConvo: true
+      titleModel: 'current_model'
+      summarize: false
+      summaryModel: 'current_model'
+      forcePrompt: false
+      modelDisplayLabel: 'Portkey'
+      iconURL: https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/rjqy7ghvjoiu4cd1xjbf
+# 模型规格配置示例，显示分组选项
+# 'group' 字段在 UI 选择器中组织模型规格：
+# - 如果 'group' 匹配端点名称（例如 "openAI", "groq"），则规格将嵌套在该端点下
+# - 如果 'group' 是自定义名称（不匹配任何端点），则创建一个单独的可折叠部分
+# - 如果省略 'group'，则规格作为独立项出现在顶层
+# modelSpecs:
+#   list:
+#     # 示例 1：嵌套在端点下（与 openAI 端点分组）
+#     - name: "gpt-4o"
+#       label: "GPT-4 优化版"
+#       description: "功能最强大的 GPT-4 模型，支持多模态"
+#       group: "openAI"  # 字符串值匹配端点名称
+#       preset:
+#         endpoint: "openAI"
+#         model: "gpt-4o"
+#
+#     # 示例 2：嵌套在自定义端点下（与 groq 端点分组）
+#     - name: "llama3-70b-8192"
+#       label: "Llama 3 70B"
+#       description: "可用的最快推理 - 非常适合快速响应"
+#       group: "groq"  # 字符串值匹配您在 endpoints.custom 中的自定义端点名称
+#       preset:
+#         endpoint: "groq"
+#         model: "llama3-70b-8192"
+#
+#     # 示例 3：自定义组（创建单独的可折叠部分）
+#     - name: "coding-assistant"
+#       label: "编程助手"
+#       description: "专为编码任务设计"
+#       group: "my-assistants"  # 自定义字符串 - 不匹配任何端点，因此创建自己的组
+#       preset:
+#         endpoint: "openAI"
+#         model: "gpt-4o"
+#         instructions: "您是一名专家编程助手..."
+#         temperature: 0.3
+#
+#     - name: "writing-assistant"
+#       label: "写作助手"
+#       description: "专为创意写作设计"
+#       group: "my-assistants"  # 相同的自定义组名 - 两个规格出现在同一部分
+#       preset:
+#         endpoint: "anthropic"
+#         model: "claude-sonnet-4"
+#         instructions: "您是一名创意写作专家..."
+#
+#     # 示例 4：独立（无组 - 出现在顶层）
+#     - name: "general-assistant"
+#       label: "通用助手"
+#       description: "通用助手"
+#       # 无 'group' 字段 - 作为独立项出现在顶层（不嵌套）
+#       preset:
+#         endpoint: "openAI"
+#         model: "gpt-4o-mini"
+
+# 文件配置示例：
+# fileConfig:
+#   endpoints:
+#     assistants:
+#       fileLimit: 5
+#       fileSizeLimit: 10  # 单个文件的最大大小（MB）
+#       totalSizeLimit: 50  # 单个请求中所有文件的最大总大小（MB）
+#       supportedMimeTypes:
+#         - "image/.*"
+#         - "application/pdf"
+#     openAI:
+#       disabled: true  # 禁用向 OpenAI 端点上传文件
+#     default:
+#       totalSizeLimit: 20
+#     YourCustomEndpointName:
+#       fileLimit: 2
+#       fileSizeLimit: 5
+#   serverFileSizeLimit: 100  # 全局服务器文件大小限制（MB）
+#   avatarSizeLimit: 2  # 用户头像图片大小限制（MB）
+#   imageGeneration: # 图片生成设置，百分比或像素
+#     percentage: 100
+#     px: 1024
+#   # 客户端图片调整以防止上传错误
+#   clientImageResize:
+#     enabled: false  # 启用/禁用客户端图片调整（默认：false）
+#     maxWidth: 1900  # 调整后图片的最大宽度（默认：1900）
+#     maxHeight: 1900  # 调整后图片的最大高度（默认：1900）
+#     quality: 0.92  # JPEG 压缩质量（0.0-1.0，默认：0.92）
+# # 有关助手配置的更多信息，请参阅自定义配置指南：
+# # https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/assistants_endpoint
+
+# 网络搜索配置（可选）
+# webSearch:
+#   # Jina 重排序配置
+#   jinaApiKey: '${JINA_API_KEY}'  # 您的 Jina API 密钥
+#   jinaApiUrl: '${JINA_API_URL}'  # 自定义 Jina API URL（可选，默认为 https://api.jina.ai/v1/rerank）
+#   
+#   # 其他重排序器
+#   cohereApiKey: '${COHERE_API_KEY}'
+#   
+#   # 搜索提供商
+#   serperApiKey: '${SERPER_API_KEY}'
+#   searxngInstanceUrl: '${SEARXNG_INSTANCE_URL}'
+#   searxngApiKey: '${SEARXNG_API_KEY}'
+#   
+#   # 内容抓取器
+#   firecrawlApiKey: '${FIRECRAWL_API_KEY}'
+#   firecrawlApiUrl: '${FIRECRAWL_API_URL}'
+
+# 用户记忆的内存配置
+# memory:
+#   # （可选）禁用记忆功能
+#   disabled: false
+#   # （可选）将记忆键限制为特定值，以限制记忆存储并提高一致性
+#   validKeys: ["preferences", "work_info", "personal_info", "skills", "interests", "context"]
+#   # （可选）记忆存储的最大令牌限制（尚未实现令牌计数）
+#   tokenLimit: 10000
+#   # （可选）启用个性化功能（如果配置了记忆，则默认为 true）
+#   # 当为 false 时，用户在设置中将看不到个性化标签页
+#   personalize: true
+#   # 记忆代理配置 - 使用现有的代理 ID 或内联定义
+#   agent:
+#     # 选项 1：使用现有的代理 ID
+#     id: "your-memory-agent-id"
+#     # 选项 2：内联定义代理
+#     # provider: "openai"
+#     # model: "gpt-4o-mini"
+#     # instructions: "您是一个记忆管理助手。准确存储和管理用户信息。"
+#     # model_parameters:
+#     #   temperature: 0.1

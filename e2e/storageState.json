@@ -1,0 +1,22 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3080",
+      "localStorage": [
+        {
+          "name": "color-theme",
+          "value": "\"light\""
+        },
+        {
+          "name": "i18nextLng",
+          "value": "zh-CN"
+        },
+        {
+          "name": "navVisible",
+          "value": "true"
+        }
+      ]
+    }
+  ]
+}

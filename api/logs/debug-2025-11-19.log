@@ -1,0 +1,738 @@
+2025-11-19T03:32:45.640Z info: Mongo Connection options
+2025-11-19T03:32:45.641Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:32:45.669Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-19T03:35:45.026Z info: Mongo Connection options
+2025-11-19T03:35:45.027Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:35:45.052Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-19T03:42:26.075Z info: Mongo Connection options
+2025-11-19T03:42:26.075Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:42:26.098Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-19T03:42:26.106Z debug: [deleteAllUserSessions] Deleted 25 sessions for user 691c40964f9b4755d75d84e1.
+2025-11-19T03:49:21.902Z info: Mongo Connection options
+2025-11-19T03:49:21.902Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:49:21.930Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-19T03:49:21.936Z debug: [deleteAllUserSessions] Deleted 7 sessions for user 691d3d824f9b4755d75d8e31.
+2025-11-19T03:53:57.665Z info: Mongo Connection options
+2025-11-19T03:53:57.666Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:53:57.692Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-19T03:56:02.897Z info: Mongo Connection options
+2025-11-19T03:56:02.897Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:56:50.420Z info: Mongo Connection options
+2025-11-19T03:56:50.420Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T03:57:45.247Z info: Mongo Connection options
+2025-11-19T03:57:45.247Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T10:19:08.525Z info: Mongo Connection options
+2025-11-19T10:19:08.526Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T10:19:08.544Z info: Connected to MongoDB
+2025-11-19T10:19:08.544Z info: [indexSync] Starting index synchronization check...
+2025-11-19T10:19:08.594Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-19T10:19:08.599Z info: Custom config file loaded:
+2025-11-19T10:19:08.599Z info: {
+  "version": "1.2.1",
+  "cache": true,
+  "interface": {
+    "customWelcome": "欢迎使用 LibreChat！祝您体验愉快。",
+    "fileSearch": true,
+    "privacyPolicy": ... [truncated]
+2025-11-19T10:19:08.599Z debug: Custom config:
+{
+  version: "1.2.1",
+  cache: true,
+    interface.customWelcome: "欢迎使用 LibreChat！祝您体验愉快。",
+    interface.fileSearch: true,
+    privacyPolicy.externalUrl: "https://librechat.ai/privacy-policy",
+    privacyPolicy.openNewTab: true,
+    termsOfService.externalUrl: "https://librechat.ai/tos",
+    termsOfService.openNewTab: true,
+    termsOfService.modalAcceptance: true,
+    termsOfService.modalTitle: "LibreChat 服务条款",
+    termsOfService.modalContent: "# LibreChat 服务条款\n*生效日期：2024年2月18日*\n\n欢迎访问 LibreChat，这是一个开源 AI 聊天平台的信息网站，位于 https://librechat.ai。这些服务条... [truncated]",
+    interface.endpointsMenu: true,
+    interface.modelSelect: true,
+    interface.parameters: true,
+    interface.sidePanel: true,
+    interface.presets: true,
+    interface.prompts: true,
+    interface.bookmarks: true,
+    interface.multiConvo: true,
+    interface.agents: true,
+    peoplePicker.users: true,
+    peoplePicker.groups: true,
+    peoplePicker.roles: true,
+    marketplace.use: false,
+    interface.fileCitations: true,
+    // 7 socialLogin(s)
+    registration.socialLogins: ["github","google","discord","openid","facebook","apple","saml"],
+    socialLogins.0: "github",
+    socialLogins.1: "google",
+    socialLogins.2: "discord",
+    socialLogins.3: "openid",
+    socialLogins.4: "facebook",
+    socialLogins.5: "apple",
+    socialLogins.6: "saml",
+    // 3 allowedDomain(s)
+    actions.allowedDomains: ["swapi.dev","librechat.ai","google.com"],
+    allowedDomains.0: "swapi.dev",
+    allowedDomains.1: "librechat.ai",
+    allowedDomains.2: "google.com",
+    // 5 custom(s)
+    endpoints.custom: [{"name":"groq","apiKey":"${GROQ_API_KEY}","baseURL":"https://api.groq.com/openai/v1/","models":{"def... [truncated],{"name":"modelscope","apiKey":"${MODELSCOPE_API_KEY}","baseURL":"https://api-inference.modelscope.cn... [truncated],{"name":"Mistral","apiKey":"${MISTRAL_API_KEY}","baseURL":"https://api.mistral.ai/v1","models":{"def... [truncated],{"name":"OpenRouter","apiKey":"${OPENROUTER_KEY}","baseURL":"https://openrouter.ai/api/v1","headers"... [truncated],{"name":"Portkey","apiKey":"dummy","baseURL":"https://api.portkey.ai/v1","headers":{"x-portkey-api-k... [truncated]],
+    0.name: "groq",
+    0.apiKey: "${GROQ_API_KEY}",
+    0.baseURL: "https://api.groq.com/openai/v1/",
+    // 5 default(s)
+    models.default: ["llama3-70b-8192","llama3-8b-8192","llama2-70b-4096","mixtral-8x7b-32768","gemma-7b-it"],
+    default.0: "llama3-70b-8192",
+    default.1: "llama3-8b-8192",
+    default.2: "llama2-70b-4096",
+    default.3: "mixtral-8x7b-32768",
+    default.4: "gemma-7b-it",
+    models.fetch: false,
+    0.titleConvo: true,
+    0.titleModel: "mixtral-8x7b-32768",
+    0.modelDisplayLabel: "groq",
+    1.name: "modelscope",
+    1.apiKey: "${MODELSCOPE_API_KEY}",
+    1.baseURL: "https://api-inference.modelscope.cn/v1/",
+    // 2 default(s)
+    models.default: ["qwen-max","qwen-plus"],
+    default.0: "qwen-max",
+    default.1: "qwen-plus",
+    models.fetch: false,
+    // 1 dropParam(s)
+    1.dropParams: ["stop"],
+    dropParams.0: "stop",
+    1.modelDisplayLabel: "ModelScope",
+    2.name: "Mistral",
+    2.apiKey: "${MISTRAL_API_KEY}",
+    2.baseURL: "https://api.mistral.ai/v1",
+    // 3 default(s)
+    models.default: ["mistral-tiny","mistral-small","mistral-medium"],
+    default.0: "mistral-tiny",
+    default.1: "mistral-small",
+    default.2: "mistral-medium",
+    models.fetch: true,
+    2.titleConvo: true,
+    2.titleModel: "mistral-tiny",
+    2.modelDisplayLabel: "Mistral",
+    // 4 dropParam(s)
+    2.dropParams: ["stop","user","frequency_penalty","presence_penalty"],
+    dropParams.0: "stop",
+    dropParams.1: "user",
+    dropParams.2: "frequency_penalty",
+    dropParams.3: "presence_penalty",
+    3.name: "OpenRouter",
+    3.apiKey: "${OPENROUTER_KEY}",
+    3.baseURL: "https://openrouter.ai/api/v1",
+    headers.x-librechat-body-parentmessageid: "{{LIBRECHAT_BODY_PARENTMESSAGEID}}",
+    // 1 default(s)
+    models.default: ["meta-llama/llama-3-70b-instruct"],
+    default.0: "meta-llama/llama-3-70b-instruct",
+    models.fetch: true,
+    3.titleConvo: true,
+    3.titleModel: "meta-llama/llama-3-70b-instruct",
+    // 1 dropParam(s)
+    3.dropParams: ["stop"],
+    dropParams.0: "stop",
+    3.modelDisplayLabel: "OpenRouter",
+    4.name: "Portkey",
+    4.apiKey: "dummy",
+    4.baseURL: "https://api.portkey.ai/v1",
+    headers.x-portkey-api-key: "${PORTKEY_API_KEY}",
+    headers.x-portkey-virtual-key: "${PORTKEY_OPENAI_VIRTUAL_KEY}",
+    // 3 default(s)
+    models.default: ["gpt-4o-mini","gpt-4o","chatgpt-4o-latest"],
+    default.0: "gpt-4o-mini",
+    default.1: "gpt-4o",
+    default.2: "chatgpt-4o-latest",
+    models.fetch: true,
+    4.titleConvo: true,
+    4.titleModel: "current_model",
+    4.summarize: false,
+    4.summaryModel: "current_model",
+    4.forcePrompt: false,
+    4.modelDisplayLabel: "Portkey",
+    4.iconURL: "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/rjqy7ghvjoiu4cd1xjbf",
+}
+2025-11-19T10:19:08.604Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-19T10:19:08.605Z warn: Default value for CREDS_KEY is being used.
+2025-11-19T10:19:08.605Z warn: Default value for CREDS_IV is being used.
+2025-11-19T10:19:08.605Z warn: Default value for JWT_SECRET is being used.
+2025-11-19T10:19:08.605Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-19T10:19:08.605Z info: Please replace any default secret values.
+2025-11-19T10:19:08.605Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-19T10:19:08.605Z info: Outdated Config version: 1.2.1
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      https://... [truncated]
+2025-11-19T10:19:08.605Z warn: RAG API is either not running or not reachable at undefined, you may experience errors with file uploads.
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'PROMPTS'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'BOOKMARKS'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'MULTI_CONVO'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'AGENTS'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'PEOPLE_PICKER'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'MARKETPLACE'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'FILE_SEARCH'
+2025-11-19T10:19:08.607Z debug: Role 'USER': Applying explicit config for 'FILE_CITATIONS'
+2025-11-19T10:19:08.607Z info: Updating 'USER' role permission 'PEOPLE_PICKER' 'VIEW_USERS' from false to: true
+2025-11-19T10:19:08.607Z info: Updating 'USER' role permission 'PEOPLE_PICKER' 'VIEW_GROUPS' from false to: true
+2025-11-19T10:19:08.607Z info: Updating 'USER' role permission 'PEOPLE_PICKER' 'VIEW_ROLES' from false to: true
+2025-11-19T10:19:08.610Z info: Updated 'USER' role permissions
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'PROMPTS'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'BOOKMARKS'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'MULTI_CONVO'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'AGENTS'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'PEOPLE_PICKER'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'MARKETPLACE'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'FILE_SEARCH'
+2025-11-19T10:19:08.610Z debug: Role 'ADMIN': Applying explicit config for 'FILE_CITATIONS'
+2025-11-19T10:19:08.611Z info: Updating 'ADMIN' role permission 'MARKETPLACE' 'USE' from true to: false
+2025-11-19T10:19:08.612Z info: Updated 'ADMIN' role permissions
+2025-11-19T10:19:08.617Z info: Server listening at http://localhost:3080
+2025-11-19T10:19:08.617Z info: OAuth reconnect manager initialized successfully.
+2025-11-19T10:19:08.618Z debug: Checking if agent permissions migration is needed
+2025-11-19T10:19:08.618Z debug: Ensuring required collections exist for permission system
+2025-11-19T10:19:08.619Z debug: Collection already exists: aclentries
+2025-11-19T10:19:08.620Z debug: Collection already exists: groups
+2025-11-19T10:19:08.620Z debug: Collection already exists: accessroles
+2025-11-19T10:19:08.621Z debug: Collection already exists: agents
+2025-11-19T10:19:08.621Z debug: Collection already exists: promptgroups
+2025-11-19T10:19:08.622Z debug: Collection already exists: projects
+2025-11-19T10:19:08.622Z debug: All required collections have been checked/created
+2025-11-19T10:19:08.630Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-19T10:19:08.630Z debug: Checking if prompt permissions migration is needed
+2025-11-19T10:19:08.630Z debug: Ensuring required collections exist for permission system
+2025-11-19T10:19:08.631Z debug: Collection already exists: aclentries
+2025-11-19T10:19:08.631Z debug: Collection already exists: groups
+2025-11-19T10:19:08.631Z debug: Collection already exists: accessroles
+2025-11-19T10:19:08.632Z debug: Collection already exists: agents
+2025-11-19T10:19:08.632Z debug: Collection already exists: promptgroups
+2025-11-19T10:19:08.633Z debug: Collection already exists: projects
+2025-11-19T10:19:08.633Z debug: All required collections have been checked/created
+2025-11-19T10:19:08.636Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-19T10:19:08.798Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-19T10:19:08.826Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-19T10:19:08.831Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-19T10:19:08.831Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-19T10:19:08.832Z debug: [indexSync] Flow state cleaned up
+2025-11-19T10:19:08.832Z debug: [indexSync] No sync was needed
+2025-11-19T10:20:40.960Z info: [Login] [Login successful] [Username: 875995534@qq.com] [Request-IP: ::1]
+2025-11-19T10:20:41.881Z error: Failed to fetch models from Mistral API The server responded with status 401: Request failed with status code 401
+2025-11-19T10:20:42.267Z error: Failed to fetch models from Portkey API The server responded with status 401: Request failed with status code 401
+2025-11-19T10:28:04.392Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-19T10:28:23.165Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-19T10:31:07.058Z info: Cleaning up FlowStateManager intervals...
+2025-11-19T10:31:14.069Z info: Mongo Connection options
+2025-11-19T10:31:14.070Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T10:31:14.090Z info: Connected to MongoDB
+2025-11-19T10:31:14.090Z info: [indexSync] Starting index synchronization check...
+2025-11-19T10:31:14.137Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-19T10:31:14.141Z info: Custom config file loaded:
+2025-11-19T10:31:14.142Z info: {
+  "version": "1.2.1",
+  "cache": true,
+  "interface": {
+    "customWelcome": "欢迎使用 AI朋友圈！祝您体验愉快。",
+    "fileSearch": true,
+    "privacyPolicy": {
+  ... [truncated]
+2025-11-19T10:31:14.142Z debug: Custom config:
+{
+  version: "1.2.1",
+  cache: true,
+    interface.customWelcome: "欢迎使用 AI朋友圈！祝您体验愉快。",
+    interface.fileSearch: true,
+    privacyPolicy.externalUrl: "https://librechat.ai/privacy-policy",
+    privacyPolicy.openNewTab: true,
+    termsOfService.externalUrl: "https://librechat.ai/tos",
+    termsOfService.openNewTab: true,
+    termsOfService.modalAcceptance: true,
+    termsOfService.modalTitle: "LibreChat 服务条款",
+    termsOfService.modalContent: "# LibreChat 服务条款\n*生效日期：2025年11月19日*\n\n欢迎访问 AI朋友圈，这是一个基础的聊天平台的信息网站（目前连ai都没有）\n\n## 1. 所有权\n\n目前没想好\n\n## 2. ... [truncated]",
+    interface.endpointsMenu: true,
+    interface.modelSelect: true,
+    interface.parameters: true,
+    interface.sidePanel: true,
+    interface.presets: true,
+    interface.prompts: true,
+    interface.bookmarks: true,
+    interface.multiConvo: true,
+    interface.agents: true,
+    peoplePicker.users: true,
+    peoplePicker.groups: true,
+    peoplePicker.roles: true,
+    marketplace.use: false,
+    interface.fileCitations: true,
+    // 7 socialLogin(s)
+    registration.socialLogins: ["github","google","discord","openid","facebook","apple","saml"],
+    socialLogins.0: "github",
+    socialLogins.1: "google",
+    socialLogins.2: "discord",
+    socialLogins.3: "openid",
+    socialLogins.4: "facebook",
+    socialLogins.5: "apple",
+    socialLogins.6: "saml",
+    // 3 allowedDomain(s)
+    actions.allowedDomains: ["swapi.dev","librechat.ai","google.com"],
+    allowedDomains.0: "swapi.dev",
+    allowedDomains.1: "librechat.ai",
+    allowedDomains.2: "google.com",
+    // 5 custom(s)
+    endpoints.custom: [{"name":"groq","apiKey":"${GROQ_API_KEY}","baseURL":"https://api.groq.com/openai/v1/","models":{"def... [truncated],{"name":"modelscope","apiKey":"${MODELSCOPE_API_KEY}","baseURL":"https://api-inference.modelscope.cn... [truncated],{"name":"Mistral","apiKey":"${MISTRAL_API_KEY}","baseURL":"https://api.mistral.ai/v1","models":{"def... [truncated],{"name":"OpenRouter","apiKey":"${OPENROUTER_KEY}","baseURL":"https://openrouter.ai/api/v1","headers"... [truncated],{"name":"Portkey","apiKey":"dummy","baseURL":"https://api.portkey.ai/v1","headers":{"x-portkey-api-k... [truncated]],
+    0.name: "groq",
+    0.apiKey: "${GROQ_API_KEY}",
+    0.baseURL: "https://api.groq.com/openai/v1/",
+    // 5 default(s)
+    models.default: ["llama3-70b-8192","llama3-8b-8192","llama2-70b-4096","mixtral-8x7b-32768","gemma-7b-it"],
+    default.0: "llama3-70b-8192",
+    default.1: "llama3-8b-8192",
+    default.2: "llama2-70b-4096",
+    default.3: "mixtral-8x7b-32768",
+    default.4: "gemma-7b-it",
+    models.fetch: false,
+    0.titleConvo: true,
+    0.titleModel: "mixtral-8x7b-32768",
+    0.modelDisplayLabel: "groq",
+    1.name: "modelscope",
+    1.apiKey: "${MODELSCOPE_API_KEY}",
+    1.baseURL: "https://api-inference.modelscope.cn/v1/",
+    // 2 default(s)
+    models.default: ["qwen-max","qwen-plus"],
+    default.0: "qwen-max",
+    default.1: "qwen-plus",
+    models.fetch: false,
+    // 1 dropParam(s)
+    1.dropParams: ["stop"],
+    dropParams.0: "stop",
+    1.modelDisplayLabel: "ModelScope",
+    2.name: "Mistral",
+    2.apiKey: "${MISTRAL_API_KEY}",
+    2.baseURL: "https://api.mistral.ai/v1",
+    // 3 default(s)
+    models.default: ["mistral-tiny","mistral-small","mistral-medium"],
+    default.0: "mistral-tiny",
+    default.1: "mistral-small",
+    default.2: "mistral-medium",
+    models.fetch: true,
+    2.titleConvo: true,
+    2.titleModel: "mistral-tiny",
+    2.modelDisplayLabel: "Mistral",
+    // 4 dropParam(s)
+    2.dropParams: ["stop","user","frequency_penalty","presence_penalty"],
+    dropParams.0: "stop",
+    dropParams.1: "user",
+    dropParams.2: "frequency_penalty",
+    dropParams.3: "presence_penalty",
+    3.name: "OpenRouter",
+    3.apiKey: "${OPENROUTER_KEY}",
+    3.baseURL: "https://openrouter.ai/api/v1",
+    headers.x-librechat-body-parentmessageid: "{{LIBRECHAT_BODY_PARENTMESSAGEID}}",
+    // 1 default(s)
+    models.default: ["meta-llama/llama-3-70b-instruct"],
+    default.0: "meta-llama/llama-3-70b-instruct",
+    models.fetch: true,
+    3.titleConvo: true,
+    3.titleModel: "meta-llama/llama-3-70b-instruct",
+    // 1 dropParam(s)
+    3.dropParams: ["stop"],
+    dropParams.0: "stop",
+    3.modelDisplayLabel: "OpenRouter",
+    4.name: "Portkey",
+    4.apiKey: "dummy",
+    4.baseURL: "https://api.portkey.ai/v1",
+    headers.x-portkey-api-key: "${PORTKEY_API_KEY}",
+    headers.x-portkey-virtual-key: "${PORTKEY_OPENAI_VIRTUAL_KEY}",
+    // 3 default(s)
+    models.default: ["gpt-4o-mini","gpt-4o","chatgpt-4o-latest"],
+    default.0: "gpt-4o-mini",
+    default.1: "gpt-4o",
+    default.2: "chatgpt-4o-latest",
+    models.fetch: true,
+    4.titleConvo: true,
+    4.titleModel: "current_model",
+    4.summarize: false,
+    4.summaryModel: "current_model",
+    4.forcePrompt: false,
+    4.modelDisplayLabel: "Portkey",
+    4.iconURL: "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/rjqy7ghvjoiu4cd1xjbf",
+}
+2025-11-19T10:31:14.147Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-19T10:31:14.148Z warn: Default value for CREDS_KEY is being used.
+2025-11-19T10:31:14.148Z warn: Default value for CREDS_IV is being used.
+2025-11-19T10:31:14.148Z warn: Default value for JWT_SECRET is being used.
+2025-11-19T10:31:14.149Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-19T10:31:14.149Z info: Please replace any default secret values.
+2025-11-19T10:31:14.149Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-19T10:31:14.149Z info: Outdated Config version: 1.2.1
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      https://... [truncated]
+2025-11-19T10:31:14.149Z warn: RAG API is either not running or not reachable at undefined, you may experience errors with file uploads.
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'PROMPTS'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'BOOKMARKS'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'MULTI_CONVO'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'AGENTS'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'PEOPLE_PICKER'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'MARKETPLACE'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'FILE_SEARCH'
+2025-11-19T10:31:14.151Z debug: Role 'USER': Applying explicit config for 'FILE_CITATIONS'
+2025-11-19T10:31:14.151Z info: No changes needed for 'USER' role permissions
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'PROMPTS'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'BOOKMARKS'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'MULTI_CONVO'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'AGENTS'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'PEOPLE_PICKER'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'MARKETPLACE'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'FILE_SEARCH'
+2025-11-19T10:31:14.152Z debug: Role 'ADMIN': Applying explicit config for 'FILE_CITATIONS'
+2025-11-19T10:31:14.152Z info: No changes needed for 'ADMIN' role permissions
+2025-11-19T10:31:14.158Z info: Server listening at http://localhost:3080
+2025-11-19T10:31:14.158Z info: OAuth reconnect manager initialized successfully.
+2025-11-19T10:31:14.158Z debug: Checking if agent permissions migration is needed
+2025-11-19T10:31:14.158Z debug: Ensuring required collections exist for permission system
+2025-11-19T10:31:14.160Z debug: Collection already exists: aclentries
+2025-11-19T10:31:14.160Z debug: Collection already exists: groups
+2025-11-19T10:31:14.161Z debug: Collection already exists: accessroles
+2025-11-19T10:31:14.162Z debug: Collection already exists: agents
+2025-11-19T10:31:14.162Z debug: Collection already exists: promptgroups
+2025-11-19T10:31:14.163Z debug: Collection already exists: projects
+2025-11-19T10:31:14.163Z debug: All required collections have been checked/created
+2025-11-19T10:31:14.168Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-19T10:31:14.169Z debug: Checking if prompt permissions migration is needed
+2025-11-19T10:31:14.169Z debug: Ensuring required collections exist for permission system
+2025-11-19T10:31:14.169Z debug: Collection already exists: aclentries
+2025-11-19T10:31:14.170Z debug: Collection already exists: groups
+2025-11-19T10:31:14.170Z debug: Collection already exists: accessroles
+2025-11-19T10:31:14.170Z debug: Collection already exists: agents
+2025-11-19T10:31:14.171Z debug: Collection already exists: promptgroups
+2025-11-19T10:31:14.171Z debug: Collection already exists: projects
+2025-11-19T10:31:14.171Z debug: All required collections have been checked/created
+2025-11-19T10:31:14.176Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-19T10:31:14.343Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-19T10:31:14.394Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-19T10:31:14.441Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-19T10:31:14.441Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-19T10:31:14.441Z debug: [indexSync] Flow state cleaned up
+2025-11-19T10:31:14.442Z debug: [indexSync] No sync was needed
+2025-11-19T10:31:44.993Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-19T10:31:46.277Z error: Failed to fetch models from Portkey API The server responded with status 401: Request failed with status code 401
+2025-11-19T10:31:46.461Z error: Failed to fetch models from Mistral API The server responded with status 401: Request failed with status code 401
+2025-11-19T10:33:18.725Z info: Cleaning up FlowStateManager intervals...
+2025-11-19T10:33:25.320Z info: Mongo Connection options
+2025-11-19T10:33:25.321Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-19T10:33:25.333Z info: Connected to MongoDB
+2025-11-19T10:33:25.334Z info: [indexSync] Starting index synchronization check...
+2025-11-19T10:33:25.392Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-19T10:33:25.397Z info: Custom config file loaded:
+2025-11-19T10:33:25.397Z info: {
+  "version": "1.2.1",
+  "cache": true,
+  "interface": {
+    "customWelcome": "欢迎使用 AI朋友圈！祝您体验愉快。",
+    "fileSearch": true,
+    "privacyPolicy": {
+  ... [truncated]
+2025-11-19T10:33:25.397Z debug: Custom config:
+{
+  version: "1.2.1",
+  cache: true,
+    interface.customWelcome: "欢迎使用 AI朋友圈！祝您体验愉快。",
+    interface.fileSearch: true,
+    privacyPolicy.externalUrl: "https://librechat.ai/privacy-policy",
+    privacyPolicy.openNewTab: true,
+    termsOfService.externalUrl: "https://librechat.ai/tos",
+    termsOfService.openNewTab: true,
+    termsOfService.modalAcceptance: true,
+    termsOfService.modalTitle: "AIPYQ 服务条款",
+    termsOfService.modalContent: "# AI朋友圈 服务条款\n*生效日期：2025年11月19日*\n\n欢迎访问 AI朋友圈，这是一个基础的聊天平台的信息网站（目前连ai都没有）\n\n## 1. 所有权\n\n目前没想好\n\n## 2. 用户数据... [truncated]",
+    interface.endpointsMenu: true,
+    interface.modelSelect: true,
+    interface.parameters: true,
+    interface.sidePanel: true,
+    interface.presets: true,
+    interface.prompts: true,
+    interface.bookmarks: true,
+    interface.multiConvo: true,
+    interface.agents: true,
+    peoplePicker.users: true,
+    peoplePicker.groups: true,
+    peoplePicker.roles: true,
+    marketplace.use: false,
+    interface.fileCitations: true,
+    // 7 socialLogin(s)
+    registration.socialLogins: ["github","google","discord","openid","facebook","apple","saml"],
+    socialLogins.0: "github",
+    socialLogins.1: "google",
+    socialLogins.2: "discord",
+    socialLogins.3: "openid",
+    socialLogins.4: "facebook",
+    socialLogins.5: "apple",
+    socialLogins.6: "saml",
+    // 3 allowedDomain(s)
+    actions.allowedDomains: ["swapi.dev","librechat.ai","google.com"],
+    allowedDomains.0: "swapi.dev",
+    allowedDomains.1: "librechat.ai",
+    allowedDomains.2: "google.com",
+    // 5 custom(s)
+    endpoints.custom: [{"name":"groq","apiKey":"${GROQ_API_KEY}","baseURL":"https://api.groq.com/openai/v1/","models":{"def... [truncated],{"name":"modelscope","apiKey":"${MODELSCOPE_API_KEY}","baseURL":"https://api-inference.modelscope.cn... [truncated],{"name":"Mistral","apiKey":"${MISTRAL_API_KEY}","baseURL":"https://api.mistral.ai/v1","models":{"def... [truncated],{"name":"OpenRouter","apiKey":"${OPENROUTER_KEY}","baseURL":"https://openrouter.ai/api/v1","headers"... [truncated],{"name":"Portkey","apiKey":"dummy","baseURL":"https://api.portkey.ai/v1","headers":{"x-portkey-api-k... [truncated]],
+    0.name: "groq",
+    0.apiKey: "${GROQ_API_KEY}",
+    0.baseURL: "https://api.groq.com/openai/v1/",
+    // 5 default(s)
+    models.default: ["llama3-70b-8192","llama3-8b-8192","llama2-70b-4096","mixtral-8x7b-32768","gemma-7b-it"],
+    default.0: "llama3-70b-8192",
+    default.1: "llama3-8b-8192",
+    default.2: "llama2-70b-4096",
+    default.3: "mixtral-8x7b-32768",
+    default.4: "gemma-7b-it",
+    models.fetch: false,
+    0.titleConvo: true,
+    0.titleModel: "mixtral-8x7b-32768",
+    0.modelDisplayLabel: "groq",
+    1.name: "modelscope",
+    1.apiKey: "${MODELSCOPE_API_KEY}",
+    1.baseURL: "https://api-inference.modelscope.cn/v1/",
+    // 2 default(s)
+    models.default: ["qwen-max","qwen-plus"],
+    default.0: "qwen-max",
+    default.1: "qwen-plus",
+    models.fetch: false,
+    // 1 dropParam(s)
+    1.dropParams: ["stop"],
+    dropParams.0: "stop",
+    1.modelDisplayLabel: "ModelScope",
+    2.name: "Mistral",
+    2.apiKey: "${MISTRAL_API_KEY}",
+    2.baseURL: "https://api.mistral.ai/v1",
+    // 3 default(s)
+    models.default: ["mistral-tiny","mistral-small","mistral-medium"],
+    default.0: "mistral-tiny",
+    default.1: "mistral-small",
+    default.2: "mistral-medium",
+    models.fetch: true,
+    2.titleConvo: true,
+    2.titleModel: "mistral-tiny",
+    2.modelDisplayLabel: "Mistral",
+    // 4 dropParam(s)
+    2.dropParams: ["stop","user","frequency_penalty","presence_penalty"],
+    dropParams.0: "stop",
+    dropParams.1: "user",
+    dropParams.2: "frequency_penalty",
+    dropParams.3: "presence_penalty",
+    3.name: "OpenRouter",
+    3.apiKey: "${OPENROUTER_KEY}",
+    3.baseURL: "https://openrouter.ai/api/v1",
+    headers.x-librechat-body-parentmessageid: "{{LIBRECHAT_BODY_PARENTMESSAGEID}}",
+    // 1 default(s)
+    models.default: ["meta-llama/llama-3-70b-instruct"],
+    default.0: "meta-llama/llama-3-70b-instruct",
+    models.fetch: true,
+    3.titleConvo: true,
+    3.titleModel: "meta-llama/llama-3-70b-instruct",
+    // 1 dropParam(s)
+    3.dropParams: ["stop"],
+    dropParams.0: "stop",
+    3.modelDisplayLabel: "OpenRouter",
+    4.name: "Portkey",
+    4.apiKey: "dummy",
+    4.baseURL: "https://api.portkey.ai/v1",
+    headers.x-portkey-api-key: "${PORTKEY_API_KEY}",
+    headers.x-portkey-virtual-key: "${PORTKEY_OPENAI_VIRTUAL_KEY}",
+    // 3 default(s)
+    models.default: ["gpt-4o-mini","gpt-4o","chatgpt-4o-latest"],
+    default.0: "gpt-4o-mini",
+    default.1: "gpt-4o",
+    default.2: "chatgpt-4o-latest",
+    models.fetch: true,
+    4.titleConvo: true,
+    4.titleModel: "current_model",
+    4.summarize: false,
+    4.summaryModel: "current_model",
+    4.forcePrompt: false,
+    4.modelDisplayLabel: "Portkey",
+    4.iconURL: "https://images.crunchbase.com/image/upload/c_pad,f_auto,q_auto:eco,dpr_1/rjqy7ghvjoiu4cd1xjbf",
+}
+2025-11-19T10:33:25.402Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-19T10:33:25.403Z warn: Default value for CREDS_KEY is being used.
+2025-11-19T10:33:25.404Z warn: Default value for CREDS_IV is being used.
+2025-11-19T10:33:25.404Z warn: Default value for JWT_SECRET is being used.
+2025-11-19T10:33:25.404Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-19T10:33:25.404Z info: Please replace any default secret values.
+2025-11-19T10:33:25.404Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-19T10:33:25.404Z info: Outdated Config version: 1.2.1
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      https://... [truncated]
+2025-11-19T10:33:25.404Z warn: RAG API is either not running or not reachable at undefined, you may experience errors with file uploads.
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'PROMPTS'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'BOOKMARKS'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'MULTI_CONVO'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'AGENTS'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'PEOPLE_PICKER'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'MARKETPLACE'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'FILE_SEARCH'
+2025-11-19T10:33:25.406Z debug: Role 'USER': Applying explicit config for 'FILE_CITATIONS'
+2025-11-19T10:33:25.406Z info: No changes needed for 'USER' role permissions
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'PROMPTS'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'BOOKMARKS'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'MULTI_CONVO'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'AGENTS'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'PEOPLE_PICKER'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'MARKETPLACE'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'FILE_SEARCH'
+2025-11-19T10:33:25.408Z debug: Role 'ADMIN': Applying explicit config for 'FILE_CITATIONS'
+2025-11-19T10:33:25.408Z info: No changes needed for 'ADMIN' role permissions
+2025-11-19T10:33:25.421Z info: Server listening at http://localhost:3080
+2025-11-19T10:33:25.422Z info: OAuth reconnect manager initialized successfully.
+2025-11-19T10:33:25.422Z debug: Checking if agent permissions migration is needed
+2025-11-19T10:33:25.422Z debug: Ensuring required collections exist for permission system
+2025-11-19T10:33:25.424Z debug: Collection already exists: aclentries
+2025-11-19T10:33:25.425Z debug: Collection already exists: groups
+2025-11-19T10:33:25.426Z debug: Collection already exists: accessroles
+2025-11-19T10:33:25.426Z debug: Collection already exists: agents
+2025-11-19T10:33:25.427Z debug: Collection already exists: promptgroups
+2025-11-19T10:33:25.427Z debug: Collection already exists: projects
+2025-11-19T10:33:25.427Z debug: All required collections have been checked/created
+2025-11-19T10:33:25.433Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-19T10:33:25.434Z debug: Checking if prompt permissions migration is needed
+2025-11-19T10:33:25.434Z debug: Ensuring required collections exist for permission system
+2025-11-19T10:33:25.434Z debug: Collection already exists: aclentries
+2025-11-19T10:33:25.435Z debug: Collection already exists: groups
+2025-11-19T10:33:25.435Z debug: Collection already exists: accessroles
+2025-11-19T10:33:25.436Z debug: Collection already exists: agents
+2025-11-19T10:33:25.436Z debug: Collection already exists: promptgroups
+2025-11-19T10:33:25.437Z debug: Collection already exists: projects
+2025-11-19T10:33:25.437Z debug: All required collections have been checked/created
+2025-11-19T10:33:25.440Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-19T10:33:25.586Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-19T10:33:25.599Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-19T10:33:25.601Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-19T10:33:25.602Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-19T10:33:25.602Z debug: [indexSync] Flow state cleaned up
+2025-11-19T10:33:25.602Z debug: [indexSync] No sync was needed
+2025-11-19T10:33:36.736Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-19T10:33:37.645Z error: Failed to fetch models from Mistral API The server responded with status 401: Request failed with status code 401
+2025-11-19T10:33:37.690Z error: Failed to fetch models from Portkey API The server responded with status 401: Request failed with status code 401
+2025-11-19T10:34:50.427Z info: Cleaning up FlowStateManager intervals...

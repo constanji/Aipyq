@@ -1,0 +1,94 @@
+2025-11-16T05:02:43.653Z info: Mongo Connection options
+2025-11-16T05:02:43.654Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-16T05:02:43.668Z info: Connected to MongoDB
+2025-11-16T05:02:43.669Z info: [indexSync] Starting index synchronization check...
+2025-11-16T05:02:43.721Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-16T05:02:43.723Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-16T05:02:43.729Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-16T05:02:43.731Z warn: Default value for CREDS_KEY is being used.
+2025-11-16T05:02:43.731Z warn: Default value for CREDS_IV is being used.
+2025-11-16T05:02:43.731Z warn: Default value for JWT_SECRET is being used.
+2025-11-16T05:02:43.731Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-16T05:02:43.731Z info: Please replace any default secret values.
+2025-11-16T05:02:43.731Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-16T05:02:43.731Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-16T05:02:43.737Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-16T05:02:43.740Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-16T05:02:43.742Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-16T05:02:43.747Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-16T05:02:43.748Z info: OAuth reconnect manager initialized successfully.
+2025-11-16T05:02:43.748Z debug: Checking if agent permissions migration is needed
+2025-11-16T05:02:43.748Z debug: Ensuring required collections exist for permission system
+2025-11-16T05:02:43.750Z debug: Collection already exists: aclentries
+2025-11-16T05:02:43.751Z debug: Collection already exists: groups
+2025-11-16T05:02:43.752Z debug: Collection already exists: accessroles
+2025-11-16T05:02:43.753Z debug: Collection already exists: agents
+2025-11-16T05:02:43.754Z debug: Collection already exists: promptgroups
+2025-11-16T05:02:43.755Z debug: Collection already exists: projects
+2025-11-16T05:02:43.755Z debug: All required collections have been checked/created
+2025-11-16T05:02:43.767Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-16T05:02:43.768Z debug: Checking if prompt permissions migration is needed
+2025-11-16T05:02:43.768Z debug: Ensuring required collections exist for permission system
+2025-11-16T05:02:43.769Z debug: Collection already exists: aclentries
+2025-11-16T05:02:43.770Z debug: Collection already exists: groups
+2025-11-16T05:02:43.771Z debug: Collection already exists: accessroles
+2025-11-16T05:02:43.771Z debug: Collection already exists: agents
+2025-11-16T05:02:43.772Z debug: Collection already exists: promptgroups
+2025-11-16T05:02:43.773Z debug: Collection already exists: projects
+2025-11-16T05:02:43.773Z debug: All required collections have been checked/created
+2025-11-16T05:02:43.781Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-16T05:02:43.922Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-16T05:02:43.941Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-16T05:02:43.946Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-16T05:02:43.946Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-16T05:02:43.946Z debug: [indexSync] Flow state cleaned up
+2025-11-16T05:02:43.946Z debug: [indexSync] No sync was needed
+2025-11-16T10:01:25.732Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-16T15:55:46.640Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection

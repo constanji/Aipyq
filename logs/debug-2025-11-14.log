@@ -1,0 +1,873 @@
+2025-11-14T01:13:35.914Z info: Mongo Connection options
+2025-11-14T01:13:35.915Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T01:13:35.933Z info: Connected to MongoDB
+2025-11-14T01:13:35.933Z info: [indexSync] Starting index synchronization check...
+2025-11-14T01:13:35.990Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T01:13:35.993Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T01:13:35.999Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T01:13:36.000Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T01:13:36.000Z warn: Default value for CREDS_IV is being used.
+2025-11-14T01:13:36.000Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T01:13:36.001Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T01:13:36.001Z info: Please replace any default secret values.
+2025-11-14T01:13:36.001Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T01:13:36.001Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T01:13:36.007Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T01:13:36.010Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T01:13:36.012Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T01:13:36.017Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T01:13:36.018Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T01:13:36.018Z debug: Checking if agent permissions migration is needed
+2025-11-14T01:13:36.018Z debug: Ensuring required collections exist for permission system
+2025-11-14T01:13:36.021Z debug: Collection already exists: aclentries
+2025-11-14T01:13:36.022Z debug: Collection already exists: groups
+2025-11-14T01:13:36.023Z debug: Collection already exists: accessroles
+2025-11-14T01:13:36.023Z debug: Collection already exists: agents
+2025-11-14T01:13:36.024Z debug: Collection already exists: promptgroups
+2025-11-14T01:13:36.025Z debug: Collection already exists: projects
+2025-11-14T01:13:36.025Z debug: All required collections have been checked/created
+2025-11-14T01:13:36.035Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T01:13:36.036Z debug: Checking if prompt permissions migration is needed
+2025-11-14T01:13:36.036Z debug: Ensuring required collections exist for permission system
+2025-11-14T01:13:36.037Z debug: Collection already exists: aclentries
+2025-11-14T01:13:36.037Z debug: Collection already exists: groups
+2025-11-14T01:13:36.039Z debug: Collection already exists: accessroles
+2025-11-14T01:13:36.040Z debug: Collection already exists: agents
+2025-11-14T01:13:36.041Z debug: Collection already exists: promptgroups
+2025-11-14T01:13:36.041Z debug: Collection already exists: projects
+2025-11-14T01:13:36.041Z debug: All required collections have been checked/created
+2025-11-14T01:13:36.048Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T01:13:36.189Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T01:13:36.207Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T01:13:36.210Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T01:13:36.210Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T01:13:36.210Z debug: [indexSync] Flow state cleaned up
+2025-11-14T01:13:36.210Z debug: [indexSync] No sync was needed
+2025-11-14T03:16:21.648Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T04:32:24.941Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T04:54:44.333Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T05:49:30.203Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T06:07:12.066Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T06:25:13.409Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T06:41:21.668Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T07:05:33.250Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:02:59.134Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:03:04.098Z error: [handleAbortError] AI response error; aborting request: {"type":"no_user_key"}
+2025-11-14T08:03:04.100Z debug: [AgentController] Performing cleanup
+2025-11-14T08:03:04.100Z debug: [AgentController] Request closed
+2025-11-14T08:03:04.100Z debug: [AgentController] Request aborted on close
+2025-11-14T08:03:04.100Z debug: [AgentController] Cleanup completed
+2025-11-14T08:20:43.831Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:26:08.734Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:26:14.300Z info: Mongo Connection options
+2025-11-14T08:26:14.301Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:26:14.318Z info: Connected to MongoDB
+2025-11-14T08:26:14.319Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:26:14.384Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:26:14.387Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:26:14.395Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:26:14.397Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:26:14.397Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:26:14.397Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:26:14.397Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:26:14.397Z info: Please replace any default secret values.
+2025-11-14T08:26:14.397Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:26:14.397Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:26:14.405Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:26:14.407Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:26:14.409Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:26:14.414Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:26:14.414Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:26:14.415Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:26:14.415Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:26:14.416Z debug: Collection already exists: aclentries
+2025-11-14T08:26:14.417Z debug: Collection already exists: groups
+2025-11-14T08:26:14.427Z debug: Collection already exists: accessroles
+2025-11-14T08:26:14.429Z debug: Collection already exists: agents
+2025-11-14T08:26:14.430Z debug: Collection already exists: promptgroups
+2025-11-14T08:26:14.431Z debug: Collection already exists: projects
+2025-11-14T08:26:14.431Z debug: All required collections have been checked/created
+2025-11-14T08:26:14.443Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:26:14.444Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:26:14.444Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:26:14.445Z debug: Collection already exists: aclentries
+2025-11-14T08:26:14.445Z debug: Collection already exists: groups
+2025-11-14T08:26:14.446Z debug: Collection already exists: accessroles
+2025-11-14T08:26:14.447Z debug: Collection already exists: agents
+2025-11-14T08:26:14.447Z debug: Collection already exists: promptgroups
+2025-11-14T08:26:14.448Z debug: Collection already exists: projects
+2025-11-14T08:26:14.448Z debug: All required collections have been checked/created
+2025-11-14T08:26:14.454Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:26:14.576Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:26:14.591Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:26:14.593Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:26:14.593Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:26:14.593Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:26:14.594Z debug: [indexSync] No sync was needed
+2025-11-14T08:26:21.805Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:27:59.300Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:28:04.625Z info: Mongo Connection options
+2025-11-14T08:28:04.626Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:28:04.653Z info: Connected to MongoDB
+2025-11-14T08:28:04.654Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:28:04.721Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:28:04.724Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:28:04.731Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:28:04.733Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:28:04.733Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:28:04.733Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:28:04.733Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:28:04.733Z info: Please replace any default secret values.
+2025-11-14T08:28:04.733Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:28:04.733Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:28:04.740Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:28:04.742Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:28:04.742Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:28:04.743Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:28:04.744Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:28:04.749Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:28:04.750Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:28:04.750Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:28:04.750Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:28:04.751Z debug: Collection already exists: aclentries
+2025-11-14T08:28:04.752Z debug: Collection already exists: groups
+2025-11-14T08:28:04.753Z debug: Collection already exists: accessroles
+2025-11-14T08:28:04.754Z debug: Collection already exists: agents
+2025-11-14T08:28:04.755Z debug: Collection already exists: promptgroups
+2025-11-14T08:28:04.756Z debug: Collection already exists: projects
+2025-11-14T08:28:04.756Z debug: All required collections have been checked/created
+2025-11-14T08:28:04.766Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:28:04.767Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:28:04.767Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:28:04.767Z debug: Collection already exists: aclentries
+2025-11-14T08:28:04.768Z debug: Collection already exists: groups
+2025-11-14T08:28:04.769Z debug: Collection already exists: accessroles
+2025-11-14T08:28:04.769Z debug: Collection already exists: agents
+2025-11-14T08:28:04.770Z debug: Collection already exists: promptgroups
+2025-11-14T08:28:04.772Z debug: Collection already exists: projects
+2025-11-14T08:28:04.772Z debug: All required collections have been checked/created
+2025-11-14T08:28:04.778Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:28:04.908Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:28:04.929Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:28:04.932Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:28:04.932Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:28:04.932Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:28:04.932Z debug: [indexSync] No sync was needed
+2025-11-14T08:28:05.234Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:31:00.996Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:31:05.837Z info: Mongo Connection options
+2025-11-14T08:31:05.838Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:31:05.858Z info: Connected to MongoDB
+2025-11-14T08:31:05.859Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:31:05.928Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:31:05.931Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:31:05.937Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:31:05.939Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:31:05.939Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:31:05.939Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:31:05.939Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:31:05.939Z info: Please replace any default secret values.
+2025-11-14T08:31:05.940Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:31:05.940Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:31:05.945Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:31:05.948Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:31:05.950Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:31:05.951Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:31:05.951Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:31:05.956Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:31:05.957Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:31:05.957Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:31:05.957Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:31:05.959Z debug: Collection already exists: aclentries
+2025-11-14T08:31:05.960Z debug: Collection already exists: groups
+2025-11-14T08:31:05.961Z debug: Collection already exists: accessroles
+2025-11-14T08:31:05.962Z debug: Collection already exists: agents
+2025-11-14T08:31:05.963Z debug: Collection already exists: promptgroups
+2025-11-14T08:31:05.964Z debug: Collection already exists: projects
+2025-11-14T08:31:05.964Z debug: All required collections have been checked/created
+2025-11-14T08:31:05.974Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:31:05.975Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:31:05.975Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:31:05.975Z debug: Collection already exists: aclentries
+2025-11-14T08:31:05.976Z debug: Collection already exists: groups
+2025-11-14T08:31:05.977Z debug: Collection already exists: accessroles
+2025-11-14T08:31:05.978Z debug: Collection already exists: agents
+2025-11-14T08:31:05.978Z debug: Collection already exists: promptgroups
+2025-11-14T08:31:05.979Z debug: Collection already exists: projects
+2025-11-14T08:31:05.979Z debug: All required collections have been checked/created
+2025-11-14T08:31:05.987Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:31:06.114Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:31:06.135Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:31:06.137Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:31:06.137Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:31:06.137Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:31:06.137Z debug: [indexSync] No sync was needed
+2025-11-14T08:31:06.673Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:31:43.608Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:31:52.445Z info: Mongo Connection options
+2025-11-14T08:31:52.446Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:31:52.462Z info: Connected to MongoDB
+2025-11-14T08:31:52.463Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:31:52.527Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:31:52.530Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:31:52.535Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:31:52.537Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:31:52.537Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:31:52.537Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:31:52.537Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:31:52.537Z info: Please replace any default secret values.
+2025-11-14T08:31:52.537Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:31:52.537Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:31:52.543Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:31:52.549Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:31:52.550Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:31:52.551Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:31:52.581Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:31:52.582Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:31:52.588Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:31:52.588Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:31:52.589Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:31:52.589Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:31:52.591Z debug: Collection already exists: aclentries
+2025-11-14T08:31:52.594Z debug: Collection already exists: groups
+2025-11-14T08:31:52.595Z debug: Collection already exists: accessroles
+2025-11-14T08:31:52.596Z debug: Collection already exists: agents
+2025-11-14T08:31:52.598Z debug: Collection already exists: promptgroups
+2025-11-14T08:31:52.608Z debug: Collection already exists: projects
+2025-11-14T08:31:52.608Z debug: All required collections have been checked/created
+2025-11-14T08:31:52.726Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:31:52.737Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:31:52.739Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:31:52.739Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:31:52.742Z debug: Collection already exists: aclentries
+2025-11-14T08:31:52.746Z debug: Collection already exists: groups
+2025-11-14T08:31:52.749Z debug: Collection already exists: accessroles
+2025-11-14T08:31:52.755Z debug: Collection already exists: agents
+2025-11-14T08:31:52.757Z debug: Collection already exists: promptgroups
+2025-11-14T08:31:52.759Z debug: Collection already exists: projects
+2025-11-14T08:31:52.759Z debug: All required collections have been checked/created
+2025-11-14T08:31:52.774Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:31:52.776Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:31:52.779Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:31:52.779Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:31:52.779Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:31:52.779Z debug: [indexSync] No sync was needed
+2025-11-14T08:31:52.866Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:32:23.700Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:37:04.883Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:37:06.984Z info: Mongo Connection options
+2025-11-14T08:37:06.985Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:37:07.004Z info: Connected to MongoDB
+2025-11-14T08:37:07.004Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:37:07.184Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:37:07.188Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:37:07.194Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:37:07.196Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:37:07.196Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:37:07.196Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:37:07.196Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:37:07.196Z info: Please replace any default secret values.
+2025-11-14T08:37:07.196Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:37:07.197Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:37:07.257Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:37:07.279Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:37:07.286Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:37:07.291Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:37:07.291Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:37:07.291Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:37:07.291Z debug: [indexSync] No sync was needed
+2025-11-14T08:37:07.296Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:37:07.296Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:37:07.296Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:37:07.296Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:37:07.297Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:37:07.298Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:37:07.299Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:37:07.309Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:37:07.310Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:37:07.311Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:37:07.311Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:37:07.315Z debug: Collection already exists: aclentries
+2025-11-14T08:37:07.317Z debug: Collection already exists: groups
+2025-11-14T08:37:07.318Z debug: Collection already exists: accessroles
+2025-11-14T08:37:07.320Z debug: Collection already exists: agents
+2025-11-14T08:37:07.321Z debug: Collection already exists: promptgroups
+2025-11-14T08:37:07.322Z debug: Collection already exists: projects
+2025-11-14T08:37:07.322Z debug: All required collections have been checked/created
+2025-11-14T08:37:07.350Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:37:07.351Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:37:07.352Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:37:07.353Z debug: Collection already exists: aclentries
+2025-11-14T08:37:07.354Z debug: Collection already exists: groups
+2025-11-14T08:37:07.355Z debug: Collection already exists: accessroles
+2025-11-14T08:37:07.356Z debug: Collection already exists: agents
+2025-11-14T08:37:07.357Z debug: Collection already exists: promptgroups
+2025-11-14T08:37:07.358Z debug: Collection already exists: projects
+2025-11-14T08:37:07.358Z debug: All required collections have been checked/created
+2025-11-14T08:37:07.364Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:37:08.425Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:39:42.259Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:48:24.652Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:48:29.539Z info: Mongo Connection options
+2025-11-14T08:48:29.540Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:48:29.566Z info: Connected to MongoDB
+2025-11-14T08:48:29.567Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:48:29.787Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:48:29.790Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:48:29.801Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:48:29.802Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:48:29.802Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:48:29.802Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:48:29.802Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:48:29.803Z info: Please replace any default secret values.
+2025-11-14T08:48:29.803Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:48:29.803Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:48:29.809Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:48:29.812Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:48:29.814Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:48:29.814Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:48:29.814Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:48:29.814Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:48:29.814Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:48:29.815Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:48:29.821Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:48:29.821Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:48:29.822Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:48:29.822Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:48:29.822Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:48:29.824Z debug: Collection already exists: aclentries
+2025-11-14T08:48:29.825Z debug: Collection already exists: groups
+2025-11-14T08:48:29.830Z debug: Collection already exists: accessroles
+2025-11-14T08:48:29.833Z debug: Collection already exists: agents
+2025-11-14T08:48:29.835Z debug: Collection already exists: promptgroups
+2025-11-14T08:48:29.837Z debug: Collection already exists: projects
+2025-11-14T08:48:29.837Z debug: All required collections have been checked/created
+2025-11-14T08:48:29.870Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:48:29.872Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:48:29.873Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:48:29.873Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:48:29.873Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:48:29.874Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:48:29.874Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:48:29.874Z debug: [indexSync] No sync was needed
+2025-11-14T08:48:29.874Z debug: Collection already exists: aclentries
+2025-11-14T08:48:29.875Z debug: Collection already exists: groups
+2025-11-14T08:48:29.876Z debug: Collection already exists: accessroles
+2025-11-14T08:48:29.878Z debug: Collection already exists: agents
+2025-11-14T08:48:29.879Z debug: Collection already exists: promptgroups
+2025-11-14T08:48:29.880Z debug: Collection already exists: projects
+2025-11-14T08:48:29.880Z debug: All required collections have been checked/created
+2025-11-14T08:48:29.889Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:48:30.988Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:48:48.033Z error: [handleAbortError] AI response error; aborting request: {"type":"no_user_key"}
+2025-11-14T08:48:48.034Z debug: [AgentController] Performing cleanup
+2025-11-14T08:48:48.034Z debug: [AgentController] Request closed
+2025-11-14T08:48:48.034Z debug: [AgentController] Request aborted on close
+2025-11-14T08:48:48.034Z debug: [AgentController] Cleanup completed
+2025-11-14T08:48:57.479Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:50:55.759Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:52:33.979Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T08:59:30.462Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T08:59:36.691Z info: Mongo Connection options
+2025-11-14T08:59:36.692Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T08:59:36.711Z info: Connected to MongoDB
+2025-11-14T08:59:36.711Z info: [indexSync] Starting index synchronization check...
+2025-11-14T08:59:36.769Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T08:59:36.772Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T08:59:36.777Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T08:59:36.779Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T08:59:36.779Z warn: Default value for CREDS_IV is being used.
+2025-11-14T08:59:36.779Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T08:59:36.779Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T08:59:36.779Z info: Please replace any default secret values.
+2025-11-14T08:59:36.779Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T08:59:36.779Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T08:59:36.785Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:59:36.787Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T08:59:36.789Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T08:59:36.793Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T08:59:36.794Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T08:59:36.794Z debug: Checking if agent permissions migration is needed
+2025-11-14T08:59:36.794Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:59:36.795Z debug: Collection already exists: aclentries
+2025-11-14T08:59:36.796Z debug: Collection already exists: groups
+2025-11-14T08:59:36.797Z debug: Collection already exists: accessroles
+2025-11-14T08:59:36.798Z debug: Collection already exists: agents
+2025-11-14T08:59:36.799Z debug: Collection already exists: promptgroups
+2025-11-14T08:59:36.800Z debug: Collection already exists: projects
+2025-11-14T08:59:36.800Z debug: All required collections have been checked/created
+2025-11-14T08:59:36.809Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T08:59:36.809Z debug: Checking if prompt permissions migration is needed
+2025-11-14T08:59:36.809Z debug: Ensuring required collections exist for permission system
+2025-11-14T08:59:36.810Z debug: Collection already exists: aclentries
+2025-11-14T08:59:36.811Z debug: Collection already exists: groups
+2025-11-14T08:59:36.812Z debug: Collection already exists: accessroles
+2025-11-14T08:59:36.814Z debug: Collection already exists: agents
+2025-11-14T08:59:36.815Z debug: Collection already exists: promptgroups
+2025-11-14T08:59:36.816Z debug: Collection already exists: projects
+2025-11-14T08:59:36.816Z debug: All required collections have been checked/created
+2025-11-14T08:59:36.822Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T08:59:36.965Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T08:59:36.983Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T08:59:36.987Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T08:59:36.987Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T08:59:36.987Z debug: [indexSync] Flow state cleaned up
+2025-11-14T08:59:36.987Z debug: [indexSync] No sync was needed
+2025-11-14T08:59:37.865Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T09:06:53.327Z info: Cleaning up FlowStateManager intervals...
+2025-11-14T09:06:59.462Z info: Mongo Connection options
+2025-11-14T09:06:59.463Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-14T09:06:59.482Z info: Connected to MongoDB
+2025-11-14T09:06:59.482Z info: [indexSync] Starting index synchronization check...
+2025-11-14T09:06:59.538Z info: [getAppConfig] App configuration not initialized. Initializing AppService...
+2025-11-14T09:06:59.541Z error: Config file YAML format is invalid: ENOENT: no such file or directory, open '/app/librechat.yaml'
+2025-11-14T09:06:59.546Z debug: Turnstile is DISABLED (no siteKey provided).
+2025-11-14T09:06:59.548Z warn: Default value for CREDS_KEY is being used.
+2025-11-14T09:06:59.548Z warn: Default value for CREDS_IV is being used.
+2025-11-14T09:06:59.548Z warn: Default value for JWT_SECRET is being used.
+2025-11-14T09:06:59.548Z warn: Default value for JWT_REFRESH_SECRET is being used.
+2025-11-14T09:06:59.548Z info: Please replace any default secret values.
+2025-11-14T09:06:59.548Z info: ​
+
+    For your convenience, use this tool to generate your own secret values:
+    https://www.librechat.ai/toolkit/creds_generator
+
+    ​
+2025-11-14T09:06:59.548Z info: Outdated Config version: undefined
+Latest version: 1.3.1
+
+      Check out the Config changelogs for the latest options and features added.
+
+      http... [truncated]
+2025-11-14T09:06:59.566Z info: RAG API is running and reachable at http://rag_api:8000.
+2025-11-14T09:06:59.569Z debug: Role 'USER': Preserving existing permissions for 'PROMPTS'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'MEMORIES'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'AGENTS'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T09:06:59.570Z debug: Role 'USER': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'PROMPTS'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'BOOKMARKS'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'MEMORIES'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'MULTI_CONVO'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'AGENTS'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'TEMPORARY_CHAT'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'RUN_CODE'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'WEB_SEARCH'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'PEOPLE_PICKER'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'MARKETPLACE'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_SEARCH'
+2025-11-14T09:06:59.574Z debug: Role 'ADMIN': Preserving existing permissions for 'FILE_CITATIONS'
+2025-11-14T09:06:59.585Z info: Server listening on all interfaces at port 3080. Use http://localhost:3080 to access it
+2025-11-14T09:06:59.587Z info: OAuth reconnect manager initialized successfully.
+2025-11-14T09:06:59.588Z debug: Checking if agent permissions migration is needed
+2025-11-14T09:06:59.588Z debug: Ensuring required collections exist for permission system
+2025-11-14T09:06:59.599Z debug: Collection already exists: aclentries
+2025-11-14T09:06:59.604Z debug: Collection already exists: groups
+2025-11-14T09:06:59.605Z debug: Collection already exists: accessroles
+2025-11-14T09:06:59.610Z debug: Collection already exists: agents
+2025-11-14T09:06:59.612Z debug: Collection already exists: promptgroups
+2025-11-14T09:06:59.615Z debug: Collection already exists: projects
+2025-11-14T09:06:59.615Z debug: All required collections have been checked/created
+2025-11-14T09:06:59.633Z debug: Agent migration check completed
+{
+  totalToMigrate: 0,
+  globalEditAccess: 0,
+  globalViewAccess: 0,
+  privateAgents: 0,
+}
+2025-11-14T09:06:59.634Z debug: Checking if prompt permissions migration is needed
+2025-11-14T09:06:59.634Z debug: Ensuring required collections exist for permission system
+2025-11-14T09:06:59.635Z debug: Collection already exists: aclentries
+2025-11-14T09:06:59.636Z debug: Collection already exists: groups
+2025-11-14T09:06:59.637Z debug: Collection already exists: accessroles
+2025-11-14T09:06:59.638Z debug: Collection already exists: agents
+2025-11-14T09:06:59.640Z debug: Collection already exists: promptgroups
+2025-11-14T09:06:59.640Z debug: Collection already exists: projects
+2025-11-14T09:06:59.641Z debug: All required collections have been checked/created
+2025-11-14T09:06:59.648Z debug: Prompt migration check completed
+{
+  totalToMigrate: 0,
+  globalViewAccess: 0,
+  privateGroups: 0,
+}
+2025-11-14T09:06:59.740Z debug: [MEILI_SYNC:meili-index-sync] Creating initial flow state
+2025-11-14T09:06:59.754Z info: [indexSync] Messages are fully synced: 0/0
+2025-11-14T09:06:59.756Z info: [indexSync] Conversations are fully synced: 0/0
+2025-11-14T09:06:59.757Z debug: [MEILI_SYNC:meili-index-sync] Flow deleted
+2025-11-14T09:06:59.757Z debug: [indexSync] Flow state cleaned up
+2025-11-14T09:06:59.757Z debug: [indexSync] No sync was needed
+2025-11-14T09:07:04.384Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T09:07:51.081Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T09:27:46.777Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T09:27:47.968Z warn: [OAuthReconnectionManager] MCPManager not available, skipping OAuth MCP server reconnection
+2025-11-14T09:28:16.992Z info: Cleaning up FlowStateManager intervals...

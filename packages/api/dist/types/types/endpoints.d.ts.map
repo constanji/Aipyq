@@ -1,0 +1,1 @@
+{"version":3,"file":"endpoints.d.ts","sourceRoot":"","sources":["../../../src/types/endpoints.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,yBAAyB,CAAC;AAEvD,MAAM,MAAM,sBAAsB,GAAG,OAAO,CAAC;IAAE,CAAC,GAAG,EAAE,MAAM,GAAG,IAAI,CAAC,OAAO,EAAE,OAAO,CAAC,CAAA;CAAE,CAAC,CAAC"}

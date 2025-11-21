@@ -1,0 +1,30 @@
+import React from 'react';
+import type { Option, OptionWithIcon, DropdownValueSetter } from '~/common';
+type SelectDropDownProps = {
+    id?: string;
+    title?: string;
+    disabled?: boolean;
+    value: string | null | Option | OptionWithIcon;
+    setValue: DropdownValueSetter | ((value: string) => void);
+    tabIndex?: number;
+    availableValues?: string[] | Option[] | OptionWithIcon[];
+    emptyTitle?: boolean;
+    showAbove?: boolean;
+    showLabel?: boolean;
+    iconSide?: 'left' | 'right';
+    optionIconSide?: 'left' | 'right';
+    renderOption?: () => React.ReactNode;
+    containerClassName?: string;
+    currentValueClass?: string;
+    optionsListClass?: string;
+    optionsClass?: string;
+    subContainerClassName?: string;
+    className?: string;
+    placeholder?: string;
+    searchClassName?: string;
+    searchPlaceholder?: string;
+    showOptionIcon?: boolean;
+};
+declare function SelectDropDown({ title: _title, value, disabled, setValue, availableValues, showAbove, showLabel, emptyTitle, iconSide, optionIconSide, placeholder, containerClassName, optionsListClass, optionsClass, currentValueClass, subContainerClassName, className, renderOption, searchClassName, searchPlaceholder, showOptionIcon, }: SelectDropDownProps): import("react/jsx-runtime").JSX.Element;
+export default SelectDropDown;
+//# sourceMappingURL=SelectDropDown.d.ts.map

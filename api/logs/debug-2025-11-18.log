@@ -1,0 +1,92 @@
+2025-11-18T09:25:02.429Z info: Mongo Connection options
+2025-11-18T09:25:02.430Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:27:42.958Z info: Mongo Connection options
+2025-11-18T09:27:42.959Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:35:26.874Z info: Mongo Connection options
+2025-11-18T09:35:26.875Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:40:37.570Z info: Mongo Connection options
+2025-11-18T09:40:37.571Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:42:37.134Z info: Mongo Connection options
+2025-11-18T09:42:37.134Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:45:14.128Z info: Mongo Connection options
+2025-11-18T09:45:14.129Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:47:23.131Z info: Mongo Connection options
+2025-11-18T09:47:23.132Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:47:23.157Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T09:53:14.552Z info: Mongo Connection options
+2025-11-18T09:53:14.553Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:53:14.577Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T09:56:09.973Z info: Mongo Connection options
+2025-11-18T09:56:09.973Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T09:56:09.997Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T10:00:39.217Z info: Mongo Connection options
+2025-11-18T10:00:39.218Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T10:00:39.243Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T10:05:44.595Z info: Mongo Connection options
+2025-11-18T10:05:44.596Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T10:05:44.620Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T10:13:27.611Z info: Mongo Connection options
+2025-11-18T10:13:27.611Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T10:13:27.637Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T10:17:20.050Z info: Mongo Connection options
+2025-11-18T10:17:20.052Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T10:17:20.093Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
+2025-11-18T10:17:28.215Z info: Mongo Connection options
+2025-11-18T10:17:28.215Z info: {
+  "bufferCommands": false,
+  "autoIndex": false,
+  "autoCreate": false
+}
+2025-11-18T10:17:28.220Z error: [deleteConvos] Error deleting conversations and messages Conversation not found or already deleted.
