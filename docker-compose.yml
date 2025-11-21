@@ -10,7 +10,7 @@ services:
       - "${API_PORT:-3080}:3080"
     depends_on:
       - rag_api
-    image: ghcr.io/danny-avila/librechat-dev:latest
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_REGISTRY_USER:-your-username}/${IMAGE_PREFIX:-aipyq}:${IMAGE_TAG:-latest}
     restart: always
     user: "${UID}:${GID}"
     extra_hosts:
@@ -74,7 +74,7 @@ services:
       - pgdata2:/var/lib/postgresql/data
   rag_api:
     container_name: Rag_api
-    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_REGISTRY_USER:-your-username}/${IMAGE_PREFIX:-aipyq}-rag-api:${IMAGE_TAG:-latest}
     environment:
       - DB_HOST=vectordb
       - RAG_PORT=${RAG_PORT:-8000}
