@@ -7,6 +7,7 @@
 - Docker 和 Docker Compose 已安装
 - Git 已安装
 - 至少 4GB 可用磁盘空间
+- （可选）Node.js 和 npm（如果需要构建前端）
 
 ## 快速测试部署
 
@@ -22,7 +23,21 @@ chmod +x scripts/test-deploy.sh
 ./scripts/test-deploy.sh
 ```
 
-### 方法 2：手动部署
+脚本会询问是否需要构建前端：
+- **输入 y**：会先构建前端，然后部署（需要 Node.js 和 npm）
+- **输入 N 或直接回车**：跳过构建，使用 Docker 镜像中的预构建文件（推荐用于快速测试）
+
+### 方法 2：先构建再部署
+
+```bash
+# 1. 仅构建前端
+./scripts/build-only.sh
+
+# 2. 然后运行部署脚本（选择不构建）
+./scripts/test-deploy.sh
+```
+
+### 方法 3：手动部署
 
 #### 步骤 1：准备环境变量
 
@@ -39,7 +54,21 @@ cp .env.example.min .env
 # - 至少一个 AI API 密钥（如 OPENAI_API_KEY 或 ANTHROPIC_API_KEY）
 ```
 
-#### 步骤 2：启动 Docker 容器
+#### 步骤 2：构建前端（可选）
+
+如果需要在本地构建前端：
+
+```bash
+# 安装依赖（如果还没有）
+npm ci
+
+# 构建前端
+npm run frontend
+```
+
+**注意**：如果不构建，Docker 镜像中已包含预构建的文件，可以直接使用。
+
+#### 步骤 3：启动 Docker 容器
 
 ```bash
 # 启动所有服务
@@ -52,7 +81,7 @@ docker compose ps
 docker compose logs -f api
 ```
 
-#### 步骤 3：验证部署
+#### 步骤 4：验证部署
 
 1. 访问应用：`http://localhost:3080`（或你配置的端口）
 2. 检查服务状态：
@@ -67,13 +96,42 @@ docker compose logs -f api
    curl http://localhost:7700/health
    ```
 
+## 构建说明
+
+### 是否需要构建？
+
+**不需要构建的情况（推荐）**：
+- 使用预构建的 Docker 镜像（`ghcr.io/danny-avila/librechat-dev:latest`）
+- 镜像中已包含构建好的前端文件
+- 适合快速测试部署
+
+**需要构建的情况**：
+- 修改了前端源代码
+- 需要测试构建流程
+- 想要使用最新的前端代码
+
+### 构建命令
+
+```bash
+# 完整构建（包括所有包和前端）
+npm run frontend
+
+# 或分步构建
+npm run build:data-provider
+npm run build:data-schemas
+npm run build:api
+npm run build:client-package
+cd client && npm run build
+```
+
 ## 测试环境清理
 
 ```bash
-# 停止并删除所有容器和数据
-docker compose down -v
+# 使用清理脚本
+./scripts/clean-test.sh
 
-# 删除数据目录（可选，会清除所有数据）
+# 或手动清理
+docker compose down -v
 rm -rf data-node meili_data_v1.12 logs uploads
 ```
 
@@ -104,6 +162,13 @@ GID=$(id -g)
 docker compose ps mongodb
 docker compose logs mongodb
 ```
+
+### 构建失败
+
+如果构建失败：
+1. 检查 Node.js 版本（需要 Node.js 20+）
+2. 清理并重新安装依赖：`rm -rf node_modules package-lock.json && npm install`
+3. 可以跳过构建，直接使用 Docker 镜像中的文件
 
 ## 验证清单
 

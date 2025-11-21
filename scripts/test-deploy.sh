@@ -79,6 +79,57 @@ if [ ${#MISSING_VARS[@]} -gt 0 ]; then
     read -p "按 Enter 继续（可能会部署失败）..."
 fi
 
+# 询问是否需要构建前端
+echo ""
+echo "=========================================="
+echo "  构建选项"
+echo "=========================================="
+echo ""
+echo "Docker 镜像中已包含预构建的前端文件"
+echo "  - 镜像: ghcr.io/danny-avila/librechat-dev:latest"
+echo "  - 预构建文件位置: /app/client/dist"
+echo ""
+echo "选择："
+echo "  [N] 跳过构建 - 使用镜像中的预构建文件（推荐，快速）"
+echo "  [y] 本地构建 - 构建前端并覆盖镜像中的文件（需要 Node.js）"
+echo ""
+read -p "是否构建前端？(y/N): " BUILD_FRONTEND
+
+if [[ "$BUILD_FRONTEND" =~ ^[Yy]$ ]]; then
+    # 检查 Node.js 和 npm
+    if ! command -v node &> /dev/null; then
+        echo -e "${YELLOW}警告: Node.js 未安装，跳过构建${NC}"
+        echo "将使用 Docker 镜像中的预构建文件"
+        BUILD_FRONTEND=""
+    elif ! command -v npm &> /dev/null; then
+        echo -e "${YELLOW}警告: npm 未安装，跳过构建${NC}"
+        echo "将使用 Docker 镜像中的预构建文件"
+        BUILD_FRONTEND=""
+    else
+        echo ""
+        echo "开始构建前端..."
+        echo "这可能需要几分钟时间..."
+        
+        # 检查是否已安装依赖
+        if [ ! -d "node_modules" ]; then
+            echo "安装依赖..."
+            npm ci --no-audit || npm install --no-audit
+        fi
+        
+        # 构建前端
+        npm run frontend
+        
+        if [ $? -eq 0 ]; then
+            echo -e "${GREEN}✓${NC} 前端构建完成"
+        else
+            echo -e "${RED}✗${NC} 前端构建失败"
+            echo -e "${YELLOW}将继续使用 Docker 镜像中的预构建文件${NC}"
+        fi
+    fi
+else
+    echo "跳过构建，将使用 Docker 镜像中的预构建文件"
+fi
+
 # 停止现有容器（如果存在）
 echo ""
 echo "停止现有容器..."
@@ -88,6 +139,12 @@ $DOCKER_COMPOSE down 2>/dev/null || true
 echo ""
 echo "创建必要的目录..."
 mkdir -p data-node meili_data_v1.12 logs uploads images
+
+# 如果未构建，确保 dist 目录存在（避免挂载错误）
+if [ ! -d "client/dist" ]; then
+    echo "创建 client/dist 目录（将使用镜像中的文件）..."
+    mkdir -p client/dist
+fi
 
 # 启动容器
 echo ""
