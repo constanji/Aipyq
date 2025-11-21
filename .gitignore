@@ -56,6 +56,9 @@ bower_components/
 *.d.ts
 !vite-env.d.ts
 
+# Bun lock file (not needed for Docker deployment)
+bun.lockb
+
 # AI
 .clineignore
 .cursor
