@@ -150,7 +150,9 @@ function parseCustomParams(endpointName, customParams) {
   // TODO: Remove this check once we support new parameters not part of default parameters.
   // Checks if every key in `paramDefinitions` is valid.
   const validKeys = new Set(Object.keys(defaultParamsMap));
-  const paramKeys = customParams.paramDefinitions.map((param) => param.key);
+  // Filter out null/undefined params before mapping
+  const validParamDefinitions = customParams.paramDefinitions.filter((param) => param != null);
+  const paramKeys = validParamDefinitions.map((param) => param.key);
   if (paramKeys.some((key) => !validKeys.has(key))) {
     throw new Error(
       `paramDefinitions of "${endpointName}" endpoint contains invalid key(s). ` +
@@ -159,7 +161,12 @@ function parseCustomParams(endpointName, customParams) {
   }
 
   // Fill out missing values for custom param definitions
-  customParams.paramDefinitions = customParams.paramDefinitions.map((param) => {
+  customParams.paramDefinitions = validParamDefinitions.map((param) => {
+    if (!param || !param.key) {
+      throw new Error(
+        `paramDefinitions of "${endpointName}" endpoint contains invalid parameter definition (missing key).`,
+      );
+    }
     return { ...defaultParamsMap[param.key], ...param, optionType: 'custom' };
   });
 

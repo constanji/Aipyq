@@ -32,7 +32,11 @@ async function loadAsyncEndpoints(appConfig) {
     }
   }
 
-  const google = serviceKey || isGoogleKeyProvided ? { userProvide: googleUserProvides } : false;
+  const google = serviceKey
+    ? serviceKey
+    : isGoogleKeyProvided
+      ? { userProvide: googleUserProvides }
+      : false;
 
   const useAzure = !!appConfig?.endpoints?.[EModelEndpoint.azureOpenAI]?.plugins;
   const gptPlugins =

@@ -53,3 +53,32 @@ export const getPresetTitle = (preset: TPreset, mention?: boolean) => {
   return `${title}${modelInfo}${label ? ` (${label})` : ''}`.trim();
 };
 
+/** Remove unavailable tools from the preset */
+export const removeUnavailableTools = (
+  preset: TPreset,
+  availableTools: Record<string, TPlugin | undefined>,
+) => {
+  const newPreset = { ...preset };
+
+  if (newPreset.tools && newPreset.tools.length > 0) {
+    newPreset.tools = newPreset.tools
+      .filter((tool) => {
+        let pluginKey: string;
+        if (typeof tool === 'string') {
+          pluginKey = tool;
+        } else {
+          ({ pluginKey } = tool);
+        }
+
+        return !!availableTools[pluginKey];
+      })
+      .map((tool) => {
+        if (typeof tool === 'string') {
+          return tool;
+        }
+        return tool.pluginKey;
+      });
+  }
+
+  return newPreset;
+};

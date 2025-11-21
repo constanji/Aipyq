@@ -1,11 +1,15 @@
-import type { TPreset } from 'librechat-data-provider';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import type { TPreset, TPlugin } from 'librechat-data-provider';
 import type { TSetOptionsPayload, TSetExample, TSetOption, TSetOptions } from '~/common';
 import { useChatContext } from '~/Providers/ChatContext';
 import { cleanupPreset } from '~/utils';
+import store from '~/store';
 
 type TUsePresetOptions = (preset?: TPreset | boolean | null) => TSetOptionsPayload | boolean;
 
 const usePresetIndexOptions: TUsePresetOptions = (_preset) => {
+  const setShowPluginStoreDialog = useSetRecoilState(store.showPluginStoreDialog);
+  const availableTools = useRecoilValue(store.availableTools);
   const { preset, setPreset } = useChatContext();
 
   if (!_preset) {
@@ -111,6 +115,54 @@ const usePresetIndexOptions: TUsePresetOptions = (_preset) => {
     );
   };
 
+  function checkPluginSelection(value: string) {
+    if (!preset?.tools) {
+      return false;
+    }
+    return preset.tools.find((el) => {
+      if (typeof el === 'string') {
+        return el === value;
+      }
+      return el.pluginKey === value;
+    })
+      ? true
+      : false;
+  }
+
+  const setTools: (newValue: string, remove?: boolean) => void = (newValue, remove) => {
+    if (newValue === 'pluginStore') {
+      setShowPluginStoreDialog(true);
+      return;
+    }
+
+    const update = {};
+    const current =
+      preset?.tools
+        ?.map((tool: string | TPlugin) => {
+          if (typeof tool === 'string') {
+            return availableTools[tool];
+          }
+          return tool;
+        })
+        .filter((el) => !!el) || [];
+    const isSelected = checkPluginSelection(newValue);
+    const tool = availableTools[newValue];
+    if (isSelected || remove) {
+      update['tools'] = current.filter((el) => el.pluginKey !== newValue);
+    } else {
+      update['tools'] = [...current, tool];
+    }
+
+    setPreset((prevState) =>
+      cleanupPreset({
+        preset: {
+          ...prevState,
+          ...update,
+        },
+      }),
+    );
+  };
+
   return {
     setOption,
     setExample,
@@ -118,7 +170,9 @@ const usePresetIndexOptions: TUsePresetOptions = (_preset) => {
     setOptions,
     removeExample,
     getConversation,
+    checkPluginSelection,
     setAgentOption,
+    setTools,
   };
 };
 

@@ -219,6 +219,7 @@ const startServer = async () => {
   // 高级功能
   app.use('/api/assistants', routes.assistants); // OpenAI Assistants 管理
   app.use('/api/agents', routes.agents); // Agent（智能代理）管理
+  app.use('/api/plugins', routes.plugins); // 插件管理
   app.use('/api/mcp', routes.mcp); // MCP (Model Context Protocol) 管理
   
   // 权限和角色

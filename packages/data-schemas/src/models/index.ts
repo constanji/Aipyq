@@ -13,6 +13,7 @@ import { createFileModel } from './file';
 import { createBannerModel } from './banner';
 import { createProjectModel } from './project';
 import { createKeyModel } from './key';
+import { createPluginAuthModel } from './pluginAuth';
 import { createTransactionModel } from './transaction';
 import { createPresetModel } from './preset';
 import { createPromptModel } from './prompt';
@@ -45,6 +46,7 @@ export function createModels(mongoose: typeof import('mongoose')) {
     Banner: createBannerModel(mongoose),
     Project: createProjectModel(mongoose),
     Key: createKeyModel(mongoose),
+    PluginAuth: createPluginAuthModel(mongoose),
     Transaction: createTransactionModel(mongoose),
     Preset: createPresetModel(mongoose),
     Prompt: createPromptModel(mongoose),

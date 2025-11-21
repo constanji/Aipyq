@@ -25,6 +25,14 @@ const endpointsQueryEnabled = atom<boolean>({
   default: true,
 });
 
+const plugins = selector({
+  key: 'plugins',
+  get: ({ get }) => {
+    const config = get(endpointsConfig) || {};
+    return config.gptPlugins?.plugins || {};
+  },
+});
+
 const endpointsFilter = selector({
   key: 'endpointsFilter',
   get: ({ get }) => {
@@ -39,6 +47,7 @@ const endpointsFilter = selector({
 });
 
 export default {
+  plugins,
   endpointsConfig,
   endpointsFilter,
   defaultConfig,
