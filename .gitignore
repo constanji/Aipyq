@@ -30,6 +30,9 @@ coverage
 config/
 # But keep translation stores structure (already ignored above)
 # config/translations/stores/* is already ignored
+
+# Documentation (optional, not needed in repository)
+docs/
 client/src/localization/languages/*_missing_keys.json
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
