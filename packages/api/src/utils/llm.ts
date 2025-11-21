@@ -1,7 +1,7 @@
-import { librechat } from 'librechat-data-provider';
+import { aipyq } from 'librechat-data-provider';
 import type { DynamicSettingProps } from 'librechat-data-provider';
 
-type LibreChatKeys = keyof typeof librechat;
+type LibreChatKeys = keyof typeof aipyq;
 
 type LibreChatParams = {
   modelOptions: Omit<NonNullable<DynamicSettingProps['conversation']>, LibreChatKeys>;
@@ -22,7 +22,7 @@ export function extractLibreChatParams(
   if (!options) {
     return {
       modelOptions: {} as Omit<NonNullable<DynamicSettingProps['conversation']>, LibreChatKeys>,
-      resendFiles: librechat.resendFiles.default as boolean,
+      resendFiles: aipyq.resendFiles.default as boolean,
     };
   }
 
@@ -30,7 +30,7 @@ export function extractLibreChatParams(
 
   const resendFiles =
     (delete modelOptions.resendFiles, options.resendFiles) ??
-    (librechat.resendFiles.default as boolean);
+    (aipyq.resendFiles.default as boolean);
   const promptPrefix = (delete modelOptions.promptPrefix, options.promptPrefix);
   const maxContextTokens = (delete modelOptions.maxContextTokens, options.maxContextTokens);
   const fileTokenLimit = (delete modelOptions.fileTokenLimit, options.fileTokenLimit);
