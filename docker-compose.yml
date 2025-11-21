@@ -7,7 +7,7 @@ services:
   api:
     container_name: AIpyq
     ports:
-      - "${PORT}:${PORT}"
+      - "${API_PORT:-3080}:${API_PORT:-3080}"
     depends_on:
       - rag_api
     image: ghcr.io/danny-avila/librechat-dev:latest
@@ -17,7 +17,8 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - HOST=0.0.0.0
-      - MONGO_URI=mongodb://host.docker.internal:27017/LibreChat
+      - PORT=${API_PORT:-3080}
+      - MONGO_URI=mongodb://host.docker.internal:${MONGO_PORT:-27017}/Aipyq
       - MEILI_HOST=http://meilisearch:7700
       - RAG_PORT=${RAG_PORT:-8000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
@@ -36,7 +37,7 @@ services:
     restart: always
     user: "${UID}:${GID}"
     ports:
-    - "27017:27017" 
+    - "${MONGO_PORT:-27017}:27017" 
     volumes:
       - ./data-node:/data/db
     command: mongod --noauth
@@ -45,6 +46,8 @@ services:
     image: getmeili/meilisearch:v1.12.3
     restart: always
     user: "${UID}:${GID}"
+    ports:
+      - "${MEILI_PORT:-7700}:7700"
     environment:
       - MEILI_HOST=http://meilisearch:7700
       - MEILI_NO_ANALYTICS=true
