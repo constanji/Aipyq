@@ -92,6 +92,9 @@ e2e/
 /e2e/specs/.test-results/
 /e2e/playwright-report/
 /playwright/.cache/
+
+# Scripts (optional tools, not needed for basic Docker deployment)
+scripts/
 .DS_Store
 *.code-workspace
 .idx
