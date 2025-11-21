@@ -109,25 +109,47 @@
 
 3. **启动服务**
    ```bash
-   # 使用测试部署脚本（推荐）
-   ./scripts/test-deploy.sh
-   
-   # 或手动启动
+   # 直接启动（推荐，最简单）
    docker compose up -d
+   
+   # 查看容器状态
+   docker compose ps
+   
+   # 查看日志
+   docker compose logs -f api
    ```
 
 4. **访问应用**
-   - 打开浏览器访问：`http://localhost:3080`
+   - 打开浏览器访问：`http://localhost:3080`（或你配置的端口）
 
-### 测试环境部署
-
-详细说明请参考 [DEPLOY_TEST.md](./DEPLOY_TEST.md)
-
-### 清理测试环境
+### 常用命令
 
 ```bash
-./scripts/clean-test.sh
+# 启动服务
+docker compose up -d
+
+# 停止服务
+docker compose down
+
+# 停止并删除数据卷（清理所有数据）
+docker compose down -v
+
+# 查看日志
+docker compose logs -f api
+
+# 重启服务
+docker compose restart api
 ```
+
+### 可选：使用自动化脚本
+
+如果需要自动化部署流程，可以使用 `scripts` 目录下的脚本：
+- `scripts/test-deploy.sh` - 自动化测试部署（包含健康检查）
+- `scripts/clean-test.sh` - 清理测试环境
+- `scripts/docker-build.sh` - 构建自定义镜像
+- `scripts/docker-push.sh` - 推送自定义镜像
+
+**注意**：如果只使用预构建的 Docker 镜像，这些脚本都不是必需的。
 
 
 
