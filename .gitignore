@@ -1,8 +1,9 @@
 ### node etc ###
 
 # Logs
-data-node
-meili_data*
+data-node/
+meili_data*/
+meili_data_v1.12/
 data/
 logs
 *.log
