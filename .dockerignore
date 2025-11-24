@@ -1,0 +1,16 @@
+**/.circleci
+**/.editorconfig
+**/.dockerignore
+**/.git
+**/.DS_Store
+**/.vscode
+**/node_modules
+
+# 特定文件或目录忽略
+data-node   
+meili_data* 
+librechat*  
+docs        
+
+# 忽略所有以.开头的文件
+.*
