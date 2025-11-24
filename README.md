@@ -97,8 +97,7 @@
 
 1. **克隆项目**
    ```bash
-   git clone <your-repo-url>
-   cd Aipyq
+   
    ```
 
 2. **配置环境变量**
@@ -141,7 +140,7 @@ docker compose logs -f api
 docker compose restart api
 ```
 
-docker镜像叫aipyq（？一小时了，我再检查一下构建好没有）
+镜像构建准备最后再上传
 
 ---
 
