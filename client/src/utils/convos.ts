@@ -312,9 +312,6 @@ export function storeEndpointSettings(conversation: TConversation | null) {
   }
   const lastModel = JSON.parse(localStorage.getItem(LocalStorageKeys.LAST_MODEL) ?? '{}');
   lastModel[endpoint] = model;
-  if (endpoint === EModelEndpoint.gptPlugins) {
-    lastModel.secondaryModel = agentOptions?.model ?? model ?? '';
-  }
   localStorage.setItem(LocalStorageKeys.LAST_MODEL, JSON.stringify(lastModel));
 }
 

@@ -539,18 +539,7 @@ describe('Conversation Utilities', () => {
         expect([undefined, 'gpt-3']).toContain(stored.openAI);
       });
 
-      it('stores secondaryModel for gptPlugins endpoint', () => {
-        const conversation = {
-          conversationId: '1',
-          endpoint: 'gptPlugins',
-          model: 'gpt-4',
-          agentOptions: { model: 'plugin-model' },
-        };
-        storeEndpointSettings(conversation as any);
-        const stored = JSON.parse(localStorage.getItem('lastModel') || '{}');
-        expect([undefined, 'gpt-4']).toContain(stored.gptPlugins);
-        expect([undefined, 'plugin-model']).toContain(stored.secondaryModel);
-      });
+      // Removed: gptPlugins endpoint is deprecated
 
       it('does nothing if conversation is null', () => {
         storeEndpointSettings(null);

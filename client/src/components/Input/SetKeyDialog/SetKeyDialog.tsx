@@ -34,7 +34,6 @@ const endpointComponents = {
   [EModelEndpoint.openAI]: OpenAIConfig,
   [EModelEndpoint.custom]: CustomConfig,
   [EModelEndpoint.azureOpenAI]: OpenAIConfig,
-  [EModelEndpoint.gptPlugins]: OpenAIConfig,
   [EModelEndpoint.assistants]: OpenAIConfig,
   [EModelEndpoint.azureAssistants]: OpenAIConfig,
   default: OtherConfig,
@@ -44,7 +43,6 @@ const formSet: Set<string> = new Set([
   EModelEndpoint.openAI,
   EModelEndpoint.custom,
   EModelEndpoint.azureOpenAI,
-  EModelEndpoint.gptPlugins,
   EModelEndpoint.assistants,
   EModelEndpoint.azureAssistants,
 ]);
@@ -220,7 +218,6 @@ const SetKeyDialog = ({
         const isOpenAIBase =
           isAzure ||
           endpoint === EModelEndpoint.openAI ||
-          endpoint === EModelEndpoint.gptPlugins ||
           isAssistantsEndpoint(endpoint);
         if (isAzure) {
           data.apiKey = 'n/a';
@@ -311,11 +308,7 @@ const SetKeyDialog = ({
             <EndpointComponent
               userKey={userKey}
               setUserKey={setUserKey}
-              endpoint={
-                endpoint === EModelEndpoint.gptPlugins && (config?.azure ?? false)
-                  ? EModelEndpoint.azureOpenAI
-                  : endpoint
-              }
+              endpoint={endpoint}
               userProvideURL={userProvideURL}
             />
           </FormProvider>

@@ -38,21 +38,7 @@ async function loadAsyncEndpoints(appConfig) {
       ? { userProvide: googleUserProvides }
       : false;
 
-  const useAzure = !!appConfig?.endpoints?.[EModelEndpoint.azureOpenAI]?.plugins;
-  const gptPlugins =
-    useAzure || openAIApiKey || azureOpenAIApiKey
-      ? {
-          availableAgents: ['classic', 'functions'],
-          userProvide: useAzure ? false : userProvidedOpenAI,
-          userProvideURL: useAzure
-            ? false
-            : config[EModelEndpoint.openAI]?.userProvideURL ||
-              config[EModelEndpoint.azureOpenAI]?.userProvideURL,
-          azure: useAzurePlugins || useAzure,
-        }
-      : false;
-
-  return { google, gptPlugins };
+  return { google };
 }
 
 module.exports = loadAsyncEndpoints;

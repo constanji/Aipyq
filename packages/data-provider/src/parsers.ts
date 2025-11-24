@@ -10,11 +10,9 @@ import {
   EModelEndpoint,
   anthropicSchema,
   assistantSchema,
-  gptPluginsSchema,
   // agentsSchema,
   compactAgentsSchema,
   compactGoogleSchema,
-  compactPluginsSchema,
   compactAssistantSchema,
 } from './schemas';
 import { bedrockInputSchema } from './bedrock';
@@ -24,7 +22,6 @@ type EndpointSchema =
   | typeof openAISchema
   | typeof googleSchema
   | typeof anthropicSchema
-  | typeof gptPluginsSchema
   | typeof assistantSchema
   | typeof compactAgentsSchema
   | typeof bedrockInputSchema;
@@ -37,7 +34,6 @@ const endpointSchemas: Record<EndpointSchemaKey, EndpointSchema> = {
   [EModelEndpoint.custom]: openAISchema,
   [EModelEndpoint.google]: googleSchema,
   [EModelEndpoint.anthropic]: anthropicSchema,
-  [EModelEndpoint.gptPlugins]: gptPluginsSchema,
   [EModelEndpoint.assistants]: assistantSchema,
   [EModelEndpoint.azureAssistants]: assistantSchema,
   [EModelEndpoint.agents]: compactAgentsSchema,
@@ -58,7 +54,6 @@ export function getEnabledEndpoints() {
     EModelEndpoint.azureOpenAI,
     EModelEndpoint.google,
     EModelEndpoint.chatGPTBrowser,
-    EModelEndpoint.gptPlugins,
     EModelEndpoint.anthropic,
     EModelEndpoint.bedrock,
   ];
@@ -228,7 +223,6 @@ export const getResponseSender = (endpointOption: t.TEndpointOption): string => 
     [
       EModelEndpoint.openAI,
       EModelEndpoint.bedrock,
-      EModelEndpoint.gptPlugins,
       EModelEndpoint.azureOpenAI,
       EModelEndpoint.chatGPTBrowser,
     ].includes(endpoint)
@@ -298,8 +292,7 @@ type CompactEndpointSchema =
   | typeof compactAgentsSchema
   | typeof compactGoogleSchema
   | typeof anthropicSchema
-  | typeof bedrockInputSchema
-  | typeof compactPluginsSchema;
+  | typeof bedrockInputSchema;
 
 const compactEndpointSchemas: Record<EndpointSchemaKey, CompactEndpointSchema> = {
   [EModelEndpoint.openAI]: openAISchema,
@@ -311,7 +304,6 @@ const compactEndpointSchemas: Record<EndpointSchemaKey, CompactEndpointSchema> =
   [EModelEndpoint.google]: compactGoogleSchema,
   [EModelEndpoint.bedrock]: bedrockInputSchema,
   [EModelEndpoint.anthropic]: anthropicSchema,
-  [EModelEndpoint.gptPlugins]: compactPluginsSchema,
 };
 
 export const parseCompactConvo = ({
