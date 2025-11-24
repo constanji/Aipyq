@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { EModelEndpoint, SettingsViews } from 'librechat-data-provider';
-import { Button, MessagesSquared, GPTIcon, AssistantIcon, DataIcon } from '@librechat/client';
+import { Button, MessagesSquared, AssistantIcon, DataIcon } from '@librechat/client';
 import type { ReactNode } from 'react';
 import { useChatContext } from '~/Providers';
 import { useLocalize } from '~/hooks';
@@ -62,19 +62,6 @@ export default function PopoverButtons({
         buttonClass: isGenerativeModel === true || isTextModel ? 'disabled' : '',
         handler: triggerExamples,
         icon: <MessagesSquared className={cn('mr-1 w-[14px]', iconClass)} />,
-      },
-    ],
-    [EModelEndpoint.gptPlugins]: [
-      {
-        label: localize(
-          showAgentSettings ? 'com_show_completion_settings' : 'com_show_agent_settings',
-        ),
-        buttonClass: '',
-        handler: () => {
-          setSettingsView(SettingsViews.default);
-          setShowAgentSettings((prev) => !prev);
-        },
-        icon: <GPTIcon className={cn('mr-1 w-[14px]', iconClass)} size={24} />,
       },
     ],
   };

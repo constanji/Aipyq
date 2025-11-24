@@ -17,7 +17,6 @@ const ConversationStarters = () => {
       [
         EModelEndpoint.chatGPTBrowser,
         EModelEndpoint.azureOpenAI,
-        EModelEndpoint.gptPlugins,
       ].includes(ep as EModelEndpoint)
     ) {
       ep = EModelEndpoint.openAI;

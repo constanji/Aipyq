@@ -47,7 +47,6 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
       [
         EModelEndpoint.chatGPTBrowser,
         EModelEndpoint.azureOpenAI,
-        EModelEndpoint.gptPlugins,
       ].includes(ep as EModelEndpoint)
     ) {
       ep = EModelEndpoint.openAI;

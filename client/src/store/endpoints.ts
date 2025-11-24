@@ -9,7 +9,6 @@ const defaultConfig: TEndpointsConfig = {
   [EModelEndpoint.agents]: null,
   [EModelEndpoint.openAI]: null,
   [EModelEndpoint.chatGPTBrowser]: null,
-  [EModelEndpoint.gptPlugins]: null,
   [EModelEndpoint.google]: null,
   [EModelEndpoint.anthropic]: null,
   [EModelEndpoint.custom]: null,
@@ -27,9 +26,8 @@ const endpointsQueryEnabled = atom<boolean>({
 
 const plugins = selector({
   key: 'plugins',
-  get: ({ get }) => {
-    const config = get(endpointsConfig) || {};
-    return config.gptPlugins?.plugins || {};
+  get: () => {
+    return {};
   },
 });
 
