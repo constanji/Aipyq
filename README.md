@@ -12,7 +12,7 @@
 
 - 🤖 **AI 模型选择**：
   - Anthropic（Claude）、AWS Bedrock、OpenAI、Azure OpenAI、Google、Vertex AI、OpenAI 响应 API（含 Azure）
-  - 自定义端点：无需代理，即可在 LibreChat 中使用任何兼容 OpenAI 的 API
+  - 自定义端点：无需代理，即可使用任何兼容 OpenAI 的 API
   - 兼容本地及远程 AI 提供商：
     - Ollama、groq、Cohere、Mistral AI、Apple MLX、koboldcpp、together.ai
     - OpenRouter、Perplexity、ShuttleAI、Deepseek、通义千问（Qwen）等更多平台
