@@ -10,10 +10,12 @@ import {
   EModelEndpoint,
   anthropicSchema,
   assistantSchema,
+  gptPluginsSchema,
   // agentsSchema,
   compactAgentsSchema,
   compactGoogleSchema,
   compactAssistantSchema,
+  compactPluginsSchema,
 } from './schemas';
 import { bedrockInputSchema } from './bedrock';
 import { alternateName } from './config';
@@ -23,6 +25,7 @@ type EndpointSchema =
   | typeof googleSchema
   | typeof anthropicSchema
   | typeof assistantSchema
+  | typeof gptPluginsSchema
   | typeof compactAgentsSchema
   | typeof bedrockInputSchema;
 
@@ -34,6 +37,7 @@ const endpointSchemas: Record<EndpointSchemaKey, EndpointSchema> = {
   [EModelEndpoint.custom]: openAISchema,
   [EModelEndpoint.google]: googleSchema,
   [EModelEndpoint.anthropic]: anthropicSchema,
+  [EModelEndpoint.gptPlugins]: gptPluginsSchema,
   [EModelEndpoint.assistants]: assistantSchema,
   [EModelEndpoint.azureAssistants]: assistantSchema,
   [EModelEndpoint.agents]: compactAgentsSchema,
@@ -292,6 +296,7 @@ type CompactEndpointSchema =
   | typeof compactAgentsSchema
   | typeof compactGoogleSchema
   | typeof anthropicSchema
+  | typeof compactPluginsSchema
   | typeof bedrockInputSchema;
 
 const compactEndpointSchemas: Record<EndpointSchemaKey, CompactEndpointSchema> = {
@@ -304,6 +309,7 @@ const compactEndpointSchemas: Record<EndpointSchemaKey, CompactEndpointSchema> =
   [EModelEndpoint.google]: compactGoogleSchema,
   [EModelEndpoint.bedrock]: bedrockInputSchema,
   [EModelEndpoint.anthropic]: anthropicSchema,
+  [EModelEndpoint.gptPlugins]: compactPluginsSchema,
 };
 
 export const parseCompactConvo = ({
