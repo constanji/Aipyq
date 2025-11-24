@@ -85,7 +85,6 @@ function checkPasswordReset() {
       
       Please configure email service for secure password reset functionality.
       
-      https://www.librechat.ai/docs/configuration/authentication/email
 
       ❗❗❗`,
     );
