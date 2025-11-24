@@ -59,6 +59,10 @@ export const useEndpoints = ({
     }
     const result: EModelEndpoint[] = [];
     for (let i = 0; i < endpoints.length; i++) {
+      // Filter out deprecated gptPlugins endpoint
+      if (endpoints[i] === EModelEndpoint.gptPlugins) {
+        continue;
+      }
       if (endpoints[i] === EModelEndpoint.agents && !hasAgentAccess) {
         continue;
       }

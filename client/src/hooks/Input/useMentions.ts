@@ -151,9 +151,9 @@ export default function useMentions({
   }, [startupConfig, agentsMap]);
 
   const options: MentionOption[] = useMemo(() => {
-    let validEndpoints = endpoints;
+    let validEndpoints = endpoints.filter((endpoint) => endpoint !== EModelEndpoint.gptPlugins);
     if (!includeAssistants) {
-      validEndpoints = endpoints.filter((endpoint) => !isAssistantsEndpoint(endpoint));
+      validEndpoints = validEndpoints.filter((endpoint) => !isAssistantsEndpoint(endpoint));
     }
 
     const modelOptions = validEndpoints.flatMap((endpoint) => {
