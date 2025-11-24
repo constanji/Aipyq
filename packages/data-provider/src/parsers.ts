@@ -245,7 +245,8 @@ export const getResponseSender = (endpointOption: t.TEndpointOption): string => 
       const gptVersion = extractGPTVersion(model);
       return gptVersion || 'GPT';
     }
-    return (alternateName[endpoint] as string | undefined) ?? 'ChatGPT';
+    const names = alternateName as Record<string, string>;
+    return names[endpoint] ?? 'ChatGPT';
   }
 
   if (endpoint === EModelEndpoint.anthropic) {
@@ -253,7 +254,8 @@ export const getResponseSender = (endpointOption: t.TEndpointOption): string => 
   }
 
   if (endpoint === EModelEndpoint.bedrock) {
-    return modelLabel || alternateName[endpoint];
+    const names = alternateName as Record<string, string>;
+    return modelLabel || names[endpoint];
   }
 
   if (endpoint === EModelEndpoint.google) {

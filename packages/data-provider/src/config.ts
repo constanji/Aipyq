@@ -940,7 +940,7 @@ export const defaultEndpoints: EModelEndpoint[] = [
   EModelEndpoint.bedrock,
 ];
 
-export const alternateName = {
+export const alternateName: Record<string, string> = {
   [EModelEndpoint.openAI]: 'OpenAI',
   [EModelEndpoint.assistants]: 'Assistants',
   [EModelEndpoint.agents]: 'My Agents',
