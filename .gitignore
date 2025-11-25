@@ -76,8 +76,8 @@ bun.lockb
 .flooignore
 
 #config file
-librechat.yaml
-librechat.yml
+#Aipyq.yaml
+#Aipyq.yml
 
 # Environment
 .npmrc
@@ -116,7 +116,7 @@ junit.xml
 # docker override file
 docker-compose.override.yaml
 docker-compose.override.yml
-
+docker-compose.override.yml.example
 # meilisearch
 meilisearch
 meilisearch.exe
@@ -135,7 +135,7 @@ uploads/
 release/
 
 # Helm
-helm/librechat/Chart.lock
+helm/Aipyq/Chart.lock
 helm/**/charts/
 helm/**/.values.yaml
 
