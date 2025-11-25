@@ -27,9 +27,6 @@ services:
       - AIPYQ_LOG_DIR=/app/api/logs
 
 
-
-      # 旧版本兼容，等镜像创建好后删除
-      - LIBRECHAT_LOG_DIR=/app/api/logs
     
     
     
@@ -85,6 +82,7 @@ services:
       - pgdata2:/var/lib/postgresql/data
   rag_api:
     container_name: Rag_api
+    #最终镜像还没创建好，先使用这个镜像
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     environment:
       - DB_HOST=vectordb
