@@ -321,7 +321,36 @@ async function createActionTool({
       return response.data;
     } catch (error) {
       const message = `API call to ${action.metadata.domain} failed:`;
-      return logAxiosError({ message, error });
+      const technicalError = logAxiosError({ message, error });
+      
+      // 生成用户友好的错误消息
+      let userFriendlyMessage = '';
+      const errorMessage = error?.message || '';
+      
+      // 检测常见的错误类型并提供友好的提示
+      if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('getaddrinfo')) {
+        userFriendlyMessage = `无法连接到API服务 (${action.metadata.domain})。请检查：\n1. API地址是否正确\n2. 网络连接是否正常\n3. 如果使用占位符URL，请改为有效的API地址或使用 httpbin.org 作为测试服务\n\n技术详情: ${technicalError}`;
+      } else if (errorMessage.includes('ECONNREFUSED')) {
+        userFriendlyMessage = `API服务拒绝连接 (${action.metadata.domain})。请检查：\n1. API服务是否正在运行\n2. 端口是否正确\n3. 防火墙设置\n\n技术详情: ${technicalError}`;
+      } else if (errorMessage.includes('timeout') || errorMessage.includes('ETIMEDOUT')) {
+        userFriendlyMessage = `API请求超时 (${action.metadata.domain})。请检查：\n1. API服务响应是否正常\n2. 网络连接是否稳定\n3. 服务器负载是否过高\n\n技术详情: ${technicalError}`;
+      } else if (error?.response?.status) {
+        const status = error.response.status;
+        if (status === 404) {
+          userFriendlyMessage = `API端点未找到 (404) - ${action.metadata.domain}。请检查API路径是否正确。\n\n技术详情: ${technicalError}`;
+        } else if (status === 401 || status === 403) {
+          userFriendlyMessage = `API认证失败 (${status}) - ${action.metadata.domain}。请检查API密钥或认证配置。\n\n技术详情: ${technicalError}`;
+        } else if (status >= 500) {
+          userFriendlyMessage = `API服务器错误 (${status}) - ${action.metadata.domain}。服务器可能暂时不可用，请稍后重试。\n\n技术详情: ${technicalError}`;
+        } else {
+          userFriendlyMessage = `API请求失败 (状态码: ${status}) - ${action.metadata.domain}。\n\n技术详情: ${technicalError}`;
+        }
+      } else {
+        // 默认友好消息
+        userFriendlyMessage = `API调用失败 - ${action.metadata.domain}。\n\n技术详情: ${technicalError}`;
+      }
+      
+      return userFriendlyMessage;
     }
   };
 
