@@ -89,7 +89,7 @@ endpoints:
         fetch: false
       dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
       modelDisplayLabel: 'ModelScope'   # 模型显示标签
-    
+      #iconURL: '/assets/qwen.svg'
   
       # 可选配置
 
