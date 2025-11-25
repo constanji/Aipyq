@@ -1,0 +1,103 @@
+# 配置版本（必需）
+version: 1.2.1
+# 缓存设置：设置为 true 启用缓存
+cache: true
+# 自定义界面配置
+interface:
+  customWelcome: '欢迎使用 AI朋友圈！祝您体验愉快。'
+  # 启用/禁用文件搜索作为聊天区域选项（默认：true）
+  # 注意：此设置不会禁用代理的文件搜索能力。
+  # 要禁用代理能力，请参阅代理端点配置。
+  fileSearch: true
+
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+  peoplePicker:
+    users: true
+    groups: true
+    roles: true
+  marketplace:
+      use: false
+  fileCitations: true
+
+# Cloudflare Turnstile 示例（可选）
+#turnstile:
+#  siteKey: "您的站点密钥"
+#  options:
+#    language: "auto"    # "auto" 或 ISO 639-1 语言代码（例如 en）
+#    size: "normal"      # 选项："normal", "compact", "flexible", 或 "invisible"
+
+# 注册对象结构示例（可选）
+registration:
+  socialLogins: ['github', 'google', 'discord', 'openid', 'facebook', 'apple', 'saml']
+  # allowedDomains:
+  # - "gmail.com"
+# 操作对象结构示例
+actions:
+  allowedDomains:
+    - 'swapi.dev'
+    - 'librechat.ai'
+    - 'google.com'
+
+# 自定义端点定义
+endpoints:
+  # assistants:
+  #   disableBuilder: false # 通过设置为 `true` 来禁用 Assistants 构建器界面
+  #   pollIntervalMs: 3000  # 检查助手更新的轮询间隔
+  #   timeoutMs: 180000  # 助手操作超时时间
+  #   # 应该只有其中一个，`supportedIds` 或 `excludedIds`
+  #   supportedIds: ["asst_supportedAssistantId1", "asst_supportedAssistantId2"]
+  #   # excludedIds: ["asst_excludedAssistantId"]
+  #   # 仅显示用户创建或外部创建的助手（例如在 Assistants playground 中）。
+  #   # privateAssistants: false # 与 `supportedIds` 或 `excludedIds` 不兼容
+  #   # （可选）支持检索的模型，默认为支持该功能的最新已知 OpenAI 模型
+  #   retrievalModels: ["gpt-4-turbo-preview"]
+  #   # （可选）对所有用户可用的助手能力。省略您希望排除的能力。默认为以下列表。
+  #   capabilities: ["code_interpreter", "retrieval", "actions", "tools", "image_vision"]
+  # agents:
+  #   # （可选）代理的默认递归深度，默认为 25
+  #   recursionLimit: 50
+  #   # （可选）代理的最大递归深度，默认为 25
+  #   maxRecursionLimit: 100
+  #   # （可选）禁用代理的构建器界面
+  #   disableBuilder: false
+  #   # （可选）代理响应中包含的最大总引用数，默认为 30
+  #   maxCitations: 30
+  #   # （可选）代理响应中每个文件的最大引用数，默认为 7
+  #   maxCitationsPerFile: 7
+  #   # （可选）源包含在响应中的最小相关性分数，默认为 0.45（45% 相关性阈值）
+  #   # 设置为 0.0 显示所有源（无过滤），或设置为更高值如 0.7 进行更严格的过滤
+  #   minRelevanceScore: 0.45
+  #   # （可选）对所有用户可用的代理能力。省略您希望排除的能力。默认为以下列表。
+  #   capabilities: ["execute_code", "file_search", "actions", "tools"]
+  custom:
+    # ModelScope 端点配置
+    - name: 'modelscope'
+      apiKey: '${OPENAI_API_KEY}'
+      baseURL: 'https://api-inference.modelscope.cn/v1'
+      models:
+        default:
+          - 'Qwen/Qwen3-0.6B'
+          - 'qwen-plus'
+          - 'Qwen/Qwen3-Coder-480B-A35B-Instruct'
+        fetch: false
+      dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
+      modelDisplayLabel: 'ModelScope'   # 模型显示标签
+    
+  
+      # 可选配置
+
+      # 标题对话设置
+      titleConvo: true # 设置为 true 启用标题对话
+
+
+      # 标题模型：指定用于标题的模型。
+      titleModel: 'Qwen/Qwen3-Coder-480B-A35B-Instruct' # 如果省略，默认为 "gpt-3.5-turbo"。
+

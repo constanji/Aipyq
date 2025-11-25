@@ -15,8 +15,8 @@
 #   api:
 #     volumes:
 #     - type: bind
-#       source: ./librechat.yaml
-#       target: /app/librechat.yaml
+#       source: ./Aipyq.yaml
+#       target: /app/Aipyq.yaml
 #     image: ghcr.io/danny-avila/librechat:latest
 
 # ---------------------------------------------------
@@ -27,8 +27,8 @@
 #   api:
 #     volumes:
 #     - type: bind
-#       source: ./librechat.yaml
-#       target: /app/librechat.yaml
+#       source: ./Aipyq.yaml
+#       target: /app/Aipyq.yaml
 
 # # 本地构建
 #   api:

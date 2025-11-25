@@ -1,6 +1,6 @@
 /**
  * MCP Tools Controller
- * Handles MCP-specific tool endpoints, decoupled from regular LibreChat tools
+ * Handles MCP-specific tool endpoints, decoupled from regular tools
  */
 const { logger } = require('@librechat/data-schemas');
 const { Constants } = require('librechat-data-provider');

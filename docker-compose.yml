@@ -10,7 +10,7 @@ services:
       - "${API_PORT:-3080}:3080"
     depends_on:
       - rag_api
-    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_REGISTRY_USER:-your-username}/${IMAGE_PREFIX:-aipyq}:${IMAGE_TAG:-latest}
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_REGISTRY_USER:-constanjin}/${IMAGE_PREFIX:-aipyq}:${IMAGE_TAG:-latest}
     restart: always
     user: "${UID}:${GID}"
     extra_hosts:
@@ -43,8 +43,10 @@ services:
       - ./uploads:/app/uploads
       - ./logs:/app/api/logs
       - ./logs:/app/logs
+      - ./Aipyq.yaml:/app/Aipyq.yaml
       # 挂载本地构建的静态资源（如果存在）
       # 使用本地构建的 dist 文件夹覆盖镜像中的静态资源
+      - ./api:/app/api
       - ./client/dist:/app/client/dist
       - ./client/public/assets:/app/client/public/assets
       - ./client/public/fonts:/app/client/public/fonts
@@ -83,7 +85,7 @@ services:
       - pgdata2:/var/lib/postgresql/data
   rag_api:
     container_name: Rag_api
-    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_REGISTRY_USER:-your-username}/${IMAGE_PREFIX:-aipyq}-rag-api:${IMAGE_TAG:-latest}
+    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     environment:
       - DB_HOST=vectordb
       - RAG_PORT=${RAG_PORT:-8000}

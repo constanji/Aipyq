@@ -39,8 +39,7 @@ export default function Footer({ className }: { className?: string }) {
       ? config.customFooter
       : '[Aipyq ' +
         Constants.VERSION +
-        '](https://github.com/constanji/Aipyq) - ' +
-        localize('com_ui_latest_footer')
+        '](https://github.com/constanji/Aipyq) - ' 
   ).split('|');
 
   useEffect(() => {
