@@ -9,10 +9,6 @@ export enum PermissionTypes {
    */
   PROMPTS = 'PROMPTS',
   /**
-   * Type for Bookmark Permissions
-   */
-  BOOKMARKS = 'BOOKMARKS',
-  /**
    * Type for Agent Permissions
    */
   AGENTS = 'AGENTS',
@@ -80,11 +76,6 @@ export const promptPermissionsSchema = z.object({
 });
 export type TPromptPermissions = z.infer<typeof promptPermissionsSchema>;
 
-export const bookmarkPermissionsSchema = z.object({
-  [Permissions.USE]: z.boolean().default(true),
-});
-export type TBookmarkPermissions = z.infer<typeof bookmarkPermissionsSchema>;
-
 export const memoryPermissionsSchema = z.object({
   [Permissions.USE]: z.boolean().default(true),
   [Permissions.CREATE]: z.boolean().default(true),
@@ -147,7 +138,6 @@ export type TFileCitationsPermissions = z.infer<typeof fileCitationsPermissionsS
 // Define a single permissions schema that holds all permission types.
 export const permissionsSchema = z.object({
   [PermissionTypes.PROMPTS]: promptPermissionsSchema,
-  [PermissionTypes.BOOKMARKS]: bookmarkPermissionsSchema,
   [PermissionTypes.MEMORIES]: memoryPermissionsSchema,
   [PermissionTypes.AGENTS]: agentPermissionsSchema,
   [PermissionTypes.MULTI_CONVO]: multiConvoPermissionsSchema,

@@ -5,7 +5,6 @@ export { default as assistantSchema } from './assistant';
 export { default as balanceSchema } from './balance';
 export { default as bannerSchema } from './banner';
 export { default as categoriesSchema } from './categories';
-export { default as conversationTagSchema } from './conversationTag';
 export { default as convoSchema } from './convo';
 export { default as fileSchema } from './file';
 export { default as keySchema } from './key';

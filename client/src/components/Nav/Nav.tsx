@@ -1,16 +1,9 @@
 import { useCallback, useEffect, useState, useMemo, memo, lazy, Suspense, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useMediaQuery } from '@librechat/client';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
 import type { ConversationListResponse } from 'librechat-data-provider';
 import type { InfiniteQueryObserverResult } from '@tanstack/react-query';
-import {
-  useLocalize,
-  useHasAccess,
-  useAuthContext,
-  useLocalStorage,
-  useNavScrolling,
-} from '~/hooks';
+import { useLocalize, useAuthContext, useLocalStorage, useNavScrolling } from '~/hooks';
 import { useConversationsInfiniteQuery } from '~/data-provider';
 import { Conversations } from '~/components/Conversations';
 import SearchBar from './SearchBar';
@@ -18,7 +11,6 @@ import NewChat from './NewChat';
 import { cn } from '~/utils';
 import store from '~/store';
 
-const BookmarkNav = lazy(() => import('./Bookmarks/BookmarkNav'));
 const AccountSettings = lazy(() => import('./AccountSettings'));
 
 const NAV_WIDTH_DESKTOP = '260px';
@@ -59,19 +51,11 @@ const Nav = memo(
     const isSmallScreen = useMediaQuery('(max-width: 768px)');
     const [newUser, setNewUser] = useLocalStorage('newUser', true);
     const [showLoading, setShowLoading] = useState(false);
-    const [tags, setTags] = useState<string[]>([]);
-
-    const hasAccessToBookmarks = useHasAccess({
-      permissionType: PermissionTypes.BOOKMARKS,
-      permission: Permissions.USE,
-    });
-
     const search = useRecoilValue(store.search);
 
     const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching, refetch } =
       useConversationsInfiniteQuery(
         {
-          tags: tags.length === 0 ? undefined : tags,
           search: search.debouncedQuery || undefined,
         },
         {
@@ -137,10 +121,6 @@ const Nav = memo(
       }
     }, [isSmallScreen, toggleNavVisible]);
 
-    useEffect(() => {
-      refetch();
-    }, [tags, refetch]);
-
     const loadMoreConversations = useCallback(() => {
       if (isFetchingNextPage || !computedHasNextPage) {
         return;
@@ -152,22 +132,6 @@ const Nav = memo(
     const subHeaders = useMemo(
       () => search.enabled === true && <SearchBar isSmallScreen={isSmallScreen} />,
       [search.enabled, isSmallScreen],
-    );
-
-    const headerButtons = useMemo(
-      () => (
-        <>
-          {hasAccessToBookmarks && (
-            <>
-              <div className="mt-1.5" />
-              <Suspense fallback={null}>
-                <BookmarkNav tags={tags} setTags={setTags} isSmallScreen={isSmallScreen} />
-              </Suspense>
-            </>
-          )}
-        </>
-      ),
-      [hasAccessToBookmarks, tags, isSmallScreen, toggleNavVisible],
     );
 
     const [isSearchLoading, setIsSearchLoading] = useState(
@@ -212,7 +176,6 @@ const Nav = memo(
                       <MemoNewChat
                         subHeaders={subHeaders}
                         toggleNav={toggleNavVisible}
-                        headerButtons={headerButtons}
                         isSmallScreen={isSmallScreen}
                       />
                       <Conversations

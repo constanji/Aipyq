@@ -194,11 +194,6 @@ export type CreateSharedLinkOptions = MutationOptions<
   Partial<types.TSharedLink>
 >;
 
-export type updateTagsInConvoOptions = MutationOptions<
-  types.TTagConversationResponse,
-  types.TTagConversationRequest
->;
-
 export type UpdateSharedLinkOptions = MutationOptions<
   types.TSharedLink,
   Partial<types.TSharedLink>
@@ -313,12 +308,6 @@ export type UpdateMarketplacePermOptions = MutationOptions<
   unknown,
   types.TError | null | undefined
 >;
-
-export type UpdateConversationTagOptions = MutationOptions<
-  types.TConversationTag,
-  types.TConversationTagRequest
->;
-export type DeleteConversationTagOptions = MutationOptions<types.TConversationTag, string>;
 
 export type AcceptTermsMutationOptions = MutationOptions<
   types.TAcceptTermsResponse,

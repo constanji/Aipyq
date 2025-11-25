@@ -200,7 +200,6 @@ const startServer = async () => {
   
   // 搜索和内容
   app.use('/api/search', routes.search); // 全文搜索（使用 Meilisearch）
-  app.use('/api/tags', routes.tags); // 标签管理
   
   // 预设和提示词
   app.use('/api/presets', routes.presets); // 预设管理（对话预设配置）

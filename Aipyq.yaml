@@ -16,7 +16,6 @@ interface:
   sidePanel: true
   presets: true
   prompts: true
-  bookmarks: true
   multiConvo: true
   agents: true
   peoplePicker:

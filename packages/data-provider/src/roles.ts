@@ -7,7 +7,6 @@ import {
   promptPermissionsSchema,
   memoryPermissionsSchema,
   runCodePermissionsSchema,
-  bookmarkPermissionsSchema,
   webSearchPermissionsSchema,
   fileSearchPermissionsSchema,
   multiConvoPermissionsSchema,
@@ -46,9 +45,6 @@ const defaultRolesSchema = z.object({
         [Permissions.USE]: z.boolean().default(true),
         [Permissions.CREATE]: z.boolean().default(true),
         // [Permissions.SHARE]: z.boolean().default(true),
-      }),
-      [PermissionTypes.BOOKMARKS]: bookmarkPermissionsSchema.extend({
-        [Permissions.USE]: z.boolean().default(true),
       }),
       [PermissionTypes.MEMORIES]: memoryPermissionsSchema.extend({
         [Permissions.USE]: z.boolean().default(true),
@@ -106,9 +102,6 @@ export const roleDefaults = defaultRolesSchema.parse({
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: {
-        [Permissions.USE]: true,
-      },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -153,7 +146,6 @@ export const roleDefaults = defaultRolesSchema.parse({
     name: SystemRoles.USER,
     permissions: {
       [PermissionTypes.PROMPTS]: {},
-      [PermissionTypes.BOOKMARKS]: {},
       [PermissionTypes.MEMORIES]: {},
       [PermissionTypes.AGENTS]: {},
       [PermissionTypes.MULTI_CONVO]: {},

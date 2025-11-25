@@ -6,7 +6,6 @@ import type {
   TSharedLink,
   TConversation,
   EModelEndpoint,
-  TConversationTag,
   TAttachment,
 } from './schemas';
 import type { SettingDefinition } from './generate';
@@ -278,25 +277,6 @@ export type TSharedLinkResponse = Pick<TSharedLink, 'shareId'> &
 export type TSharedLinkGetResponse = TSharedLinkResponse & {
   success: boolean;
 };
-
-// type for getting conversation tags
-export type TConversationTagsResponse = TConversationTag[];
-// type for creating conversation tag
-export type TConversationTagRequest = Partial<
-  Omit<TConversationTag, 'createdAt' | 'updatedAt' | 'count' | 'user'>
-> & {
-  conversationId?: string;
-  addToConversation?: boolean;
-};
-
-export type TConversationTagResponse = TConversationTag;
-
-export type TTagConversationRequest = {
-  tags: string[];
-  tag: string;
-};
-
-export type TTagConversationResponse = string[];
 
 export type TDuplicateConvoRequest = {
   conversationId?: string;

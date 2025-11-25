@@ -19,8 +19,6 @@ function hasExplicitConfig(
   switch (permissionType) {
     case PermissionTypes.PROMPTS:
       return interfaceConfig?.prompts !== undefined;
-    case PermissionTypes.BOOKMARKS:
-      return interfaceConfig?.bookmarks !== undefined;
     case PermissionTypes.MEMORIES:
       return interfaceConfig?.memories !== undefined;
     case PermissionTypes.MULTI_CONVO:
@@ -145,13 +143,6 @@ export async function updateInterfacePermissions({
           loadedInterface.prompts,
           defaultPerms[PermissionTypes.PROMPTS]?.[Permissions.USE],
           defaults.prompts,
-        ),
-      },
-      [PermissionTypes.BOOKMARKS]: {
-        [Permissions.USE]: getPermissionValue(
-          loadedInterface.bookmarks,
-          defaultPerms[PermissionTypes.BOOKMARKS]?.[Permissions.USE],
-          defaults.bookmarks,
         ),
       },
       [PermissionTypes.MEMORIES]: {

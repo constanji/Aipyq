@@ -18,7 +18,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         agents: true,
@@ -51,7 +50,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -80,7 +78,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -126,7 +123,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         prompts: false,
-        bookmarks: false,
         memories: false,
         multiConvo: false,
         agents: false,
@@ -159,7 +155,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: false,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: false,
         [Permissions.CREATE]: true,
@@ -188,7 +183,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: false,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: false,
         [Permissions.CREATE]: true,
@@ -235,7 +229,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         agents: true,
@@ -267,7 +260,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -296,7 +288,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -342,7 +333,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         prompts: true,
-        bookmarks: false,
         memories: true,
         multiConvo: undefined,
         agents: true,
@@ -356,7 +346,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         agents: true,
@@ -388,7 +377,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -417,7 +405,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -464,7 +451,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         agents: true,
@@ -496,7 +482,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -525,7 +510,6 @@ describe('updateInterfacePermissions - permissions', () => {
       [PermissionTypes.PROMPTS]: {
         [Permissions.USE]: true,
       },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -580,7 +564,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         agents: true,
@@ -610,7 +593,6 @@ describe('updateInterfacePermissions - permissions', () => {
 
     // Should be called with all permissions EXCEPT prompts and agents (which already exist)
     const expectedPermissionsForUser = {
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -633,7 +615,6 @@ describe('updateInterfacePermissions - permissions', () => {
     };
 
     const expectedPermissionsForAdmin = {
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       [PermissionTypes.MEMORIES]: {
         [Permissions.USE]: true,
         [Permissions.CREATE]: true,
@@ -684,7 +665,6 @@ describe('updateInterfacePermissions - permissions', () => {
       permissions: {
         [PermissionTypes.PROMPTS]: { [Permissions.USE]: false },
         [PermissionTypes.AGENTS]: { [Permissions.USE]: false },
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       },
     });
 
@@ -692,14 +672,12 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         prompts: true, // Explicitly set, should override existing false
         // agents not specified, so existing false should be preserved
-        // bookmarks not specified, so existing false should be preserved
       },
     };
     const configDefaults = {
       interface: {
         prompts: false,
         agents: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         temporaryChat: true,
@@ -836,7 +814,6 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         // peoplePicker is not defined at all
         prompts: true,
-        bookmarks: true,
       },
     };
     const configDefaults = { interface: {} } as TConfigDefaults;
@@ -878,7 +855,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         prompts: true,
-        bookmarks: true,
       },
     };
     const configDefaults = { interface: {} } as TConfigDefaults;
@@ -901,14 +877,12 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         // Only configure some permissions, leave others undefined
-        bookmarks: true,
         multiConvo: false,
       },
     };
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         multiConvo: true,
         agents: true,
@@ -984,7 +958,6 @@ describe('updateInterfacePermissions - permissions', () => {
     mockGetRoleByName.mockResolvedValue({
       permissions: {
         [PermissionTypes.PROMPTS]: { [Permissions.USE]: true },
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
         // PEOPLE_PICKER and MARKETPLACE are missing
       },
     });
@@ -992,13 +965,11 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         prompts: true,
-        bookmarks: true,
       },
     };
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         peoplePicker: {
           users: true,
           groups: true,
@@ -1072,7 +1043,6 @@ describe('updateInterfacePermissions - permissions', () => {
     // Mock existing permissions with values that differ from defaults
     const existingUserPermissions = {
       [PermissionTypes.PROMPTS]: { [Permissions.USE]: false },
-      [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       [PermissionTypes.MEMORIES]: { [Permissions.USE]: false },
       [PermissionTypes.PEOPLE_PICKER]: {
         [Permissions.VIEW_USERS]: true,
@@ -1091,7 +1061,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const configDefaults = {
       interface: {
         prompts: true,
-        bookmarks: true,
         memories: true,
         peoplePicker: {
           users: true,
@@ -1119,7 +1088,6 @@ describe('updateInterfacePermissions - permissions', () => {
 
     // Should only have permissions for things that don't exist in the role
     expect(userCall[1]).not.toHaveProperty(PermissionTypes.PROMPTS);
-    expect(userCall[1]).not.toHaveProperty(PermissionTypes.BOOKMARKS);
     expect(userCall[1]).not.toHaveProperty(PermissionTypes.MEMORIES);
     expect(userCall[1]).not.toHaveProperty(PermissionTypes.PEOPLE_PICKER);
     expect(userCall[1]).not.toHaveProperty(PermissionTypes.MARKETPLACE);
@@ -1134,7 +1102,6 @@ describe('updateInterfacePermissions - permissions', () => {
     mockGetRoleByName.mockResolvedValue({
       permissions: {
         [PermissionTypes.PROMPTS]: { [Permissions.USE]: false },
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
         [PermissionTypes.MEMORIES]: { [Permissions.USE]: false },
         [PermissionTypes.PEOPLE_PICKER]: {
           [Permissions.VIEW_USERS]: false,
@@ -1149,7 +1116,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const config = {
       interface: {
         prompts: true, // Explicitly set to true
-        bookmarks: true, // Explicitly set to true
         // memories not configured - should remain unchanged
         // peoplePicker not configured - should remain unchanged
         marketplace: {
@@ -1160,7 +1126,6 @@ describe('updateInterfacePermissions - permissions', () => {
     const configDefaults = {
       interface: {
         prompts: false,
-        bookmarks: false,
         memories: true,
         peoplePicker: {
           users: true,
@@ -1189,7 +1154,6 @@ describe('updateInterfacePermissions - permissions', () => {
     expect(userCall[1][PermissionTypes.PROMPTS]).toEqual({
       [Permissions.USE]: true,
     });
-    expect(userCall[1][PermissionTypes.BOOKMARKS]).toEqual({ [Permissions.USE]: true });
     expect(userCall[1][PermissionTypes.MARKETPLACE]).toEqual({ [Permissions.USE]: true });
 
     // Unconfigured permissions should not be present (left unchanged)
@@ -1206,7 +1170,6 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         // Even if memories is not explicitly set to false in interface
         prompts: true,
-        bookmarks: true,
       },
       memory: {
         disabled: true,
@@ -1324,7 +1287,6 @@ describe('updateInterfacePermissions - permissions', () => {
         },
         // Other existing permissions
         [PermissionTypes.PROMPTS]: { [Permissions.USE]: true },
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       },
     });
 
@@ -1332,7 +1294,6 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         // Not explicitly configuring memories in interface
         prompts: true,
-        bookmarks: true,
       },
       memory: {
         disabled: false, // Memory is explicitly enabled (changed from true to false)
@@ -1346,7 +1307,6 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         memories: true,
         prompts: true,
-        bookmarks: true,
       },
     } as TConfigDefaults;
     const interfaceConfig = await loadDefaultInterface({ config, configDefaults });
@@ -1460,7 +1420,6 @@ describe('updateInterfacePermissions - permissions', () => {
         },
         // Other existing permissions
         [PermissionTypes.PROMPTS]: { [Permissions.USE]: true },
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
       },
     });
 
@@ -1468,7 +1427,6 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         // Not explicitly configuring memories in interface
         prompts: true,
-        bookmarks: true,
       },
       memory: {
         disabled: true, // Memory is explicitly disabled
@@ -1482,7 +1440,6 @@ describe('updateInterfacePermissions - permissions', () => {
       interface: {
         memories: true, // Default would be true
         prompts: true,
-        bookmarks: true,
       },
     } as TConfigDefaults;
     const interfaceConfig = await loadDefaultInterface({ config, configDefaults });
@@ -1510,8 +1467,6 @@ describe('updateInterfacePermissions - permissions', () => {
     expect(userCall[1][PermissionTypes.MEMORIES]).toEqual(expectedMemoryPermissions);
     // Prompts should be updated (explicitly configured)
     expect(userCall[1][PermissionTypes.PROMPTS]).toEqual({ [Permissions.USE]: true });
-    // Bookmarks should be updated (explicitly configured)
-    expect(userCall[1][PermissionTypes.BOOKMARKS]).toEqual({ [Permissions.USE]: true });
 
     // Check ADMIN role call
     const adminCall = mockUpdateAccessPermissions.mock.calls.find(
@@ -1520,7 +1475,6 @@ describe('updateInterfacePermissions - permissions', () => {
     // Memory permissions should be updated even though they already exist
     expect(adminCall[1][PermissionTypes.MEMORIES]).toEqual(expectedMemoryPermissions);
     expect(adminCall[1][PermissionTypes.PROMPTS]).toEqual({ [Permissions.USE]: true });
-    expect(adminCall[1][PermissionTypes.BOOKMARKS]).toEqual({ [Permissions.USE]: true });
 
     // Verify the existing role data was passed to updateAccessPermissions
     expect(userCall[2]).toMatchObject({

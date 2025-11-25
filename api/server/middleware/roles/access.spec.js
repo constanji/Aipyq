@@ -49,7 +49,6 @@ describe('Access Middleware', () => {
     await Role.create({
       name: 'user',
       permissions: {
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
         [PermissionTypes.PROMPTS]: {
           [Permissions.SHARED_GLOBAL]: false,
           [Permissions.USE]: true,
@@ -77,7 +76,6 @@ describe('Access Middleware', () => {
     await Role.create({
       name: 'admin',
       permissions: {
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: true },
         [PermissionTypes.PROMPTS]: {
           [Permissions.SHARED_GLOBAL]: true,
           [Permissions.USE]: true,

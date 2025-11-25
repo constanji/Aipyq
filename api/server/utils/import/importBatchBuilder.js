@@ -1,7 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const { logger } = require('@librechat/data-schemas');
 const { EModelEndpoint, Constants, openAISettings } = require('librechat-data-provider');
-const { bulkIncrementTagCounts } = require('~/models/ConversationTag');
 const { bulkSaveConvos } = require('~/models/Conversation');
 const { bulkSaveMessages } = require('~/models/Message');
 
@@ -103,12 +102,6 @@ class ImportBatchBuilder {
       const promises = [];
       promises.push(bulkSaveConvos(this.conversations));
       promises.push(bulkSaveMessages(this.messages, true));
-      promises.push(
-        bulkIncrementTagCounts(
-          this.requestUserId,
-          this.conversations.flatMap((convo) => convo.tags),
-        ),
-      );
       await Promise.all(promises);
       logger.debug(
         `user: ${this.requestUserId} | Added ${this.conversations.length} conversations and ${this.messages.length} messages to the DB.`,

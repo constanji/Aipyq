@@ -507,28 +507,6 @@ describe('access middleware', () => {
       expect(mockNext).toHaveBeenCalled();
     });
 
-    it('should handle bookmark access patterns', async () => {
-      const mockRole = {
-        name: 'user',
-        permissions: {
-          [PermissionTypes.BOOKMARKS]: {
-            [Permissions.USE]: true,
-          },
-        },
-      } as unknown as IRole;
-
-      mockGetRoleByName.mockResolvedValue(mockRole);
-
-      const checkBookmarkAccess = generateCheckAccess({
-        permissionType: PermissionTypes.BOOKMARKS,
-        permissions: [Permissions.USE],
-        getRoleByName: mockGetRoleByName,
-      });
-
-      await checkBookmarkAccess(mockReq as Request, mockRes as Response, mockNext);
-      expect(mockNext).toHaveBeenCalled();
-    });
-
     it('should handle tool access patterns', async () => {
       const mockRole = {
         name: 'user',

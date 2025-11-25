@@ -32,11 +32,10 @@ describe('AppService interface configuration', () => {
     );
   });
 
-  it('should set prompts and bookmarks to false when config specifies them as false', async () => {
+  it('should set prompts to false when config specifies them as false', async () => {
     const config = {
       interface: {
         prompts: false,
-        bookmarks: false,
       },
     };
 
@@ -46,13 +45,12 @@ describe('AppService interface configuration', () => {
       expect.objectContaining({
         interfaceConfig: expect.objectContaining({
           prompts: false,
-          bookmarks: false,
         }),
       }),
     );
   });
 
-  it('should not set prompts and bookmarks when not provided in config', async () => {
+  it('should not set prompts when not provided in config', async () => {
     const config = {};
 
     const result = await AppService({ config });
@@ -63,29 +61,8 @@ describe('AppService interface configuration', () => {
       }),
     );
 
-    // Verify that prompts and bookmarks are undefined when not provided
+    // Verify that prompts is undefined when not provided
     expect(result.interfaceConfig?.prompts).toBeUndefined();
-    expect(result.interfaceConfig?.bookmarks).toBeUndefined();
-  });
-
-  it('should set prompts and bookmarks to different values when specified differently in config', async () => {
-    const config = {
-      interface: {
-        prompts: true,
-        bookmarks: false,
-      },
-    };
-
-    const result = await AppService({ config });
-
-    expect(result).toEqual(
-      expect.objectContaining({
-        interfaceConfig: expect.objectContaining({
-          prompts: true,
-          bookmarks: false,
-        }),
-      }),
-    );
   });
 
   it('should correctly configure peoplePicker permissions including roles', async () => {

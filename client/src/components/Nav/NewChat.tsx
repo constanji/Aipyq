@@ -13,13 +13,11 @@ export default function NewChat({
   toggleNav,
   subHeaders,
   isSmallScreen,
-  headerButtons,
 }: {
   index?: number;
   toggleNav: () => void;
   isSmallScreen?: boolean;
   subHeaders?: React.ReactNode;
-  headerButtons?: React.ReactNode;
 }) {
   const queryClient = useQueryClient();
   /** Note: this component needs an explicit index passed if using more than one */
@@ -65,8 +63,6 @@ export default function NewChat({
           }
         />
         <div className="flex gap-0.5">
-          {headerButtons}
-
           <TooltipAnchor
             description={localize('com_ui_new_chat')}
             render={

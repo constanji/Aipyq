@@ -318,18 +318,6 @@ export const updatePeoplePickerPermissions = (roleName: string) =>
 export const updateMarketplacePermissions = (roleName: string) =>
   `${getRole(roleName)}/marketplace`;
 
-/* Conversation Tags */
-export const conversationTags = (tag?: string) =>
-  `${BASE_URL}/api/tags${tag != null && tag ? `/${encodeURIComponent(tag)}` : ''}`;
-
-export const conversationTagsList = (pageNumber: string, sort?: string, order?: string) =>
-  `${conversationTags()}/list?pageNumber=${pageNumber}${sort ? `&sort=${sort}` : ''}${
-    order ? `&order=${order}` : ''
-  }`;
-
-export const addTagToConversation = (conversationId: string) =>
-  `${conversationTags()}/convo/${conversationId}`;
-
 export const userTerms = () => `${BASE_URL}/api/user/terms`;
 export const acceptUserTerms = () => `${BASE_URL}/api/user/terms/accept`;
 export const banner = () => `${BASE_URL}/api/banner`;

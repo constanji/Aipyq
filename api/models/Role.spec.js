@@ -156,13 +156,13 @@ describe('updateAccessPermissions', () => {
       name: SystemRoles.USER,
       permissions: {
         [PermissionTypes.PROMPTS]: { CREATE: true, USE: true, SHARED_GLOBAL: false },
-        [PermissionTypes.BOOKMARKS]: { USE: true },
+        [PermissionTypes.MULTI_CONVO]: { USE: true },
       },
     }).save();
 
     await updateAccessPermissions(SystemRoles.USER, {
       [PermissionTypes.PROMPTS]: { USE: false, SHARED_GLOBAL: true },
-      [PermissionTypes.BOOKMARKS]: { USE: false },
+      [PermissionTypes.MULTI_CONVO]: { USE: false },
     });
 
     const updatedRole = await getRoleByName(SystemRoles.USER);
@@ -171,7 +171,7 @@ describe('updateAccessPermissions', () => {
       USE: false,
       SHARED_GLOBAL: true,
     });
-    expect(updatedRole.permissions[PermissionTypes.BOOKMARKS]).toEqual({ USE: false });
+    expect(updatedRole.permissions[PermissionTypes.MULTI_CONVO]).toEqual({ USE: false });
   });
 
   it('should handle updates for a single permission type', async () => {
@@ -272,7 +272,6 @@ describe('initializeRoles', () => {
 
     // Example: Check default values for ADMIN role
     expect(adminRole.permissions[PermissionTypes.PROMPTS].SHARED_GLOBAL).toBe(true);
-    expect(adminRole.permissions[PermissionTypes.BOOKMARKS].USE).toBe(true);
     expect(adminRole.permissions[PermissionTypes.AGENTS].CREATE).toBe(true);
   });
 
@@ -285,7 +284,6 @@ describe('initializeRoles', () => {
           [Permissions.CREATE]: true,
           [Permissions.SHARED_GLOBAL]: true,
         },
-        [PermissionTypes.BOOKMARKS]: { [Permissions.USE]: false },
       },
     };
 
@@ -296,9 +294,6 @@ describe('initializeRoles', () => {
     expect(userRole.permissions[PermissionTypes.PROMPTS]).toEqual(
       customUserRole.permissions[PermissionTypes.PROMPTS],
     );
-    expect(userRole.permissions[PermissionTypes.BOOKMARKS]).toEqual(
-      customUserRole.permissions[PermissionTypes.BOOKMARKS],
-    );
     expect(userRole.permissions[PermissionTypes.AGENTS]).toBeDefined();
   });
 
@@ -308,8 +303,6 @@ describe('initializeRoles', () => {
       permissions: {
         [PermissionTypes.PROMPTS]:
           roleDefaults[SystemRoles.USER].permissions[PermissionTypes.PROMPTS],
-        [PermissionTypes.BOOKMARKS]:
-          roleDefaults[SystemRoles.USER].permissions[PermissionTypes.BOOKMARKS],
       },
     };
 
@@ -350,8 +343,6 @@ describe('initializeRoles', () => {
           [Permissions.CREATE]: false,
           [Permissions.SHARED_GLOBAL]: false,
         },
-        [PermissionTypes.BOOKMARKS]:
-          roleDefaults[SystemRoles.ADMIN].permissions[PermissionTypes.BOOKMARKS],
       },
     };
 
@@ -390,8 +381,6 @@ describe('initializeRoles', () => {
       permissions: {
         [PermissionTypes.PROMPTS]:
           roleDefaults[SystemRoles.USER].permissions[PermissionTypes.PROMPTS],
-        [PermissionTypes.BOOKMARKS]:
-          roleDefaults[SystemRoles.USER].permissions[PermissionTypes.BOOKMARKS],
       },
     };
 

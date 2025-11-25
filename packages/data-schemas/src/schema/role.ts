@@ -7,9 +7,6 @@ import type { IRole } from '~/types';
  */
 const rolePermissionsSchema = new Schema(
   {
-    [PermissionTypes.BOOKMARKS]: {
-      [Permissions.USE]: { type: Boolean },
-    },
     [PermissionTypes.PROMPTS]: {
       [Permissions.SHARED_GLOBAL]: { type: Boolean },
       [Permissions.USE]: { type: Boolean },

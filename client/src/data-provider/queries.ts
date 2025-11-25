@@ -158,21 +158,6 @@ export const useSharedLinksQuery = (
   });
 };
 
-export const useConversationTagsQuery = (
-  config?: UseQueryOptions<t.TConversationTagsResponse>,
-): QueryObserverResult<t.TConversationTagsResponse> => {
-  return useQuery<t.TConversationTag[]>(
-    [QueryKeys.conversationTags],
-    () => dataService.getConversationTags(),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-      ...config,
-    },
-  );
-};
-
 /**
  * ASSISTANTS
  */

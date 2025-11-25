@@ -54,7 +54,7 @@ const EditMemoryButton = ({ memory }: { memory: TUserMemory }) => {
           render={
             <Button
               variant="ghost"
-              aria-label={localize('com_ui_bookmarks_edit')}
+              aria-label={localize('com_ui_edit_memory')}
               onClick={() => setOpen(!open)}
               className="h-8 w-8 p-0"
             >

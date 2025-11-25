@@ -6,9 +6,6 @@ import { CursorPaginationParams } from '~/common';
 export interface IRole extends Document {
   name: string;
   permissions: {
-    [PermissionTypes.BOOKMARKS]?: {
-      [Permissions.USE]?: boolean;
-    };
     [PermissionTypes.PROMPTS]?: {
       [Permissions.SHARED_GLOBAL]?: boolean;
       [Permissions.USE]?: boolean;
