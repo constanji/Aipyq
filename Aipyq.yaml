@@ -43,7 +43,6 @@ registration:
 actions:
   allowedDomains:
     - 'swapi.dev'
-    - 'librechat.ai'
     - 'google.com'
 
 # 自定义端点定义
@@ -85,7 +84,6 @@ endpoints:
       models:
         default:
           - 'Qwen/Qwen3-0.6B'
-          - 'qwen-plus'
           - 'Qwen/Qwen3-Coder-480B-A35B-Instruct'
         fetch: false
       dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
