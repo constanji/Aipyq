@@ -85,6 +85,8 @@ endpoints:
         default:
           - 'Qwen/Qwen3-0.6B'
           - 'Qwen/Qwen3-Coder-480B-A35B-Instruct'
+          - 'Qwen/QwQ-32B'
+          - 'Qwen/Qwen3-32B'
         fetch: false
       dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
       modelDisplayLabel: 'ModelScope'   # 模型显示标签

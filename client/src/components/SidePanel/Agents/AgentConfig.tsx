@@ -1,8 +1,13 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useToastContext } from '@librechat/client';
 import { EModelEndpoint } from 'librechat-data-provider';
-import { Controller, useWatch, useFormContext } from 'react-hook-form';
-import type { AgentForm, AgentPanelProps, IconComponentTypes } from '~/common';
+import { Controller, useWatch, useFormContext, useForm, FormProvider } from 'react-hook-form';
+import {
+  AuthTypeEnum,
+  AuthorizationTypeEnum,
+  TokenExchangeMethodEnum,
+} from 'librechat-data-provider';
+import type { AgentForm, AgentPanelProps, IconComponentTypes, ActionAuthForm } from '~/common';
 import {
   removeFocusOutlines,
   processAgentOption,
@@ -19,6 +24,8 @@ import AgentCategorySelector from './AgentCategorySelector';
 import Action from '~/components/SidePanel/Builder/Action';
 import { useLocalize, useVisibleTools } from '~/hooks';
 import { Panel, isEphemeralAgent } from '~/common';
+import ActionsInput from './ActionsInput';
+import ActionsAuth from '~/components/SidePanel/Builder/ActionsAuth';
 import { useGetAgentFiles } from '~/data-provider';
 import { icons } from '~/hooks/Endpoint/Icons';
 import Instructions from './Instructions';
@@ -38,6 +45,36 @@ const inputClass = cn(
   removeFocusOutlines,
 );
 
+// FormProvider wrapper for Actions form
+function ActionsFormProvider({
+  children,
+  action,
+}: {
+  children: React.ReactNode;
+  action?: any;
+}) {
+  const methods = useForm<ActionAuthForm>({
+    defaultValues: {
+      /* General */
+      type: AuthTypeEnum.None,
+      saved_auth_fields: false,
+      /* API key */
+      api_key: '',
+      authorization_type: AuthorizationTypeEnum.Basic,
+      custom_auth_header: '',
+      /* OAuth */
+      oauth_client_id: '',
+      oauth_client_secret: '',
+      authorization_url: '',
+      client_url: '',
+      scope: '',
+      token_exchange_method: TokenExchangeMethodEnum.DefaultPost,
+    },
+  });
+
+  return <FormProvider {...methods}>{children}</FormProvider>;
+}
+
 export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'createMutation'>) {
   const localize = useLocalize();
   const fileMap = useFileMapContext();
@@ -47,6 +84,7 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
   const [showMCPToolDialog, setShowMCPToolDialog] = useState(false);
   const {
     actions,
+    action,
     setAction,
     regularTools,
     agentsConfig,
@@ -148,16 +186,6 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
     return _agent.code_files ?? [];
   }, [agent, agent_id, mergedFileMap]);
 
-  const handleAddActions = useCallback(() => {
-    if (isEphemeralAgent(agent_id)) {
-      showToast({
-        message: localize('com_assistants_actions_disabled'),
-        status: 'warning',
-      });
-      return;
-    }
-    setActivePanel(Panel.actions);
-  }, [agent_id, setActivePanel, showToast, localize]);
 
   const providerValue = typeof provider === 'string' ? provider : provider?.value;
   let Icon: IconComponentTypes | null | undefined;
@@ -349,7 +377,6 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
                     action={action}
                     onClick={() => {
                       setAction(action);
-                      setActivePanel(Panel.actions);
                     }}
                   />
                 ))}
@@ -367,22 +394,23 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
                   </div>
                 </button>
               )}
-              {(actionsEnabled ?? false) && (
-                <button
-                  type="button"
-                  disabled={isEphemeralAgent(agent_id)}
-                  onClick={handleAddActions}
-                  className="btn btn-neutral border-token-border-light relative h-9 w-full rounded-lg font-medium"
-                  aria-haspopup="dialog"
-                >
-                  <div className="flex w-full items-center justify-center gap-2">
-                    {localize('com_assistants_add_actions')}
-                  </div>
-                </button>
-              )}
             </div>
           </div>
         </div>
+        {/* Actions Input Section */}
+        {(actionsEnabled ?? false) && (
+          <div className="mb-4">
+            <label className={labelClass}>
+              {localize('com_assistants_actions')}
+            </label>
+            <ActionsFormProvider action={action}>
+              <div className="space-y-4">
+                <ActionsAuth />
+                <ActionsInput action={action} agent_id={agent_id} setAction={setAction} />
+              </div>
+            </ActionsFormProvider>
+          </div>
+        )}
         {/* Support Contact (Optional) */}
         <div className="mb-4">
           <div className="mb-1.5 flex items-center gap-2">

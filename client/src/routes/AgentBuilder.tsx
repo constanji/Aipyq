@@ -4,9 +4,11 @@ import { Spinner } from '@librechat/client';
 import { PermissionTypes, Permissions } from 'librechat-data-provider';
 import { useGetStartupConfig, useGetEndpointsQuery } from '~/data-provider';
 import { useAppStartup, useHasAccess } from '~/hooks';
-import { AgentPanelProvider } from '~/Providers/AgentPanelContext';
+import { AgentPanelProvider, ChatContext } from '~/Providers';
+import useChatHelpers from '~/hooks/Chat/useChatHelpers';
 import AgentPanelSwitch from '~/components/SidePanel/Agents/AgentPanelSwitch';
 import useAuthRedirect from './useAuthRedirect';
+import store from '~/store';
 
 export default function AgentBuilder() {
   const { data: startupConfig } = useGetStartupConfig();
@@ -25,6 +27,14 @@ export default function AgentBuilder() {
     permissionType: PermissionTypes.AGENTS,
     permission: Permissions.CREATE,
   });
+
+  // 初始化对话状态（与 ChatRoute 保持一致）
+  const index = 0;
+  const { conversation } = store.useCreateConversationAtom(index);
+  
+  // Hooks 必须在组件顶层调用，不能在条件语句之后
+  // 使用 'new' 作为 paramId，这样 useChatHelpers 会创建一个新对话
+  const chatHelpers = useChatHelpers(index, 'new');
 
   useEffect(() => {
     if (isAuthenticated && (!hasAccessToAgents || !hasAccessToCreateAgents)) {
@@ -49,25 +59,25 @@ export default function AgentBuilder() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden bg-background">
-      <div className="flex h-full w-full flex-row">
-        <div className="flex h-full w-full flex-col overflow-y-auto">
-          <div className="flex h-full w-full flex-col p-4">
-            <div className="mb-4">
-              <h1 className="text-2xl font-semibold text-text-primary">智能体构建器</h1>
-              <p className="mt-1 text-sm text-text-secondary">
-                创建和配置您的智能体
-              </p>
-            </div>
-            <div className="flex-1">
-              <AgentPanelProvider>
+    <ChatContext.Provider value={chatHelpers}>
+      <div className="flex h-full w-full flex-col overflow-hidden bg-background">
+        <div className="flex h-full w-full flex-row">
+          <div className="flex h-full w-full flex-col overflow-hidden">
+            <div className="flex h-full w-full flex-col">
+              <div className="mb-4 px-4 pt-4">
+                <h1 className="text-2xl font-semibold text-text-primary">智能体构建器</h1>
+                <p className="mt-1 text-sm text-text-secondary">
+                  创建和配置您的智能体
+                </p>
+              </div>
+              <div className="flex-1 min-h-0 overflow-hidden">
                 <AgentPanelSwitch />
-              </AgentPanelProvider>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </ChatContext.Provider>
   );
 }
 

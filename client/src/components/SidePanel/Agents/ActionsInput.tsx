@@ -14,6 +14,7 @@ import type {
   ValidationResult,
 } from 'librechat-data-provider';
 import type { ActionAuthForm } from '~/common';
+import { isEphemeralAgent } from '~/common';
 import type { Spec } from './ActionsTable';
 import ActionCallback from '~/components/SidePanel/Builder/ActionCallback';
 import { ActionsTable, columns } from './ActionsTable';
@@ -104,8 +105,11 @@ export default function ActionsInput({
   const saveAction = handleSubmit((authFormData) => {
     logger.log('actions', 'saving action', authFormData);
     const currentAgentId = agent_id ?? '';
-    if (!currentAgentId) {
-      // alert user?
+    if (!currentAgentId || isEphemeralAgent(currentAgentId)) {
+      showToast({
+        message: localize('com_assistants_actions_disabled'),
+        status: 'warning',
+      });
       return;
     }
 

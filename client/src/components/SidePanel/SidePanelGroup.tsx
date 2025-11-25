@@ -132,7 +132,8 @@ const SidePanelGroup = memo(
               </ResizablePanel>
             </>
           )}
-          {!hideSidePanel && interfaceConfig.sidePanel === true && (
+          {/* 侧边栏已完全移除，所有功能已迁移到独立页面 */}
+          {false && !hideSidePanel && interfaceConfig.sidePanel === true && (
             <SidePanel
               panelRef={panelRef}
               minSize={minSize}
@@ -149,11 +150,14 @@ const SidePanelGroup = memo(
             />
           )}
         </ResizablePanelGroup>
-        <button
-          aria-label="Close right side panel"
-          className={`nav-mask ${!isCollapsed ? 'active' : ''}`}
-          onClick={handleClosePanel}
-        />
+        {/* 侧边栏已完全移除，关闭按钮也已隐藏 */}
+        {false && (
+          <button
+            aria-label="Close right side panel"
+            className={`nav-mask ${!isCollapsed ? 'active' : ''}`}
+            onClick={handleClosePanel}
+          />
+        )}
       </>
     );
   },

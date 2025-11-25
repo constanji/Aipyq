@@ -26,14 +26,38 @@ function AgentPanelSwitchWithContext() {
     }
   }, [setCurrentAgentId, conversation?.agent_id]);
 
+  // 调试信息
+  useEffect(() => {
+    console.log('[AgentPanelSwitch] activePanel:', activePanel, 'Panel.actions:', Panel.actions);
+  }, [activePanel]);
+
+  // 优先检查 actions 面板
   if (activePanel === Panel.actions) {
-    return <ActionsPanel />;
+    console.log('[AgentPanelSwitch] Rendering ActionsPanel');
+    return (
+      <div className="h-full overflow-hidden">
+        <ActionsPanel />
+      </div>
+    );
   }
   if (activePanel === Panel.version) {
-    return <VersionPanel />;
+    return (
+      <div className="h-full overflow-hidden">
+        <VersionPanel />
+      </div>
+    );
   }
   if (activePanel === Panel.mcp) {
-    return <MCPPanel />;
+    return (
+      <div className="h-full overflow-hidden">
+        <MCPPanel />
+      </div>
+    );
   }
-  return <AgentPanel />;
+  console.log('[AgentPanelSwitch] Rendering AgentPanel, activePanel:', activePanel);
+  return (
+    <div className="h-full overflow-hidden">
+      <AgentPanel />
+    </div>
+  );
 }
