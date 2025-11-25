@@ -2,6 +2,10 @@
 
 This guide explains how to add new languages to LibreChat's localization system.
 
+## Current Supported Languages
+
+The default Aipyq build only bundles English (`en`), Simplified Chinese (`zh-Hans`), and Traditional Chinese (`zh-Hant`). If you need another locale, follow the steps below to add it back.
+
 ## Adding a New Language
 
 To add a new language to LibreChat, follow these steps:
