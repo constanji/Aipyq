@@ -927,13 +927,11 @@ export enum FetchTokenConfig {
 }
 
 export const defaultEndpoints: EModelEndpoint[] = [
-  EModelEndpoint.openAI,
   EModelEndpoint.assistants,
   EModelEndpoint.azureAssistants,
   EModelEndpoint.azureOpenAI,
   EModelEndpoint.agents,
   EModelEndpoint.chatGPTBrowser,
-  EModelEndpoint.anthropic,
   EModelEndpoint.custom,
   EModelEndpoint.bedrock,
 ];
