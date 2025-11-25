@@ -152,11 +152,11 @@ const SidePanelGroup = memo(
         </ResizablePanelGroup>
         {/* 侧边栏已完全移除，关闭按钮也已隐藏 */}
         {false && (
-          <button
-            aria-label="Close right side panel"
-            className={`nav-mask ${!isCollapsed ? 'active' : ''}`}
-            onClick={handleClosePanel}
-          />
+        <button
+          aria-label="Close right side panel"
+          className={`nav-mask ${!isCollapsed ? 'active' : ''}`}
+          onClick={handleClosePanel}
+        />
         )}
       </>
     );
