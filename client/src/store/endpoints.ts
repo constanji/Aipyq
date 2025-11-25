@@ -9,7 +9,6 @@ const defaultConfig: TEndpointsConfig = {
   [EModelEndpoint.agents]: null,
   [EModelEndpoint.openAI]: null,
   [EModelEndpoint.chatGPTBrowser]: null,
-  [EModelEndpoint.google]: null,
   [EModelEndpoint.anthropic]: null,
   [EModelEndpoint.custom]: null,
 };
