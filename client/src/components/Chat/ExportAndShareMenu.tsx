@@ -1,12 +1,14 @@
 import { useState, useId, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import * as Ariakit from '@ariakit/react';
-import { Upload, Share2 } from 'lucide-react';
+import { Upload, Share2, Blocks } from 'lucide-react';
 import { DropdownPopup, TooltipAnchor, useMediaQuery } from '@librechat/client';
 import type * as t from '~/common';
 import ExportModal from '~/components/Nav/ExportConversation/ExportModal';
 import { ShareButton } from '~/components/Conversations/ConvoOptions';
-import { useLocalize } from '~/hooks';
+import { useLocalize, useHasAccess } from '~/hooks';
+import { PermissionTypes, Permissions } from 'librechat-data-provider';
 import store from '~/store';
 
 export default function ExportAndShareMenu({
@@ -15,6 +17,7 @@ export default function ExportAndShareMenu({
   isSharedButtonEnabled: boolean;
 }) {
   const localize = useLocalize();
+  const navigate = useNavigate();
   const [showExports, setShowExports] = useState(false);
   const [isPopoverActive, setIsPopoverActive] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
@@ -24,6 +27,16 @@ export default function ExportAndShareMenu({
   const exportButtonRef = useRef<HTMLButtonElement>(null);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
   const conversation = useRecoilValue(store.conversationByIndex(0));
+
+  const hasAccessToAgents = useHasAccess({
+    permissionType: PermissionTypes.AGENTS,
+    permission: Permissions.USE,
+  });
+
+  const hasAccessToCreateAgents = useHasAccess({
+    permissionType: PermissionTypes.AGENTS,
+    permission: Permissions.CREATE,
+  });
 
   const exportable =
     conversation &&
@@ -41,6 +54,11 @@ export default function ExportAndShareMenu({
 
   const exportHandler = () => {
     setShowExports(true);
+  };
+
+  const agentBuilderHandler = () => {
+    navigate('/agent-builder');
+    setIsPopoverActive(false);
   };
 
   const dropdownItems: t.MenuItemProps[] = [
@@ -62,6 +80,12 @@ export default function ExportAndShareMenu({
       hideOnClick: false,
       ref: exportButtonRef,
       render: (props) => <button {...props} />,
+    },
+    {
+      label: '智能体构建器',
+      onClick: agentBuilderHandler,
+      icon: <Blocks className="icon-md mr-2 text-text-secondary" />,
+      show: hasAccessToAgents && hasAccessToCreateAgents,
     },
   ];
 

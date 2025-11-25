@@ -64,6 +64,11 @@ export default function useSideNavLinks({
   const { data: startupConfig } = useGetStartupConfig();
 
   const Links = useMemo(() => {
+    // 隐藏侧边栏功能，所有功能已迁移到独立页面
+    const links: NavLink[] = [];
+    return links;
+    
+    /* 原始侧边栏代码已注释
     const links: NavLink[] = [];
     if (
       isAssistantsEndpoint(endpoint) &&
@@ -179,21 +184,9 @@ export default function useSideNavLinks({
     });
 
     return links;
-  }, [
-    endpointsConfig,
-    interfaceConfig.parameters,
-    keyProvided,
-    endpointType,
-    endpoint,
-    hasAccessToAgents,
-    hasAccessToPrompts,
-    hasAccessToMemories,
-    hasAccessToReadMemories,
-    hasAccessToBookmarks,
-    hasAccessToCreateAgents,
-    hidePanel,
-    startupConfig,
-  ]);
+    */
+    // 依赖项已简化，因为现在返回空数组
+  }, []);
 
   return Links;
 }

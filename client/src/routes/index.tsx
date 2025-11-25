@@ -18,6 +18,7 @@ import ShareRoute from './ShareRoute';
 import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
+import AgentBuilder from './AgentBuilder';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -108,6 +109,10 @@ export const router = createBrowserRouter(
             {
               path: 'search',
               element: <Search />,
+            },
+            {
+              path: 'agent-builder',
+              element: <AgentBuilder />,
             },
           ],
         },
