@@ -345,12 +345,10 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
             setShowMCPToolDialog={setShowMCPToolDialog}
           />
         )}
-        {/* Agent Tools & Actions */}
+        {/* Agent Tools */}
         <div className="mb-4">
           <label className={labelClass}>
-            {`${toolsEnabled === true ? localize('com_ui_tools') : ''}
-              ${toolsEnabled === true && actionsEnabled === true ? ' + ' : ''}
-              ${actionsEnabled === true ? localize('com_assistants_actions') : ''}`}
+            {toolsEnabled === true ? localize('com_ui_tools') : ''}
           </label>
           <div>
             <div className="mb-1">
@@ -375,6 +373,7 @@ export default function AgentConfig({ createMutation }: Pick<AgentPanelProps, 'c
                   <Action
                     key={i}
                     action={action}
+                    agentId={agent_id}
                     onClick={() => {
                       setAction(action);
                     }}
