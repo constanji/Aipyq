@@ -51,25 +51,25 @@ class BaseClient {
     this.parentMessageId;
     /** @type {TAttachment[]} */
     this.attachments;
-    /** The key for the usage object's input tokens
+    /** 用于使用对象的输入令牌的键
      * @type {string} */
     this.inputTokensKey = 'prompt_tokens';
-    /** The key for the usage object's output tokens
+    /** 用于使用对象的输出令牌的键
      * @type {string} */
     this.outputTokensKey = 'completion_tokens';
     /** @type {Set<string>} */
     this.savedMessageIds = new Set();
     /**
-     * Flag to determine if the client re-submitted the latest assistant message.
+     * 标志用于判断客户端是否重新提交了最新的助手（工具） 响应。
      * @type {boolean | undefined} */
     this.continued;
     /**
-     * Flag to determine if the client has already fetched the conversation while saving new messages.
+     * 标志用于判断客户端是否已经获取了会话，同时保存了新的消息。
      * @type {boolean | undefined} */
     this.fetchedConvo;
     /** @type {TMessage[]} */
     this.currentMessages = [];
-    /** @type {import('aipyq-data-provider').VisionModes | undefined} */
+    /** @type {import('librechat-data-provider').VisionModes | undefined} */
     this.visionMode;
   }
 
@@ -109,7 +109,7 @@ class BaseClient {
   }
 
   /**
-   * Abstract method to get the token count for a message. Subclasses must implement this method.
+   * 抽象方法，用于获取消息的令牌数量。子类必须实现此方法。
    * @param {TMessage} responseMessage
    * @returns {number}
    */
@@ -118,9 +118,9 @@ class BaseClient {
   }
 
   /**
-   * Abstract method to record token usage. Subclasses must implement this method.
-   * If a correction to the token usage is needed, the method should return an object with the corrected token counts.
-   * Should only be used if `recordCollectedUsage` was not used instead.
+     * 抽象方法，用于记录令牌使用情况。子类必须实现此方法。
+     * 如果需要对令牌使用情况进行修正，该方法应返回一个包含修正后的令牌数量的对象。
+     * 只有在 `recordCollectedUsage` 未被使用时才应使用此方法。
    * @param {string} [model]
    * @param {AppConfig['balance']} [balance]
    * @param {number} promptTokens
@@ -137,11 +137,11 @@ class BaseClient {
   }
 
   /**
-   * Makes an HTTP request and logs the process.
+   * 发送HTTP请求并记录过程。
    *
-   * @param {RequestInfo} url - The URL to make the request to. Can be a string or a Request object.
-   * @param {RequestInit} [init] - Optional init options for the request.
-   * @returns {Promise<Response>} - A promise that resolves to the response of the fetch request.
+   * @param {RequestInfo} url - 要发送请求的URL。可以是字符串或Request对象。
+   * @param {RequestInit} [init] - 可选的初始化选项。
+   * @returns {Promise<Response>} - 一个Promise，解析为fetch请求的响应。
    */
   async fetch(_url, init) {
     let url = _url;
