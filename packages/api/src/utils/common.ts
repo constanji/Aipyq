@@ -1,4 +1,4 @@
-import { Providers } from '@librechat/agents';
+import { Providers } from '@aipyq/agents';
 import { AuthType } from 'aipyq-data-provider';
 
 /**

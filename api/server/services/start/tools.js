@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Tool } = require('@langchain/core/tools');
-const { Calculator } = require('@librechat/agents');
+const { Calculator } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { zodToJsonSchema } = require('zod-to-json-schema');
 const { Tools, ImageVisionTool } = require('aipyq-data-provider');

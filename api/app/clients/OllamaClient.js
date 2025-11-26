@@ -1,7 +1,7 @@
 const { z } = require('zod');
 const axios = require('axios');
 const { Ollama } = require('ollama');
-const { sleep } = require('@librechat/agents');
+const { sleep } = require('@aipyq/agents');
 const { resolveHeaders } = require('@aipyq/api');
 const { logger } = require('@aipyq/data-schemas');
 const { Constants } = require('aipyq-data-provider');

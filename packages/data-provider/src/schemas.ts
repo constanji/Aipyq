@@ -31,7 +31,7 @@ export enum EModelEndpoint {
   gptPlugins = 'gptPlugins',
 }
 
-/** Mirrors `@librechat/agents` providers */
+/** Mirrors `@aipyq/agents` providers */
 export enum Providers {
   OPENAI = 'openAI',
   ANTHROPIC = 'anthropic',

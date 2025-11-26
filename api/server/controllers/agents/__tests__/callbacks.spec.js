@@ -15,7 +15,7 @@ jest.mock('@aipyq/data-schemas', () => ({
   },
 }));
 
-jest.mock('@librechat/agents', () => ({
+jest.mock('@aipyq/agents', () => ({
   EnvVar: { CODE_API_KEY: 'CODE_API_KEY' },
   Providers: { GOOGLE: 'google' },
   GraphEvents: {},

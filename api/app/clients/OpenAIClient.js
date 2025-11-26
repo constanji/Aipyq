@@ -1,6 +1,6 @@
 const { logger } = require('@aipyq/data-schemas');
 const { HttpsProxyAgent } = require('https-proxy-agent');
-const { sleep, SplitStreamHandler, CustomOpenAIClient: OpenAI } = require('@librechat/agents');
+const { sleep, SplitStreamHandler, CustomOpenAIClient: OpenAI } = require('@aipyq/agents');
 const {
   isEnabled,
   Tokenizer,

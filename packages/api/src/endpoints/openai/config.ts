@@ -1,5 +1,5 @@
 import { ProxyAgent } from 'undici';
-import { Providers } from '@librechat/agents';
+import { Providers } from '@aipyq/agents';
 import { KnownEndpoints, EModelEndpoint } from 'aipyq-data-provider';
 import type * as t from '~/types';
 import { getLLMConfig as getAnthropicLLMConfig } from '~/endpoints/anthropic/llm';

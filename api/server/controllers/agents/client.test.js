@@ -1,9 +1,9 @@
-const { Providers } = require('@librechat/agents');
+const { Providers } = require('@aipyq/agents');
 const { Constants, EModelEndpoint } = require('aipyq-data-provider');
 const AgentClient = require('./client');
 
-jest.mock('@librechat/agents', () => ({
-  ...jest.requireActual('@librechat/agents'),
+jest.mock('@aipyq/agents', () => ({
+  ...jest.requireActual('@aipyq/agents'),
   createMetadataAggregator: () => ({
     handleLLMEnd: jest.fn(),
     collected: [],

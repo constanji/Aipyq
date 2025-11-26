@@ -1,5 +1,5 @@
 import { EModelEndpoint } from 'aipyq-data-provider';
-import type { ClientOptions } from '@librechat/agents';
+import type { ClientOptions } from '@aipyq/agents';
 import type * as t from '~/types';
 import { knownOpenAIParams } from './llm';
 

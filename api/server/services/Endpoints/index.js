@@ -1,4 +1,4 @@
-const { Providers } = require('@librechat/agents');
+const { Providers } = require('@aipyq/agents');
 const { EModelEndpoint } = require('aipyq-data-provider');
 const { getCustomEndpointConfig } = require('@aipyq/api');
 const initAnthropic = require('~/server/services/Endpoints/anthropic/initialize');

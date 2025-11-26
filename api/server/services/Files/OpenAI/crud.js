@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { sleep } = require('@librechat/agents');
+const { sleep } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { FilePurpose } = require('aipyq-data-provider');
 

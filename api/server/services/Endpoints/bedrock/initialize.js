@@ -1,5 +1,5 @@
 const { getModelMaxTokens } = require('@aipyq/api');
-const { createContentAggregator } = require('@librechat/agents');
+const { createContentAggregator } = require('@aipyq/agents');
 const {
   EModelEndpoint,
   providerEndpointMap,

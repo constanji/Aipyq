@@ -1,4 +1,4 @@
-import { Providers } from '@librechat/agents';
+import { Providers } from '@aipyq/agents';
 import { mbToBytes, isOpenAILikeProvider } from 'aipyq-data-provider';
 
 export interface PDFValidationResult {

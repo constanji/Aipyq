@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { logger } from '@aipyq/data-schemas';
-import { GraphEvents, sleep } from '@librechat/agents';
+import { GraphEvents, sleep } from '@aipyq/agents';
 import type { Response as ServerResponse } from 'express';
 import type { ServerSentEvent } from '~/types';
 import { sendEvent } from './events';

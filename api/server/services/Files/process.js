@@ -16,7 +16,7 @@ const {
   removeNullishValues,
   isAssistantsEndpoint,
 } = require('aipyq-data-provider');
-const { EnvVar } = require('@librechat/agents');
+const { EnvVar } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { sanitizeFilename, parseText, processAudioFile } = require('@aipyq/api');
 const {

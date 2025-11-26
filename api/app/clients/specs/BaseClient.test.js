@@ -40,8 +40,8 @@ jest.mock('~/models', () => ({
 
 const { getConvo, saveConvo } = require('~/models');
 
-jest.mock('@librechat/agents', () => {
-  const { Providers } = jest.requireActual('@librechat/agents');
+jest.mock('@aipyq/agents', () => {
+  const { Providers } = jest.requireActual('@aipyq/agents');
   return {
     Providers,
     ChatOpenAI: jest.fn().mockImplementation(() => {

@@ -1,4 +1,4 @@
-const { sleep } = require('@librechat/agents');
+const { sleep } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { RunStatus, defaultOrderQuery, CacheKeys } = require('aipyq-data-provider');
 const getLogStores = require('~/cache/getLogStores');

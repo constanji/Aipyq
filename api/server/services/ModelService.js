@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { Providers } = require('@librechat/agents');
+const { Providers } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { HttpsProxyAgent } = require('https-proxy-agent');
 const { logAxiosError, inputSchema, processModelData } = require('@aipyq/api');

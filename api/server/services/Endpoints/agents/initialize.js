@@ -1,5 +1,5 @@
 const { logger } = require('@aipyq/data-schemas');
-const { createContentAggregator } = require('@librechat/agents');
+const { createContentAggregator } = require('@aipyq/agents');
 const {
   validateAgentModel,
   getCustomEndpointConfig,

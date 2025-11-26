@@ -35,7 +35,7 @@ jest.mock('~/models', () => ({
 }));
 
 // Import the actual module but mock specific parts
-const agents = jest.requireActual('@librechat/agents');
+const agents = jest.requireActual('@aipyq/agents');
 const { CustomOpenAIClient } = agents;
 
 // Also mock ChatOpenAI to prevent real API calls

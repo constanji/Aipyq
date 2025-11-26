@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const { sleep } = require('@librechat/agents');
+const { sleep } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { getModelMaxTokens } = require('@aipyq/api');
 const { concat } = require('@langchain/core/utils/stream');

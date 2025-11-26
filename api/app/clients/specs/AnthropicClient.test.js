@@ -1,4 +1,4 @@
-const { SplitStreamHandler } = require('@librechat/agents');
+const { SplitStreamHandler } = require('@aipyq/agents');
 const { anthropicSettings } = require('aipyq-data-provider');
 const AnthropicClient = require('~/app/clients/AnthropicClient');
 

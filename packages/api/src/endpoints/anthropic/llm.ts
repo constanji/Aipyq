@@ -1,5 +1,5 @@
 import { Dispatcher, ProxyAgent } from 'undici';
-import { AnthropicClientOptions } from '@librechat/agents';
+import { AnthropicClientOptions } from '@aipyq/agents';
 import { anthropicSettings, removeNullishValues } from 'aipyq-data-provider';
 import type { AnthropicLLMConfigResult, AnthropicConfigOptions } from '~/types/anthropic';
 import { checkPromptCacheSupport, getClaudeHeaders, configureReasoning } from './helpers';

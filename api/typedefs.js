@@ -48,115 +48,115 @@
 
 /**
  * @exports Graph
- * @typedef {import('@librechat/agents').Graph} Graph
+ * @typedef {import('@aipyq/agents').Graph} Graph
  * @memberof typedefs
  */
 
 /**
  * @exports StandardGraph
- * @typedef {import('@librechat/agents').StandardGraph} StandardGraph
+ * @typedef {import('@aipyq/agents').StandardGraph} StandardGraph
  * @memberof typedefs
  */
 
 /**
  * @exports MessageContentComplex
- * @typedef {import('@librechat/agents').MessageContentComplex} MessageContentComplex
+ * @typedef {import('@aipyq/agents').MessageContentComplex} MessageContentComplex
  * @memberof typedefs
  */
 
 /**
  * @exports EventHandler
- * @typedef {import('@librechat/agents').EventHandler} EventHandler
+ * @typedef {import('@aipyq/agents').EventHandler} EventHandler
  * @memberof typedefs
  */
 
 /**
  * @exports ModelEndData
- * @typedef {import('@librechat/agents').ModelEndData} ModelEndData
+ * @typedef {import('@aipyq/agents').ModelEndData} ModelEndData
  * @memberof typedefs
  */
 
 /**
  * @exports ToolEndData
- * @typedef {import('@librechat/agents').ToolEndData} ToolEndData
+ * @typedef {import('@aipyq/agents').ToolEndData} ToolEndData
  * @memberof typedefs
  */
 
 /**
  * @exports ToolEndCallback
- * @typedef {import('@librechat/agents').ToolEndCallback} ToolEndCallback
+ * @typedef {import('@aipyq/agents').ToolEndCallback} ToolEndCallback
  * @memberof typedefs
  */
 
 /**
  * @exports ChatModelStreamHandler
- * @typedef {import('@librechat/agents').ChatModelStreamHandler} ChatModelStreamHandler
+ * @typedef {import('@aipyq/agents').ChatModelStreamHandler} ChatModelStreamHandler
  * @memberof typedefs
  */
 
 /**
  * @exports ContentAggregator
- * @typedef {import('@librechat/agents').ContentAggregatorResult['aggregateContent']} ContentAggregator
+ * @typedef {import('@aipyq/agents').ContentAggregatorResult['aggregateContent']} ContentAggregator
  * @memberof typedefs
  */
 
 /**
  * @exports GraphEvents
- * @typedef {import('@librechat/agents').GraphEvents} GraphEvents
+ * @typedef {import('@aipyq/agents').GraphEvents} GraphEvents
  * @memberof typedefs
  */
 
 /**
  * @exports AgentRun
- * @typedef {import('@librechat/agents').Run} AgentRun
+ * @typedef {import('@aipyq/agents').Run} AgentRun
  * @memberof typedefs
  */
 
 /**
  * @exports IState
- * @typedef {import('@librechat/agents').IState} IState
+ * @typedef {import('@aipyq/agents').IState} IState
  * @memberof typedefs
  */
 
 /**
  * @exports ClientCallbacks
- * @typedef {import('@librechat/agents').ClientCallbacks} ClientCallbacks
+ * @typedef {import('@aipyq/agents').ClientCallbacks} ClientCallbacks
  * @memberof typedefs
  */
 
 /**
  * @exports OpenAIClientOptions
- * @typedef {import('@librechat/agents').OpenAIClientOptions} OpenAIClientOptions
+ * @typedef {import('@aipyq/agents').OpenAIClientOptions} OpenAIClientOptions
  * @memberof typedefs
  */
 
 /**
  * @exports AnthropicClientOptions
- * @typedef {import('@librechat/agents').AnthropicClientOptions} AnthropicClientOptions
+ * @typedef {import('@aipyq/agents').AnthropicClientOptions} AnthropicClientOptions
  * @memberof typedefs
  */
 
 /**
  * @exports BedrockClientOptions
- * @typedef {import('@librechat/agents').BedrockConverseClientOptions} BedrockClientOptions
+ * @typedef {import('@aipyq/agents').BedrockConverseClientOptions} BedrockClientOptions
  * @memberof typedefs
  */
 
 /**
  * @exports VertexAIClientOptions
- * @typedef {import('@librechat/agents').VertexAIClientOptions} VertexAIClientOptions
+ * @typedef {import('@aipyq/agents').VertexAIClientOptions} VertexAIClientOptions
  * @memberof typedefs
  */
 
 /**
  * @exports GoogleClientOptions
- * @typedef {import('@librechat/agents').GoogleClientOptions} GoogleClientOptions
+ * @typedef {import('@aipyq/agents').GoogleClientOptions} GoogleClientOptions
  * @memberof typedefs
  */
 
 /**
  * @exports StreamEventData
- * @typedef {import('@librechat/agents').StreamEventData} StreamEventData
+ * @typedef {import('@aipyq/agents').StreamEventData} StreamEventData
  * @memberof typedefs
  */
 
@@ -489,13 +489,13 @@
 
 /**
  * @exports SearchResult
- * @typedef {import('@librechat/agents').SearchResult} SearchResult
+ * @typedef {import('@aipyq/agents').SearchResult} SearchResult
  * @memberof typedefs
  */
 
 /**
  * @exports SearchResultData
- * @typedef {import('@librechat/agents').SearchResultData} SearchResultData
+ * @typedef {import('@aipyq/agents').SearchResultData} SearchResultData
  * @memberof typedefs
  */
 

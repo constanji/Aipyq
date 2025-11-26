@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { tool } from '@langchain/core/tools';
 import { Tools } from 'aipyq-data-provider';
 import { logger } from '@aipyq/data-schemas';
-import { Run, Providers, GraphEvents } from '@librechat/agents';
+import { Run, Providers, GraphEvents } from '@aipyq/agents';
 import type {
   OpenAIClientOptions,
   StreamEventData,
@@ -12,7 +12,7 @@ import type {
   EventHandler,
   ToolEndData,
   LLMConfig,
-} from '@librechat/agents';
+} from '@aipyq/agents';
 import type { TAttachment, MemoryArtifact } from 'aipyq-data-provider';
 import type { ObjectId, MemoryMethods } from '@aipyq/data-schemas';
 import type { BaseMessage, ToolMessage } from '@langchain/core/messages';

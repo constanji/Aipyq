@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { Providers } from '@librechat/agents';
+import { Providers } from '@aipyq/agents';
 import { Tools } from 'aipyq-data-provider';
 import type { MemoryArtifact } from 'aipyq-data-provider';
 import { createMemoryTool, processMemory } from '../memory';
@@ -29,8 +29,8 @@ jest.mock('~/utils', () => ({
 }));
 
 // Mock the Run module
-jest.mock('@librechat/agents', () => ({
-  ...jest.requireActual('@librechat/agents'),
+jest.mock('@aipyq/agents', () => ({
+  ...jest.requireActual('@aipyq/agents'),
   Run: {
     create: jest.fn(),
   },
@@ -198,7 +198,7 @@ describe('processMemory - GPT-5+ handling', () => {
     };
 
     // Setup the Run.create mock
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     (Run.create as jest.Mock).mockResolvedValue({
       processStream: jest.fn().mockResolvedValue('Memory processed'),
     });
@@ -223,7 +223,7 @@ describe('processMemory - GPT-5+ handling', () => {
       },
     });
 
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     expect(Run.create).toHaveBeenCalledWith(
       expect.objectContaining({
         graphConfig: expect.objectContaining({
@@ -265,7 +265,7 @@ describe('processMemory - GPT-5+ handling', () => {
       },
     });
 
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     expect(Run.create).toHaveBeenCalledWith(
       expect.objectContaining({
         graphConfig: expect.objectContaining({
@@ -304,7 +304,7 @@ describe('processMemory - GPT-5+ handling', () => {
       },
     });
 
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     expect(Run.create).toHaveBeenCalledWith(
       expect.objectContaining({
         graphConfig: expect.objectContaining({
@@ -334,7 +334,7 @@ describe('processMemory - GPT-5+ handling', () => {
 
     for (const { model, shouldTransform } of testCases) {
       jest.clearAllMocks();
-      const { Run } = jest.requireMock('@librechat/agents');
+      const { Run } = jest.requireMock('@aipyq/agents');
       (Run.create as jest.Mock).mockResolvedValue({
         processStream: jest.fn().mockResolvedValue('Memory processed'),
       });
@@ -386,7 +386,7 @@ describe('processMemory - GPT-5+ handling', () => {
       // No llmConfig provided
     });
 
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     expect(Run.create).toHaveBeenCalledWith(
       expect.objectContaining({
         graphConfig: expect.objectContaining({
@@ -418,7 +418,7 @@ describe('processMemory - GPT-5+ handling', () => {
       },
     });
 
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     expect(Run.create).toHaveBeenCalledWith(
       expect.objectContaining({
         graphConfig: expect.objectContaining({
@@ -452,7 +452,7 @@ describe('processMemory - GPT-5+ handling', () => {
       },
     });
 
-    const { Run } = jest.requireMock('@librechat/agents');
+    const { Run } = jest.requireMock('@aipyq/agents');
     expect(Run.create).toHaveBeenCalledWith(
       expect.objectContaining({
         graphConfig: expect.objectContaining({

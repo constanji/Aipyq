@@ -1,6 +1,6 @@
 const multer = require('multer');
 const express = require('express');
-const { sleep } = require('@librechat/agents');
+const { sleep } = require('@aipyq/agents');
 const { isEnabled } = require('@aipyq/api');
 const { logger } = require('@aipyq/data-schemas');
 const { CacheKeys, EModelEndpoint } = require('aipyq-data-provider');

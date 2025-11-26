@@ -6,7 +6,7 @@ const {
   StepTypes,
   GraphEvents,
   Constants: AgentConstants,
-} = require('@librechat/agents');
+} = require('@aipyq/agents');
 const {
   sendEvent,
   MCPOAuthHandler,
@@ -63,7 +63,7 @@ function createRunStepDeltaEmitter({ res, stepId, toolCall }) {
  */
 function createRunStepEmitter({ res, runId, stepId, toolCall, index }) {
   return function () {
-    /** @type {import('@librechat/agents').RunStep} */
+    /** @type {import('@aipyq/agents').RunStep} */
     const data = {
       runId: runId ?? Constants.USE_PRELIM_RESPONSE_MESSAGE_ID,
       id: stepId,

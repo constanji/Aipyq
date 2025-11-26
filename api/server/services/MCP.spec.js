@@ -26,7 +26,7 @@ jest.mock('@langchain/core/tools', () => ({
   }),
 }));
 
-jest.mock('@librechat/agents', () => ({
+jest.mock('@aipyq/agents', () => ({
   Providers: {
     VERTEXAI: 'vertexai',
     GOOGLE: 'google',

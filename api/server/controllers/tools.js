@@ -1,5 +1,5 @@
 const { nanoid } = require('nanoid');
-const { EnvVar } = require('@librechat/agents');
+const { EnvVar } = require('@aipyq/agents');
 const { logger } = require('@aipyq/data-schemas');
 const { checkAccess, loadWebSearchAuth } = require('@aipyq/api');
 const {

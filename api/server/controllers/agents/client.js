@@ -22,7 +22,7 @@ const {
   formatAgentMessages,
   getTokenCountForMessage,
   createMetadataAggregator,
-} = require('@librechat/agents');
+} = require('@aipyq/agents');
 const {
   Constants,
   Permissions,
@@ -953,7 +953,7 @@ class AgentClient extends BaseClient {
     const appConfig = req.config;
     let endpoint = agent.endpoint;
 
-    /** @type {import('@librechat/agents').ClientOptions} */
+    /** @type {import('@aipyq/agents').ClientOptions} */
     let clientOptions = {
       model: agent.model || agent.model_parameters.model,
     };
@@ -1027,7 +1027,7 @@ class AgentClient extends BaseClient {
       provider = Providers.AZURE;
     }
 
-    /** @type {import('@librechat/agents').ClientOptions} */
+    /** @type {import('@aipyq/agents').ClientOptions} */
     clientOptions = { ...options.llmConfig };
     if (options.configOptions) {
       clientOptions.configuration = options.configOptions;

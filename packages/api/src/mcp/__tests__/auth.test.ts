@@ -1,5 +1,5 @@
 import type { PluginAuthMethods } from '@aipyq/data-schemas';
-import type { GenericTool } from '@librechat/agents';
+import type { GenericTool } from '@aipyq/agents';
 import { getPluginAuthMap } from '~/agents/auth';
 import { getUserMCPAuthMap } from '../auth';
 

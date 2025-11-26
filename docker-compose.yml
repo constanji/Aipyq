@@ -25,6 +25,7 @@ services:
       - RAG_PORT=${RAG_PORT:-8000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
       - AIPYQ_LOG_DIR=/app/api/logs
+      - CONFIG_PATH=/app/Aipyq.yaml
 
 
     
@@ -41,11 +42,7 @@ services:
       - ./logs:/app/api/logs
       - ./logs:/app/logs
       - ./Aipyq.yaml:/app/Aipyq.yaml
-      # 挂载本地构建的静态资源（如果存在）
-      # 使用本地构建的 dist 文件夹覆盖镜像中的静态资源
-      # 暂时注释掉本地代码挂载以使用镜像中的代码
-      # - ./api:/app/api
-      # - ./packages:/app/packages
+      # 挂载本地静态资源
       - ./client/dist:/app/client/dist
       - ./client/public/assets:/app/client/public/assets
       - ./client/public/fonts:/app/client/public/fonts

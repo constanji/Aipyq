@@ -3,7 +3,7 @@ const { v4 } = require('uuid');
 const axios = require('axios');
 const { logAxiosError } = require('@aipyq/api');
 const { logger } = require('@aipyq/data-schemas');
-const { getCodeBaseURL } = require('@librechat/agents');
+const { getCodeBaseURL } = require('@aipyq/agents');
 const {
   Tools,
   FileContext,

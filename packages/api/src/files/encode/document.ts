@@ -1,4 +1,4 @@
-import { Providers } from '@librechat/agents';
+import { Providers } from '@aipyq/agents';
 import { isOpenAILikeProvider, isDocumentSupportedProvider } from 'aipyq-data-provider';
 import type { IMongoFile } from '@aipyq/data-schemas';
 import type { Request } from 'express';

@@ -1,4 +1,4 @@
-const { Providers } = require('@librechat/agents');
+const { Providers } = require('@aipyq/agents');
 const {
   primeResources,
   getModelMaxTokens,
@@ -157,7 +157,7 @@ const initializeAgent = async ({
     agent.provider = options.provider;
   }
 
-  /** @type {import('@librechat/agents').GenericTool[]} */
+  /** @type {import('@aipyq/agents').GenericTool[]} */
   let tools = options.tools?.length ? options.tools : structuredTools;
   if (
     (agent.provider === Providers.GOOGLE || agent.provider === Providers.VERTEXAI) &&
@@ -175,7 +175,7 @@ const initializeAgent = async ({
     tools = structuredTools.concat(options.tools);
   }
 
-  /** @type {import('@librechat/agents').ClientOptions} */
+  /** @type {import('@aipyq/agents').ClientOptions} */
   agent.model_parameters = { ...options.llmConfig };
   if (options.configOptions) {
     agent.model_parameters.configuration = options.configOptions;

@@ -4,7 +4,7 @@ const {
   Calculator,
   createSearchTool,
   createCodeExecutionTool,
-} = require('@librechat/agents');
+} = require('@aipyq/agents');
 const {
   checkAccess,
   createSafeUser,

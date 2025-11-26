@@ -1,7 +1,7 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('@librechat/agents', () => ({
+jest.mock('@aipyq/agents', () => ({
   sleep: jest.fn(),
 }));
 

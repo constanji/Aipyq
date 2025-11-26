@@ -1,5 +1,5 @@
 const { klona } = require('klona');
-const { sleep } = require('@librechat/agents');
+const { sleep } = require('@aipyq/agents');
 const { sendEvent } = require('@aipyq/api');
 const { logger } = require('@aipyq/data-schemas');
 const {

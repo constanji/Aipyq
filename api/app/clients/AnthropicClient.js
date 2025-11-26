@@ -10,7 +10,7 @@ const {
   getResponseSender,
   validateVisionModel,
 } = require('aipyq-data-provider');
-const { sleep, SplitStreamHandler: _Handler, addCacheControl } = require('@librechat/agents');
+const { sleep, SplitStreamHandler: _Handler, addCacheControl } = require('@aipyq/agents');
 const {
   Tokenizer,
   createFetch,
