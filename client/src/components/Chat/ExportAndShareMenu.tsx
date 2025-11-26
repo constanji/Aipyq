@@ -44,10 +44,6 @@ export default function ExportAndShareMenu({
     conversation.conversationId !== 'new' &&
     conversation.conversationId !== 'search';
 
-  if (exportable === false) {
-    return null;
-  }
-
   const shareHandler = () => {
     setShowShareDialog(true);
   };
@@ -66,7 +62,7 @@ export default function ExportAndShareMenu({
       label: localize('com_ui_share'),
       onClick: shareHandler,
       icon: <Share2 className="icon-md mr-2 text-text-secondary" />,
-      show: isSharedButtonEnabled,
+      show: isSharedButtonEnabled && exportable,
       /** NOTE: THE FOLLOWING PROPS ARE REQUIRED FOR MENU ITEMS THAT OPEN DIALOGS */
       hideOnClick: false,
       ref: shareButtonRef,
@@ -76,6 +72,7 @@ export default function ExportAndShareMenu({
       label: localize('com_endpoint_export'),
       onClick: exportHandler,
       icon: <Upload className="icon-md mr-2 text-text-secondary" />,
+      show: exportable,
       /** NOTE: THE FOLLOWING PROPS ARE REQUIRED FOR MENU ITEMS THAT OPEN DIALOGS */
       hideOnClick: false,
       ref: exportButtonRef,

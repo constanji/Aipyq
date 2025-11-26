@@ -7,7 +7,6 @@ import ModelSelector from './Menus/Endpoints/ModelSelector';
 import { PresetsMenu, HeaderNewChat, OpenSidebar } from './Menus';
 import { useGetStartupConfig } from '~/data-provider';
 import ExportAndShareMenu from './ExportAndShareMenu';
-import { TemporaryChat } from './TemporaryChat';
 import AddMultiConvo from './AddMultiConvo';
 import { useHasAccess } from '~/hooks';
 
@@ -54,12 +53,9 @@ export default function Header() {
             {interfaceConfig.presets === true && interfaceConfig.modelSelect && <PresetsMenu />}
             {hasAccessToMultiConvo === true && <AddMultiConvo />}
             {isSmallScreen && (
-              <>
-                <ExportAndShareMenu
-                  isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
-                />
-                <TemporaryChat />
-              </>
+              <ExportAndShareMenu
+                isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
+              />
             )}
           </div>
         </div>
@@ -68,7 +64,6 @@ export default function Header() {
             <ExportAndShareMenu
               isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
             />
-            <TemporaryChat />
           </div>
         )}
       </div>
