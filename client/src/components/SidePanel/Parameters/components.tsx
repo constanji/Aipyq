@@ -1,5 +1,5 @@
-import { ComponentTypes } from 'librechat-data-provider';
-import type { DynamicSettingProps } from 'librechat-data-provider';
+import { ComponentTypes } from 'aipyq-data-provider';
+import type { DynamicSettingProps } from 'aipyq-data-provider';
 import {
   DynamicCombobox,
   DynamicDropdown,

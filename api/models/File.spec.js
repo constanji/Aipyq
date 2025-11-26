@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-const { createModels } = require('@librechat/data-schemas');
+const { createModels } = require('@aipyq/data-schemas');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const {
   SystemRoles,
   ResourceType,
   AccessRoleIds,
   PrincipalType,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { grantPermission } = require('~/server/services/PermissionService');
 const { getFiles, createFile } = require('./File');
 const { seedDefaultRoles } = require('~/models');

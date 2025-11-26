@@ -1,6 +1,6 @@
-# LibreChat Localization Guide
+# Aipyq Localization Guide
 
-This guide explains how to add new languages to LibreChat's localization system.
+This guide explains how to add new languages to Aipyq's localization system.
 
 ## Current Supported Languages
 
@@ -8,11 +8,11 @@ The default Aipyq build only bundles English (`en`), Simplified Chinese (`zh-Han
 
 ## Adding a New Language
 
-To add a new language to LibreChat, follow these steps:
+To add a new language to Aipyq, follow these steps:
 
 ### 1. Add the Language to Locize Project
 
-- Navigate to the [LibreChat locize project](https://www.locize.app/cat/62uyy7c9), 
+- Navigate to the [Aipyq locize project](https://www.locize.app/cat/62uyy7c9), 
 - Click the "ADD LANGUAGE" button, typically found within the "..." menu of the "Start to translate" card on the project overview page.
 
 ### 2. Update the Language Selector Component
@@ -112,7 +112,7 @@ fallbackLng: {
 
 After adding a new language:
 
-1. The empty translation file will be populated through LibreChat's automated translation platform
+1. The empty translation file will be populated through Aipyq's automated translation platform
 2. Only the English (`en`) translation file should be manually updated
 3. Other language translations are managed externally
 

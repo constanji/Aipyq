@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ViolationTypes, ErrorTypes } from 'librechat-data-provider';
-import type { Agent, TModelsConfig } from 'librechat-data-provider';
+import { ViolationTypes, ErrorTypes } from 'aipyq-data-provider';
+import type { Agent, TModelsConfig } from 'aipyq-data-provider';
 import type { Request, Response } from 'express';
 
 /** Avatar schema shared between create and update */

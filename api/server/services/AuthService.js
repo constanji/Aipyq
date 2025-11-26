@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { webcrypto } = require('node:crypto');
-const { logger } = require('@librechat/data-schemas');
-const { isEnabled, checkEmailConfig, isEmailDomainAllowed } = require('@librechat/api');
-const { ErrorTypes, SystemRoles, errorsToString } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { isEnabled, checkEmailConfig, isEmailDomainAllowed } = require('@aipyq/api');
+const { ErrorTypes, SystemRoles, errorsToString } = require('aipyq-data-provider');
 const {
   findUser,
   findToken,
@@ -416,7 +416,7 @@ const setAuthTokens = async (userId, res, _session = null) => {
       secure: isProduction,
       sameSite: 'strict',
     });
-    res.cookie('token_provider', 'librechat', {
+    res.cookie('token_provider', 'aipyq', {
       expires: new Date(refreshTokenExpires),
       httpOnly: true,
       secure: isProduction,

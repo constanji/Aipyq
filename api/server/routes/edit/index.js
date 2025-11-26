@@ -1,5 +1,5 @@
-const { isEnabled } = require('@librechat/api');
-const { EModelEndpoint } = require('librechat-data-provider');
+const { isEnabled } = require('@aipyq/api');
+const { EModelEndpoint } = require('aipyq-data-provider');
 const {
   validateConvoAccess,
   messageUserLimiter,

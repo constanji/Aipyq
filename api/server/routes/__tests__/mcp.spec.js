@@ -3,8 +3,8 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
-jest.mock('@librechat/api', () => ({
-  ...jest.requireActual('@librechat/api'),
+jest.mock('@aipyq/api', () => ({
+  ...jest.requireActual('@aipyq/api'),
   MCPOAuthHandler: {
     initiateOAuthFlow: jest.fn(),
     getFlowState: jest.fn(),
@@ -21,7 +21,7 @@ jest.mock('@librechat/api', () => ({
   },
 }));
 
-jest.mock('@librechat/data-schemas', () => ({
+jest.mock('@aipyq/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     info: jest.fn(),
@@ -119,7 +119,7 @@ describe('MCP Routes', () => {
   });
 
   describe('GET /:serverName/oauth/initiate', () => {
-    const { MCPOAuthHandler, mcpServersRegistry } = require('@librechat/api');
+    const { MCPOAuthHandler, mcpServersRegistry } = require('@aipyq/api');
     const { getLogStores } = require('~/cache');
 
     it('should initiate OAuth flow successfully', async () => {
@@ -244,7 +244,7 @@ describe('MCP Routes', () => {
   });
 
   describe('GET /:serverName/oauth/callback', () => {
-    const { MCPOAuthHandler, MCPTokenStorage } = require('@librechat/api');
+    const { MCPOAuthHandler, MCPTokenStorage } = require('@aipyq/api');
     const { getLogStores } = require('~/cache');
 
     it('should redirect to error page when OAuth error is received', async () => {
@@ -288,7 +288,7 @@ describe('MCP Routes', () => {
     });
 
     it('should handle OAuth callback successfully', async () => {
-      const { mcpServersRegistry } = require('@librechat/api');
+      const { mcpServersRegistry } = require('@aipyq/api');
       const mockFlowManager = {
         completeFlow: jest.fn().mockResolvedValue(),
         deleteFlow: jest.fn().mockResolvedValue(true),
@@ -327,7 +327,7 @@ describe('MCP Routes', () => {
       require('~/config').getMCPManager.mockReturnValue(mockMcpManager);
 
       const { getCachedTools, setCachedTools } = require('~/server/services/Config');
-      const { Constants } = require('librechat-data-provider');
+      const { Constants } = require('aipyq-data-provider');
       getCachedTools.mockResolvedValue({
         [`existing-tool${Constants.mcp_delimiter}test-server`]: { type: 'function' },
         [`other-tool${Constants.mcp_delimiter}other-server`]: { type: 'function' },
@@ -380,7 +380,7 @@ describe('MCP Routes', () => {
     });
 
     it('should handle system-level OAuth completion', async () => {
-      const { mcpServersRegistry } = require('@librechat/api');
+      const { mcpServersRegistry } = require('@aipyq/api');
       const mockFlowManager = {
         completeFlow: jest.fn().mockResolvedValue(),
         deleteFlow: jest.fn().mockResolvedValue(true),
@@ -415,7 +415,7 @@ describe('MCP Routes', () => {
     });
 
     it('should handle reconnection failure after OAuth', async () => {
-      const { mcpServersRegistry } = require('@librechat/api');
+      const { mcpServersRegistry } = require('@aipyq/api');
       const mockFlowManager = {
         completeFlow: jest.fn().mockResolvedValue(),
         deleteFlow: jest.fn().mockResolvedValue(true),
@@ -460,7 +460,7 @@ describe('MCP Routes', () => {
     });
 
     it('should redirect to error page if token storage fails', async () => {
-      const { mcpServersRegistry } = require('@librechat/api');
+      const { mcpServersRegistry } = require('@aipyq/api');
       const mockFlowManager = {
         completeFlow: jest.fn().mockResolvedValue(),
         deleteFlow: jest.fn().mockResolvedValue(true),
@@ -650,7 +650,7 @@ describe('MCP Routes', () => {
   });
 
   describe('POST /oauth/cancel/:serverName', () => {
-    const { MCPOAuthHandler } = require('@librechat/api');
+    const { MCPOAuthHandler } = require('@aipyq/api');
     const { getLogStores } = require('~/cache');
 
     it('should cancel OAuth flow successfully', async () => {
@@ -731,7 +731,7 @@ describe('MCP Routes', () => {
   });
 
   describe('POST /:serverName/reinitialize', () => {
-    const { mcpServersRegistry } = require('@librechat/api');
+    const { mcpServersRegistry } = require('@aipyq/api');
 
     it('should return 404 when server is not found in configuration', async () => {
       const mockMcpManager = {
@@ -908,7 +908,7 @@ describe('MCP Routes', () => {
       require('~/config').getMCPManager.mockReturnValue(mockMcpManager);
       require('~/config').getFlowStateManager.mockReturnValue({});
       require('~/cache').getLogStores.mockReturnValue({});
-      require('@librechat/api').getUserMCPAuthMap.mockResolvedValue({
+      require('@aipyq/api').getUserMCPAuthMap.mockResolvedValue({
         'mcp:test-server': {
           API_KEY: 'api-key-value',
         },
@@ -935,7 +935,7 @@ describe('MCP Routes', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(require('@librechat/api').getUserMCPAuthMap).toHaveBeenCalledWith({
+      expect(require('@aipyq/api').getUserMCPAuthMap).toHaveBeenCalledWith({
         userId: 'test-user-id',
         servers: ['test-server'],
         findPluginAuthsByKeys: require('~/models').findPluginAuthsByKeys,
@@ -1109,7 +1109,7 @@ describe('MCP Routes', () => {
 
   describe('GET /:serverName/auth-values', () => {
     const { getUserPluginAuthValue } = require('~/server/services/PluginService');
-    const { mcpServersRegistry } = require('@librechat/api');
+    const { mcpServersRegistry } = require('@aipyq/api');
 
     it('should return auth value flags for server', async () => {
       const mockMcpManager = {};
@@ -1221,7 +1221,7 @@ describe('MCP Routes', () => {
 
   describe('GET /:serverName/oauth/callback - Edge Cases', () => {
     it('should handle OAuth callback without toolFlowId (falsy toolFlowId)', async () => {
-      const { MCPOAuthHandler, MCPTokenStorage, mcpServersRegistry } = require('@librechat/api');
+      const { MCPOAuthHandler, MCPTokenStorage, mcpServersRegistry } = require('@aipyq/api');
       const mockTokens = {
         access_token: 'edge-access-token',
         refresh_token: 'edge-refresh-token',
@@ -1264,7 +1264,7 @@ describe('MCP Routes', () => {
     it('should handle null cached tools in OAuth callback (triggers || {} fallback)', async () => {
       const { getCachedTools } = require('~/server/services/Config');
       getCachedTools.mockResolvedValue(null);
-      const { MCPOAuthHandler, MCPTokenStorage, mcpServersRegistry } = require('@librechat/api');
+      const { MCPOAuthHandler, MCPTokenStorage, mcpServersRegistry } = require('@aipyq/api');
       const mockTokens = {
         access_token: 'edge-access-token',
         refresh_token: 'edge-refresh-token',

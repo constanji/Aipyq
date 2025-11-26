@@ -1,6 +1,6 @@
-const { isEnabled } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
-const { CacheKeys } = require('librechat-data-provider');
+const { isEnabled } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
+const { CacheKeys } = require('aipyq-data-provider');
 const getLogStores = require('~/cache/getLogStores');
 const { saveConvo } = require('~/models');
 

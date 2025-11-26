@@ -2,8 +2,8 @@ import {
   isAgentsEndpoint,
   tQueryParamsSchema,
   isAssistantsEndpoint,
-} from 'librechat-data-provider';
-import type { TConversation, TPreset } from 'librechat-data-provider';
+} from 'aipyq-data-provider';
+import type { TConversation, TPreset } from 'aipyq-data-provider';
 import { isEphemeralAgent } from '~/common';
 
 const allowedParams = Object.keys(tQueryParamsSchema.shape);

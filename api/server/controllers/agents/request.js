@@ -1,6 +1,6 @@
-const { sendEvent } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
-const { Constants } = require('librechat-data-provider');
+const { sendEvent } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
+const { Constants } = require('aipyq-data-provider');
 const {
   handleAbortError,
   createAbortController,

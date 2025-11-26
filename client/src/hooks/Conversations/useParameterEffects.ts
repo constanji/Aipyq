@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import type { DynamicSettingProps, TPreset } from 'librechat-data-provider';
+import type { DynamicSettingProps, TPreset } from 'aipyq-data-provider';
 import { defaultDebouncedDelay } from '~/common';
 
 function useParameterEffects<T = unknown>({

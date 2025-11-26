@@ -1,5 +1,5 @@
-import { memorySchema } from 'librechat-data-provider';
-import type { TCustomConfig, TMemoryConfig } from 'librechat-data-provider';
+import { memorySchema } from 'aipyq-data-provider';
+import type { TCustomConfig, TMemoryConfig } from 'aipyq-data-provider';
 
 const hasValidAgent = (agent: TMemoryConfig['agent']) =>
   !!agent &&

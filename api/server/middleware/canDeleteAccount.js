@@ -1,6 +1,6 @@
-const { isEnabled } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
-const { SystemRoles } = require('librechat-data-provider');
+const { isEnabled } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
+const { SystemRoles } = require('aipyq-data-provider');
 
 /**
  * Checks if the user can delete their account

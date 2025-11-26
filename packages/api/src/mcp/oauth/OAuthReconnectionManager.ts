@@ -1,6 +1,6 @@
-import { logger } from '@librechat/data-schemas';
-import type { TokenMethods } from '@librechat/data-schemas';
-import type { TUser } from 'librechat-data-provider';
+import { logger } from '@aipyq/data-schemas';
+import type { TokenMethods } from '@aipyq/data-schemas';
+import type { TUser } from 'aipyq-data-provider';
 import type { MCPOAuthTokens } from './types';
 import { OAuthReconnectionTracker } from './OAuthReconnectionTracker';
 import { FlowStateManager } from '~/flow/manager';

@@ -1,5 +1,5 @@
 const express = require('express');
-const { ResourceType, PermissionBits } = require('librechat-data-provider');
+const { ResourceType, PermissionBits } = require('aipyq-data-provider');
 const {
   getUserEffectivePermissions,
   updateResourcePermissions,

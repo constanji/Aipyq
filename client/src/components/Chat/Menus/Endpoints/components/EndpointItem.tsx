@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { SettingsIcon } from 'lucide-react';
-import { Spinner } from '@librechat/client';
-import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from 'librechat-data-provider';
-import type { TModelSpec } from 'librechat-data-provider';
+import { Spinner } from '@aipyq/client';
+import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from 'aipyq-data-provider';
+import type { TModelSpec } from 'aipyq-data-provider';
 import type { Endpoint } from '~/common';
 import { CustomMenu as Menu, CustomMenuItem as MenuItem } from '../CustomMenu';
 import { useModelSelectorContext } from '../ModelSelectorContext';

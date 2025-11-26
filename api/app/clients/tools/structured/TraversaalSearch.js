@@ -1,6 +1,6 @@
 const { z } = require('zod');
 const { Tool } = require('@langchain/core/tools');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const { getEnvironmentVariable } = require('@langchain/core/utils/env');
 
 /**

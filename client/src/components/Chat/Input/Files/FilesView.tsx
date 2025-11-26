@@ -1,6 +1,6 @@
-import { FileSources, FileContext } from 'librechat-data-provider';
-import type { TFile } from 'librechat-data-provider';
-import { OGDialog, OGDialogContent, OGDialogHeader, OGDialogTitle } from '@librechat/client';
+import { FileSources, FileContext } from 'aipyq-data-provider';
+import type { TFile } from 'aipyq-data-provider';
+import { OGDialog, OGDialogContent, OGDialogHeader, OGDialogTitle } from '@aipyq/client';
 import { useGetFiles } from '~/data-provider';
 import { DataTable, columns } from './Table';
 import { useLocalize } from '~/hooks';

@@ -1,4 +1,4 @@
-import type { PluginAuthMethods } from '@librechat/data-schemas';
+import type { PluginAuthMethods } from '@aipyq/data-schemas';
 import type { GenericTool } from '@librechat/agents';
 import { getPluginAuthMap } from '~/agents/auth';
 import { getUserMCPAuthMap } from '../auth';

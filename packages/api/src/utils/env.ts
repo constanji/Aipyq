@@ -1,6 +1,6 @@
-import { extractEnvVariable } from 'librechat-data-provider';
-import type { TUser, MCPOptions } from 'librechat-data-provider';
-import type { IUser } from '@librechat/data-schemas';
+import { extractEnvVariable } from 'aipyq-data-provider';
+import type { TUser, MCPOptions } from 'aipyq-data-provider';
+import type { IUser } from '@aipyq/data-schemas';
 import type { RequestBody } from '~/types';
 
 /**
@@ -70,7 +70,7 @@ function processUserPlaceholders(value: string, user?: TUser): string {
   }
 
   for (const field of ALLOWED_USER_FIELDS) {
-    const placeholder = `{{LIBRECHAT_USER_${field.toUpperCase()}}}`;
+    const placeholder = `{{AIPYQ_USER_${field.toUpperCase()}}}`;
     if (!value.includes(placeholder)) {
       continue;
     }
@@ -96,7 +96,7 @@ function processUserPlaceholders(value: string, user?: TUser): string {
 
 /**
  * Replaces request body field placeholders within a string.
- * Recognized placeholders: `{{LIBRECHAT_BODY_<FIELD>}}` where `<FIELD>` ∈ ALLOWED_BODY_FIELDS.
+ * Recognized placeholders: `{{AIPYQ_BODY_<FIELD>}}` where `<FIELD>` ∈ ALLOWED_BODY_FIELDS.
  * If a body field is absent or null/undefined, it is replaced with an empty string.
  *
  * @param value - The string value to process
@@ -105,7 +105,7 @@ function processUserPlaceholders(value: string, user?: TUser): string {
  */
 function processBodyPlaceholders(value: string, body: RequestBody): string {
   for (const field of ALLOWED_BODY_FIELDS) {
-    const placeholder = `{{LIBRECHAT_BODY_${field.toUpperCase()}}}`;
+    const placeholder = `{{AIPYQ_BODY_${field.toUpperCase()}}}`;
     if (!value.includes(placeholder)) {
       continue;
     }
@@ -149,10 +149,10 @@ function processSingleValue({
     }
   }
 
-  // 2. Replace user field placeholders (e.g., {{LIBRECHAT_USER_EMAIL}}, {{LIBRECHAT_USER_ID}})
+  // 2. Replace user field placeholders (e.g., {{AIPYQ_USER_EMAIL}}, {{AIPYQ_USER_ID}})
   value = processUserPlaceholders(value, user);
 
-  // 3. Replace body field placeholders (e.g., {{LIBRECHAT_BODY_CONVERSATIONID}}, {{LIBRECHAT_BODY_PARENTMESSAGEID}})
+  // 3. Replace body field placeholders (e.g., {{AIPYQ_BODY_CONVERSATIONID}}, {{AIPYQ_BODY_PARENTMESSAGEID}})
   if (body) {
     value = processBodyPlaceholders(value, body);
   }

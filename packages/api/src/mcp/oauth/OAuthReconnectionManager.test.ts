@@ -1,11 +1,11 @@
-import { TokenMethods } from '@librechat/data-schemas';
+import { TokenMethods } from '@aipyq/data-schemas';
 import { FlowStateManager, MCPConnection, MCPOAuthTokens, MCPOptions } from '../..';
 import { MCPManager } from '../MCPManager';
 import { mcpServersRegistry } from '../../mcp/registry/MCPServersRegistry';
 import { OAuthReconnectionManager } from './OAuthReconnectionManager';
 import { OAuthReconnectionTracker } from './OAuthReconnectionTracker';
 
-jest.mock('@librechat/data-schemas', () => ({
+jest.mock('@aipyq/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),

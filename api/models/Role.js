@@ -4,8 +4,8 @@ const {
   roleDefaults,
   permissionsSchema,
   removeNullishValues,
-} = require('librechat-data-provider');
-const { logger } = require('@librechat/data-schemas');
+} = require('aipyq-data-provider');
+const { logger } = require('@aipyq/data-schemas');
 const getLogStores = require('~/cache/getLogStores');
 const { Role } = require('~/db/models');
 

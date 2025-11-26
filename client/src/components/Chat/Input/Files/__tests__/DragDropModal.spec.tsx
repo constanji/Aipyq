@@ -1,4 +1,4 @@
-import { EModelEndpoint, isDocumentSupportedProvider } from 'librechat-data-provider';
+import { EModelEndpoint, isDocumentSupportedProvider } from 'aipyq-data-provider';
 
 describe('DragDropModal - Provider Detection', () => {
   describe('endpointType priority over currentProvider', () => {

@@ -1,5 +1,5 @@
-const { CacheKeys } = require('librechat-data-provider');
-const { logger, AppService } = require('@librechat/data-schemas');
+const { CacheKeys } = require('aipyq-data-provider');
+const { logger, AppService } = require('@aipyq/data-schemas');
 const { loadAndFormatTools } = require('~/server/services/start/tools');
 const loadCustomConfig = require('./loadCustomConfig');
 const { setCachedTools } = require('./getCachedTools');

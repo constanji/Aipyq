@@ -1,16 +1,16 @@
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const { createContentAggregator } = require('@librechat/agents');
 const {
   validateAgentModel,
   getCustomEndpointConfig,
   createSequentialChainEdges,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   Constants,
   EModelEndpoint,
   isAgentsEndpoint,
   getResponseSender,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const {
   createToolEndCallback,
   getDefaultHandlers,

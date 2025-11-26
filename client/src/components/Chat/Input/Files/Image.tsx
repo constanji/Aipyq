@@ -1,4 +1,4 @@
-import { FileSources } from 'librechat-data-provider';
+import { FileSources } from 'aipyq-data-provider';
 import ImagePreview from './ImagePreview';
 import RemoveFile from './RemoveFile';
 

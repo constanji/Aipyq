@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
   useToastContext,
-} from '@librechat/client';
+} from '@aipyq/client';
 import {
   flexRender,
   getCoreRowModel,
@@ -31,7 +31,7 @@ import {
   megabyte,
   isAssistantsEndpoint,
   type TFile,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import { useFileMapContext, useChatContext } from '~/Providers';
 import { useLocalize, useUpdateFiles } from '~/hooks';
 import { useGetFileConfig } from '~/data-provider';

@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import React, { createContext, useContext, useState, useMemo } from 'react';
-import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from 'librechat-data-provider';
-import type * as t from 'librechat-data-provider';
+import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from 'aipyq-data-provider';
+import type * as t from 'aipyq-data-provider';
 import type { Endpoint, SelectedValues } from '~/common';
 import {
   useAgentDefaultPermissionLevel,
@@ -21,7 +21,7 @@ type ModelSelectorContextType = {
   selectedValues: SelectedValues;
   endpointSearchValues: Record<string, string>;
   searchResults: (t.TModelSpec | Endpoint)[] | null;
-  // LibreChat
+  // Aipyq
   modelSpecs: t.TModelSpec[];
   mappedEndpoints: Endpoint[];
   agentsMap: t.TAgentsMap | undefined;
@@ -207,7 +207,7 @@ export function ModelSelectorProvider({ children, startupConfig }: ModelSelector
     searchResults,
     selectedValues,
     endpointSearchValues,
-    // LibreChat
+    // Aipyq
     agentsMap,
     modelSpecs,
     assistantsMap,

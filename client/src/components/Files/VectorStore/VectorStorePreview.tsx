@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DeleteIconButton from '../DeleteIconButton';
-import { TrashIcon, Button } from '@librechat/client';
-import { TFile } from 'librechat-data-provider/dist/types';
+import { TrashIcon, Button } from '@aipyq/client';
+import { TFile } from 'aipyq-data-provider/dist/types';
 import UploadFileButton from '../FileList/UploadFileButton';
 import UploadFileModal from '../FileList/UploadFileModal';
 import { BarChart4Icon, Clock3, FileClock, FileIcon, InfoIcon, PlusIcon } from 'lucide-react';

@@ -3,7 +3,7 @@ import copy from 'copy-to-clipboard';
 import rehypeKatex from 'rehype-katex';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
-import { Clipboard, CheckMark } from '@librechat/client';
+import { Clipboard, CheckMark } from '@aipyq/client';
 import { handleDoubleClick, langSubset } from '~/utils';
 import { useLocalize } from '~/hooks';
 

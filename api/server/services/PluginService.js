@@ -1,5 +1,5 @@
-const { logger } = require('@librechat/data-schemas');
-const { encrypt, decrypt } = require('@librechat/api');
+const { logger } = require('@aipyq/data-schemas');
+const { encrypt, decrypt } = require('@aipyq/api');
 const { findOnePluginAuth, updatePluginAuth, deletePluginAuth } = require('~/models');
 
 /**

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import type { TPromptGroup } from 'librechat-data-provider';
-import { OGDialog, OGDialogTitle, OGDialogContent } from '@librechat/client';
+import type { TPromptGroup } from 'aipyq-data-provider';
+import { OGDialog, OGDialogTitle, OGDialogContent } from '@aipyq/client';
 import { detectVariables } from '~/utils';
 import VariableForm from './VariableForm';
 

@@ -3,16 +3,16 @@ import {
   SafeSearchTypes,
   SearchCategories,
   extractVariableName,
-} from 'librechat-data-provider';
-import { webSearchAuth } from '@librechat/data-schemas';
+} from 'aipyq-data-provider';
+import { webSearchAuth } from '@aipyq/data-schemas';
 import type {
   RerankerTypes,
   TCustomConfig,
   SearchProviders,
   ScraperProviders,
   TWebSearchConfig,
-} from 'librechat-data-provider';
-import type { TWebSearchKeys, TWebSearchCategories } from '@librechat/data-schemas';
+} from 'aipyq-data-provider';
+import type { TWebSearchKeys, TWebSearchCategories } from '@aipyq/data-schemas';
 
 export function extractWebSearchEnvVars({
   keys,

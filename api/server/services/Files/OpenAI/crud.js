@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { sleep } = require('@librechat/agents');
-const { logger } = require('@librechat/data-schemas');
-const { FilePurpose } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { FilePurpose } = require('aipyq-data-provider');
 
 /**
  * Uploads a file that can be used across various OpenAI services.

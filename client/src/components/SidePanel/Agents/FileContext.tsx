@@ -6,7 +6,7 @@ import {
   EToolResources,
   mergeFileConfig,
   fileConfig as defaultFileConfig,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import {
   HoverCard,
   DropdownPopup,
@@ -16,7 +16,7 @@ import {
   HoverCardPortal,
   HoverCardContent,
   HoverCardTrigger,
-} from '@librechat/client';
+} from '@aipyq/client';
 import type { ExtendedFile } from '~/common';
 import { useFileHandling, useLocalize, useLazyEffect, useSharePointFileHandling } from '~/hooks';
 import { useGetFileConfig, useGetStartupConfig } from '~/data-provider';

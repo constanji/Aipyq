@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-const { EModelEndpoint } = require('librechat-data-provider');
+const { EModelEndpoint } = require('aipyq-data-provider');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const {
   deleteNullOrEmptyConversations,

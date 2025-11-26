@@ -1,11 +1,11 @@
-const { logger, webSearchKeys } = require('@librechat/data-schemas');
-const { Tools, CacheKeys, Constants, FileSources } = require('librechat-data-provider');
+const { logger, webSearchKeys } = require('@aipyq/data-schemas');
+const { Tools, CacheKeys, Constants, FileSources } = require('aipyq-data-provider');
 const {
   MCPOAuthHandler,
   MCPTokenStorage,
   normalizeHttpError,
   extractWebSearchEnvVars,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   getFiles,
   findToken,
@@ -28,7 +28,7 @@ const { getMCPManager, getFlowStateManager } = require('~/config');
 const { getAppConfig } = require('~/server/services/Config');
 const { deleteToolCalls } = require('~/models/ToolCall');
 const { getLogStores } = require('~/cache');
-const { mcpServersRegistry } = require('@librechat/api');
+const { mcpServersRegistry } = require('@aipyq/api');
 
 const getUserController = async (req, res) => {
   const appConfig = await getAppConfig({ role: req.user?.role });

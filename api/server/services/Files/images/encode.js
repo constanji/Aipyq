@@ -1,13 +1,13 @@
 const axios = require('axios');
-const { logAxiosError } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
+const { logAxiosError } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
 const {
   FileSources,
   VisionModes,
   ImageDetail,
   ContentTypes,
   EModelEndpoint,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
 
 /**

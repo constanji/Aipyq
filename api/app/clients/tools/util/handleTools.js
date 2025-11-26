@@ -1,4 +1,4 @@
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const {
   EnvVar,
   Calculator,
@@ -10,7 +10,7 @@ const {
   createSafeUser,
   mcpToolPattern,
   loadWebSearchAuth,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   Tools,
   Constants,
@@ -18,7 +18,7 @@ const {
   EToolResources,
   PermissionTypes,
   replaceSpecialVars,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const {
   availableTools,
   manifestToolMap,

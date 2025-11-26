@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useMemo, memo, lazy, Suspense, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useMediaQuery } from '@librechat/client';
-import type { ConversationListResponse } from 'librechat-data-provider';
+import { useMediaQuery } from '@aipyq/client';
+import type { ConversationListResponse } from 'aipyq-data-provider';
 import type { InfiniteQueryObserverResult } from '@tanstack/react-query';
 import { useLocalize, useAuthContext, useLocalStorage, useNavScrolling } from '~/hooks';
 import { useConversationsInfiniteQuery } from '~/data-provider';

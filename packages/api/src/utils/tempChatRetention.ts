@@ -1,5 +1,5 @@
-import { logger } from '@librechat/data-schemas';
-import type { AppConfig } from '@librechat/data-schemas';
+import { logger } from '@aipyq/data-schemas';
+import type { AppConfig } from '@aipyq/data-schemas';
 
 /**
  * Default retention period for temporary chats in hours

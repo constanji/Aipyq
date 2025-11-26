@@ -1,6 +1,6 @@
 import logger from '~/config/winston';
-import { EModelEndpoint } from 'librechat-data-provider';
-import type { TCustomConfig } from 'librechat-data-provider';
+import { EModelEndpoint } from 'aipyq-data-provider';
+import type { TCustomConfig } from 'aipyq-data-provider';
 
 /**
  * Normalize the endpoint name to system-expected value.
@@ -11,7 +11,7 @@ function normalizeEndpointName(name = ''): string {
 }
 
 /**
- * Sets up Model Specs from the config (`librechat.yaml`) file.
+ * Sets up Model Specs from the config (`aipyq.yaml`) file.
  * @param [endpoints] - The loaded custom configuration for endpoints.
  * @param [modelSpecs] - The loaded custom configuration for model specs.
  * @param [interfaceConfig] - The loaded interface configuration.
@@ -74,7 +74,7 @@ export function processModelSpecs(
     if (!endpoint) {
       logger.warn(`Model spec with endpoint "${currentEndpoint}" was skipped: Endpoint not found in configuration. The \`endpoint\` value must exactly match either a system-defined endpoint or a custom endpoint defined by the user.
 
-For more information, see the documentation at https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/model_specs#endpoint`);
+For more information, see the documentation at https://www.aipyq.ai/docs/configuration/aipyq_yaml/object_structure/model_specs#endpoint`);
       continue;
     }
 

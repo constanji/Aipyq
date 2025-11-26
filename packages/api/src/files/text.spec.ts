@@ -1,7 +1,7 @@
-import { FileSources } from 'librechat-data-provider';
+import { FileSources } from 'aipyq-data-provider';
 import { Readable } from 'stream';
 
-jest.mock('@librechat/data-schemas', () => ({
+jest.mock('@aipyq/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     warn: jest.fn(),

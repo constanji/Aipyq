@@ -7,8 +7,8 @@ import {
   isAgentsEndpoint,
   isAssistantsEndpoint,
   fileConfig as defaultFileConfig,
-} from 'librechat-data-provider';
-import type { EndpointFileConfig, TConversation } from 'librechat-data-provider';
+} from 'aipyq-data-provider';
+import type { EndpointFileConfig, TConversation } from 'aipyq-data-provider';
 import { useGetFileConfig, useGetEndpointsQuery } from '~/data-provider';
 import { getEndpointField } from '~/utils/endpoints';
 import AttachFileMenu from './AttachFileMenu';

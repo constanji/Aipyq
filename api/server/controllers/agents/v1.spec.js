@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const { nanoid } = require('nanoid');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { agentSchema } = require('@librechat/data-schemas');
+const { agentSchema } = require('@aipyq/data-schemas');
 
 // Only mock the dependencies that are not database-related
 jest.mock('~/server/services/Config', () => ({
@@ -65,7 +65,7 @@ const {
 } = require('~/server/services/PermissionService');
 
 /**
- * @type {import('mongoose').Model<import('@librechat/data-schemas').IAgent>}
+ * @type {import('mongoose').Model<import('@aipyq/data-schemas').IAgent>}
  */
 let Agent;
 

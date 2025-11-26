@@ -1,5 +1,5 @@
-const { logger } = require('@librechat/data-schemas');
-const { EModelEndpoint } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { EModelEndpoint } = require('aipyq-data-provider');
 const {
   getAnthropicModels,
   getBedrockModels,

@@ -1,5 +1,5 @@
-const { isUserProvided, normalizeEndpointName } = require('@librechat/api');
-const { EModelEndpoint, extractEnvVariable } = require('librechat-data-provider');
+const { isUserProvided, normalizeEndpointName } = require('@aipyq/api');
+const { EModelEndpoint, extractEnvVariable } = require('aipyq-data-provider');
 const { fetchModels } = require('~/server/services/ModelService');
 const { getAppConfig } = require('./app');
 

@@ -6,7 +6,7 @@ import {
   InputNumber,
   SelectDropDown,
   HoverCardTrigger,
-} from '@librechat/client';
+} from '@aipyq/client';
 import type { TModelSelectProps } from '~/common';
 import { cn, optionText, defaultTextProps, removeFocusRings } from '~/utils';
 import OptionHover from './OptionHover';

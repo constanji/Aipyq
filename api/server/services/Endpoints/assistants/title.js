@@ -1,5 +1,5 @@
-const { isEnabled } = require('@librechat/api');
-const { CacheKeys } = require('librechat-data-provider');
+const { isEnabled } = require('@aipyq/api');
+const { CacheKeys } = require('aipyq-data-provider');
 const { saveConvo } = require('~/models/Conversation');
 const getLogStores = require('~/cache/getLogStores');
 

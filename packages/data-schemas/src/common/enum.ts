@@ -1,4 +1,4 @@
-import { PermissionBits } from 'librechat-data-provider';
+import { PermissionBits } from 'aipyq-data-provider';
 
 /**
  * Common role combinations

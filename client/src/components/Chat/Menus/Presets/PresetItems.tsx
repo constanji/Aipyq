@@ -9,8 +9,8 @@ import {
   PinIcon,
   EditIcon,
   TrashIcon,
-} from '@librechat/client';
-import type { TPreset } from 'librechat-data-provider';
+} from '@aipyq/client';
+import type { TPreset } from 'aipyq-data-provider';
 import type { FC } from 'react';
 import { getPresetTitle, getEndpointField, getIconKey } from '~/utils';
 import FileUpload from '~/components/Chat/Input/Files/FileUpload';

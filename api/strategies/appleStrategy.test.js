@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const { isEnabled } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
+const { isEnabled } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
 const { Strategy: AppleStrategy } = require('passport-apple');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { createSocialUser, handleExistingUser } = require('./process');
@@ -10,8 +10,8 @@ const { findUser } = require('~/models');
 const { User } = require('~/db/models');
 
 jest.mock('jsonwebtoken');
-jest.mock('@librechat/data-schemas', () => {
-  const actualModule = jest.requireActual('@librechat/data-schemas');
+jest.mock('@aipyq/data-schemas', () => {
+  const actualModule = jest.requireActual('@aipyq/data-schemas');
   return {
     ...actualModule,
     logger: {
@@ -26,8 +26,8 @@ jest.mock('./process', () => ({
   createSocialUser: jest.fn(),
   handleExistingUser: jest.fn(),
 }));
-jest.mock('@librechat/api', () => ({
-  ...jest.requireActual('@librechat/api'),
+jest.mock('@aipyq/api', () => ({
+  ...jest.requireActual('@aipyq/api'),
   isEnabled: jest.fn(),
 }));
 jest.mock('~/models', () => ({

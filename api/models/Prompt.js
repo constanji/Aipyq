@@ -1,11 +1,11 @@
 const { ObjectId } = require('mongodb');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const {
   Constants,
   SystemRoles,
   ResourceType,
   SystemCategories,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const {
   removeGroupFromAllProjects,
   removeGroupIdsFromProject,

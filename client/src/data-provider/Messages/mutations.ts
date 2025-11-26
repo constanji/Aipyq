@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dataService, QueryKeys, Constants } from 'librechat-data-provider';
+import { dataService, QueryKeys, Constants } from 'aipyq-data-provider';
 import type { UseMutationResult } from '@tanstack/react-query';
-import type * as t from 'librechat-data-provider';
+import type * as t from 'aipyq-data-provider';
 
 export const useEditArtifact = (
   _options?: t.EditArtifactOptions,

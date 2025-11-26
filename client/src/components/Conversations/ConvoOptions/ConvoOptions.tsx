@@ -1,7 +1,7 @@
 import { useState, useId, useRef, memo, useCallback, useMemo } from 'react';
 import * as Menu from '@ariakit/react/menu';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DropdownPopup, Spinner, useToastContext } from '@librechat/client';
+import { DropdownPopup, Spinner, useToastContext } from '@aipyq/client';
 import { Ellipsis, Share2, Copy, Archive, Pen, Trash } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import {

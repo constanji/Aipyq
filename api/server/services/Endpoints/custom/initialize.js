@@ -3,14 +3,14 @@ const {
   isUserProvided,
   getOpenAIConfig,
   getCustomEndpointConfig,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   CacheKeys,
   ErrorTypes,
   envVarRegex,
   FetchTokenConfig,
   extractEnvVariable,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { getUserKeyValues, checkUserKeyExpiry } = require('~/server/services/UserService');
 const { fetchModels } = require('~/server/services/ModelService');
 const OpenAIClient = require('~/app/clients/OpenAIClient');

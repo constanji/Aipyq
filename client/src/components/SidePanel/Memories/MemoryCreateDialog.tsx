@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
+import { PermissionTypes, Permissions } from 'aipyq-data-provider';
 import {
   OGDialog,
   OGDialogTemplate,
@@ -8,7 +8,7 @@ import {
   Input,
   Spinner,
   useToastContext,
-} from '@librechat/client';
+} from '@aipyq/client';
 import { useCreateMemoryMutation } from '~/data-provider';
 import { useLocalize, useHasAccess } from '~/hooks';
 

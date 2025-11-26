@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, TrashIcon } from '@librechat/client';
-import type { TFile } from 'librechat-data-provider';
+import { Button, TrashIcon } from '@aipyq/client';
+import type { TFile } from 'aipyq-data-provider';
 
 type FileListItemProps = {
   file: TFile;

@@ -1,6 +1,6 @@
 const OpenAI = require('openai');
 const { ProxyAgent } = require('undici');
-const { ErrorTypes, EModelEndpoint } = require('librechat-data-provider');
+const { ErrorTypes, EModelEndpoint } = require('aipyq-data-provider');
 const {
   getUserKeyValues,
   getUserKeyExpiry,

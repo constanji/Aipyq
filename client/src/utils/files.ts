@@ -5,7 +5,7 @@ import {
   AudioPaths,
   VideoPaths,
   SheetPaths,
-} from '@librechat/client';
+} from '@aipyq/client';
 import {
   megabyte,
   QueryKeys,
@@ -13,8 +13,8 @@ import {
   EToolResources,
   codeTypeMapping,
   fileConfig as defaultFileConfig,
-} from 'librechat-data-provider';
-import type { TFile, EndpointFileConfig, FileConfig } from 'librechat-data-provider';
+} from 'aipyq-data-provider';
+import type { TFile, EndpointFileConfig, FileConfig } from 'aipyq-data-provider';
 import type { QueryClient } from '@tanstack/react-query';
 import type { ExtendedFile } from '~/common';
 

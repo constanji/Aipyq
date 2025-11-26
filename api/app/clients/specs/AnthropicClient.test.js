@@ -1,5 +1,5 @@
 const { SplitStreamHandler } = require('@librechat/agents');
-const { anthropicSettings } = require('librechat-data-provider');
+const { anthropicSettings } = require('aipyq-data-provider');
 const AnthropicClient = require('~/app/clients/AnthropicClient');
 
 const HUMAN_PROMPT = '\n\nHuman:';

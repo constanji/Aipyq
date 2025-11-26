@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
-import { Constants } from 'librechat-data-provider';
+import { Constants } from 'aipyq-data-provider';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { logger } from '~/utils';
 import { useArtifactsContext } from '~/Providers';

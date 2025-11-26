@@ -1,5 +1,5 @@
-const { isUserProvided } = require('@librechat/api');
-const { EModelEndpoint } = require('librechat-data-provider');
+const { isUserProvided } = require('@aipyq/api');
+const { EModelEndpoint } = require('aipyq-data-provider');
 const { generateConfig } = require('~/server/utils/handleText');
 
 const {

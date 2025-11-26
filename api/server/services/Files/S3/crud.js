@@ -1,8 +1,8 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
-const { initializeS3 } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
-const { FileSources } = require('librechat-data-provider');
+const { initializeS3 } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
+const { FileSources } = require('aipyq-data-provider');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const {
   PutObjectCommand,

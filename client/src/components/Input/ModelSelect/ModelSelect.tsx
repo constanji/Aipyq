@@ -1,5 +1,5 @@
-import { useGetModelsQuery } from 'librechat-data-provider/react-query';
-import type { TConversation } from 'librechat-data-provider';
+import { useGetModelsQuery } from 'aipyq-data-provider/react-query';
+import type { TConversation } from 'aipyq-data-provider';
 import type { TSetOption } from '~/common';
 import { multiChatOptions } from './options';
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { v4 } from 'uuid';
 import { useSetRecoilState } from 'recoil';
-import { useToastContext } from '@librechat/client';
+import { useToastContext } from '@aipyq/client';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   QueryKeys,
@@ -13,9 +13,9 @@ import {
   isAssistantsEndpoint,
   defaultAssistantsVersion,
   fileConfig as defaultFileConfig,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import debounce from 'lodash/debounce';
-import type { EndpointFileConfig, TEndpointsConfig, TError } from 'librechat-data-provider';
+import type { EndpointFileConfig, TEndpointsConfig, TError } from 'aipyq-data-provider';
 import type { ExtendedFile, FileSetter } from '~/common';
 import { useGetFileConfig, useUploadFileMutation } from '~/data-provider';
 import useLocalize, { TranslationKeys } from '~/hooks/useLocalize';

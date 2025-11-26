@@ -1,6 +1,6 @@
 const rateLimit = require('express-rate-limit');
-const { limiterCache } = require('@librechat/api');
-const { ViolationTypes } = require('librechat-data-provider');
+const { limiterCache } = require('@aipyq/api');
+const { ViolationTypes } = require('aipyq-data-provider');
 const logViolation = require('~/cache/logViolation');
 
 const getEnvironmentVariables = () => {

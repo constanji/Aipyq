@@ -1,19 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { useToastContext } from '@librechat/client';
+import { useToastContext } from '@aipyq/client';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   QueryKeys,
   mergeFileConfig,
   fileConfig as defaultFileConfig,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import type { UseMutationResult } from '@tanstack/react-query';
 import type {
   Agent,
   AgentAvatar,
   AgentCreateParams,
   AgentListResponse,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import {
   useUploadAgentAvatarMutation,
   useGetFileConfig,

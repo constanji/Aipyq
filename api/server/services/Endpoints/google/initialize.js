@@ -1,6 +1,6 @@
 const path = require('path');
-const { EModelEndpoint, AuthKeys } = require('librechat-data-provider');
-const { getGoogleConfig, isEnabled, loadServiceKey } = require('@librechat/api');
+const { EModelEndpoint, AuthKeys } = require('aipyq-data-provider');
+const { getGoogleConfig, isEnabled, loadServiceKey } = require('@aipyq/api');
 const { getUserKey, checkUserKeyExpiry } = require('~/server/services/UserService');
 const { GoogleClient } = require('~/app');
 

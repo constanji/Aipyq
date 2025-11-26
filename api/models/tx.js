@@ -1,4 +1,4 @@
-const { matchModelName, findMatchingPattern } = require('@librechat/api');
+const { matchModelName, findMatchingPattern } = require('@aipyq/api');
 const defaultRate = 6;
 
 /**

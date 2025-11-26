@@ -1,5 +1,5 @@
 import React from 'react';
-import { EModelEndpoint } from 'librechat-data-provider';
+import { EModelEndpoint } from 'aipyq-data-provider';
 import { SetKeyDialog } from '~/components/Input/SetKeyDialog';
 import { getEndpointField } from '~/utils';
 

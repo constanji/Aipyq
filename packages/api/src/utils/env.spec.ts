@@ -1,6 +1,6 @@
 import { resolveHeaders, processMCPEnv } from './env';
-import { TokenExchangeMethodEnum } from 'librechat-data-provider';
-import type { TUser, MCPOptions } from 'librechat-data-provider';
+import { TokenExchangeMethodEnum } from 'aipyq-data-provider';
+import type { TUser, MCPOptions } from 'aipyq-data-provider';
 
 function isStdioOptions(options: MCPOptions): options is Extract<MCPOptions, { type?: 'stdio' }> {
   return !options.type || options.type === 'stdio';
@@ -75,7 +75,7 @@ describe('resolveHeaders', () => {
   it('should process user ID placeholder when user has id', () => {
     const user = { id: 'test-user-123' };
     const headers = {
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
@@ -89,14 +89,14 @@ describe('resolveHeaders', () => {
 
   it('should not process user ID placeholder when user is undefined', () => {
     const headers = {
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
     const result = resolveHeaders({ headers });
 
     expect(result).toEqual({
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
       'Content-Type': 'application/json',
     });
   });
@@ -104,14 +104,14 @@ describe('resolveHeaders', () => {
   it('should not process user ID placeholder when user has no id', () => {
     const user = { id: '' };
     const headers = {
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
     const result = resolveHeaders({ headers, user });
 
     expect(result).toEqual({
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
       'Content-Type': 'application/json',
     });
   });
@@ -126,11 +126,11 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'User-Email': '{{LIBRECHAT_USER_EMAIL}}',
-      'User-Name': '{{LIBRECHAT_USER_NAME}}',
-      'User-Username': '{{LIBRECHAT_USER_USERNAME}}',
-      'User-Role': '{{LIBRECHAT_USER_ROLE}}',
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Email': '{{AIPYQ_USER_EMAIL}}',
+      'User-Name': '{{AIPYQ_USER_NAME}}',
+      'User-Username': '{{AIPYQ_USER_USERNAME}}',
+      'User-Role': '{{AIPYQ_USER_ROLE}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
@@ -154,9 +154,9 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'User-Email': '{{LIBRECHAT_USER_EMAIL}}',
-      'User-Username': '{{LIBRECHAT_USER_USERNAME}}',
-      'Non-Existent': '{{LIBRECHAT_USER_NONEXISTENT}}',
+      'User-Email': '{{AIPYQ_USER_EMAIL}}',
+      'User-Username': '{{AIPYQ_USER_USERNAME}}',
+      'Non-Existent': '{{AIPYQ_USER_NONEXISTENT}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -164,7 +164,7 @@ describe('resolveHeaders', () => {
     expect(result).toEqual({
       'User-Email': 'test@example.com',
       'User-Username': '',
-      'Non-Existent': '{{LIBRECHAT_USER_NONEXISTENT}}',
+      'Non-Existent': '{{AIPYQ_USER_NONEXISTENT}}',
     });
   });
 
@@ -179,7 +179,7 @@ describe('resolveHeaders', () => {
       Authorization: 'Bearer {{CUSTOM_TOKEN}}',
       'X-Region': '{{REGION}}',
       'X-System-Key': '${TEST_API_KEY}',
-      'X-User-Id': '{{LIBRECHAT_USER_ID}}',
+      'X-User-Id': '{{AIPYQ_USER_ID}}',
     };
 
     const result = resolveHeaders({ headers, user, customUserVars });
@@ -198,11 +198,11 @@ describe('resolveHeaders', () => {
       email: 'user-email@example.com',
     });
     const customUserVars = {
-      LIBRECHAT_USER_EMAIL: 'custom-email@example.com',
+      AIPYQ_USER_EMAIL: 'custom-email@example.com',
     };
 
     const headers = {
-      'Test-Email': '{{LIBRECHAT_USER_EMAIL}}',
+      'Test-Email': '{{AIPYQ_USER_EMAIL}}',
     };
 
     const result = resolveHeaders({ headers, user, customUserVars });
@@ -220,8 +220,8 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'User-Role': '{{LIBRECHAT_USER_ROLE}}',
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Role': '{{AIPYQ_USER_ROLE}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -239,9 +239,9 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'Primary-Email': '{{LIBRECHAT_USER_EMAIL}}',
-      'Secondary-Email': '{{LIBRECHAT_USER_EMAIL}}',
-      'Backup-Email': '{{LIBRECHAT_USER_EMAIL}}',
+      'Primary-Email': '{{AIPYQ_USER_EMAIL}}',
+      'Secondary-Email': '{{AIPYQ_USER_EMAIL}}',
+      'Backup-Email': '{{AIPYQ_USER_EMAIL}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -264,9 +264,9 @@ describe('resolveHeaders', () => {
 
     const headers = {
       Authorization: 'Bearer {{CUSTOM_TOKEN}}',
-      'X-User-Id': '{{LIBRECHAT_USER_ID}}',
+      'X-User-Id': '{{AIPYQ_USER_ID}}',
       'X-System-Key': '${TEST_API_KEY}',
-      'X-User-Email': '{{LIBRECHAT_USER_EMAIL}}',
+      'X-User-Email': '{{AIPYQ_USER_EMAIL}}',
       'Content-Type': 'application/json',
     };
 
@@ -284,7 +284,7 @@ describe('resolveHeaders', () => {
   it('should not modify the original headers object', () => {
     const originalHeaders = {
       Authorization: '${TEST_API_KEY}',
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
     };
     const user = { id: 'user-123' };
 
@@ -297,7 +297,7 @@ describe('resolveHeaders', () => {
 
     expect(originalHeaders).toEqual({
       Authorization: '${TEST_API_KEY}',
-      'User-Id': '{{LIBRECHAT_USER_ID}}',
+      'User-Id': '{{AIPYQ_USER_ID}}',
     });
   });
 
@@ -346,23 +346,23 @@ describe('resolveHeaders', () => {
     };
 
     const headers = {
-      'X-User-ID': '{{LIBRECHAT_USER_ID}}',
-      'X-User-Name': '{{LIBRECHAT_USER_NAME}}',
-      'X-User-Username': '{{LIBRECHAT_USER_USERNAME}}',
-      'X-User-Email': '{{LIBRECHAT_USER_EMAIL}}',
-      'X-User-Provider': '{{LIBRECHAT_USER_PROVIDER}}',
-      'X-User-Role': '{{LIBRECHAT_USER_ROLE}}',
-      'X-User-GoogleId': '{{LIBRECHAT_USER_GOOGLEID}}',
-      'X-User-FacebookId': '{{LIBRECHAT_USER_FACEBOOKID}}',
-      'X-User-OpenIdId': '{{LIBRECHAT_USER_OPENIDID}}',
-      'X-User-SamlId': '{{LIBRECHAT_USER_SAMLID}}',
-      'X-User-LdapId': '{{LIBRECHAT_USER_LDAPID}}',
-      'X-User-GithubId': '{{LIBRECHAT_USER_GITHUBID}}',
-      'X-User-DiscordId': '{{LIBRECHAT_USER_DISCORDID}}',
-      'X-User-AppleId': '{{LIBRECHAT_USER_APPLEID}}',
-      'X-User-EmailVerified': '{{LIBRECHAT_USER_EMAILVERIFIED}}',
-      'X-User-TwoFactorEnabled': '{{LIBRECHAT_USER_TWOFACTORENABLED}}',
-      'X-User-TermsAccepted': '{{LIBRECHAT_USER_TERMSACCEPTED}}',
+      'X-User-ID': '{{AIPYQ_USER_ID}}',
+      'X-User-Name': '{{AIPYQ_USER_NAME}}',
+      'X-User-Username': '{{AIPYQ_USER_USERNAME}}',
+      'X-User-Email': '{{AIPYQ_USER_EMAIL}}',
+      'X-User-Provider': '{{AIPYQ_USER_PROVIDER}}',
+      'X-User-Role': '{{AIPYQ_USER_ROLE}}',
+      'X-User-GoogleId': '{{AIPYQ_USER_GOOGLEID}}',
+      'X-User-FacebookId': '{{AIPYQ_USER_FACEBOOKID}}',
+      'X-User-OpenIdId': '{{AIPYQ_USER_OPENIDID}}',
+      'X-User-SamlId': '{{AIPYQ_USER_SAMLID}}',
+      'X-User-LdapId': '{{AIPYQ_USER_LDAPID}}',
+      'X-User-GithubId': '{{AIPYQ_USER_GITHUBID}}',
+      'X-User-DiscordId': '{{AIPYQ_USER_DISCORDID}}',
+      'X-User-AppleId': '{{AIPYQ_USER_APPLEID}}',
+      'X-User-EmailVerified': '{{AIPYQ_USER_EMAILVERIFIED}}',
+      'X-User-TwoFactorEnabled': '{{AIPYQ_USER_TWOFACTORENABLED}}',
+      'X-User-TermsAccepted': '{{AIPYQ_USER_TERMSACCEPTED}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -389,7 +389,7 @@ describe('resolveHeaders', () => {
   it('should handle multiple placeholders in one value', () => {
     const user = { id: 'abc', email: 'me@example.com' };
     const headers = {
-      'X-Multi': 'User: {{LIBRECHAT_USER_ID}}, Env: ${TEST_API_KEY}, Custom: {{MY_CUSTOM}}',
+      'X-Multi': 'User: {{AIPYQ_USER_ID}}, Env: ${TEST_API_KEY}, Custom: {{MY_CUSTOM}}',
     };
     const customVars = { MY_CUSTOM: 'custom-value' };
     const result = resolveHeaders({ headers, user, customUserVars: customVars });
@@ -400,7 +400,7 @@ describe('resolveHeaders', () => {
     const user = { id: 'abc' };
     const headers = {
       'X-Unknown': '{{SOMETHING_NOT_RECOGNIZED}}',
-      'X-Known': '{{LIBRECHAT_USER_ID}}',
+      'X-Known': '{{AIPYQ_USER_ID}}',
     };
     const result = resolveHeaders({ headers, user });
     expect(result['X-Unknown']).toBe('{{SOMETHING_NOT_RECOGNIZED}}');
@@ -415,13 +415,13 @@ describe('resolveHeaders', () => {
       twoFactorEnabled: false,
     };
     const headers = {
-      'X-User': '{{LIBRECHAT_USER_ID}}',
+      'X-User': '{{AIPYQ_USER_ID}}',
       'X-Env': '${TEST_API_KEY}',
       'X-Custom': '{{MY_CUSTOM}}',
-      'X-Multi': 'ID: {{LIBRECHAT_USER_ID}}, ENV: ${TEST_API_KEY}, CUSTOM: {{MY_CUSTOM}}',
+      'X-Multi': 'ID: {{AIPYQ_USER_ID}}, ENV: ${TEST_API_KEY}, CUSTOM: {{MY_CUSTOM}}',
       'X-Unknown': '{{NOT_A_REAL_PLACEHOLDER}}',
       'X-Empty': '',
-      'X-Boolean': '{{LIBRECHAT_USER_EMAILVERIFIED}}',
+      'X-Boolean': '{{AIPYQ_USER_EMAILVERIFIED}}',
     };
     const customVars = { MY_CUSTOM: 'custom-value' };
     const result = resolveHeaders({ headers, user, customUserVars: customVars });
@@ -435,13 +435,13 @@ describe('resolveHeaders', () => {
     expect(result['X-Boolean']).toBe('true');
   });
 
-  it('should process LIBRECHAT_BODY placeholders', () => {
+  it('should process AIPYQ_BODY placeholders', () => {
     const body = {
       conversationId: 'conv-123',
       parentMessageId: 'parent-456',
       messageId: 'msg-789',
     };
-    const headers = { 'X-Conversation': '{{LIBRECHAT_BODY_CONVERSATIONID}}' };
+    const headers = { 'X-Conversation': '{{AIPYQ_BODY_CONVERSATIONID}}' };
     const result = resolveHeaders({ headers, body });
     expect(result['X-Conversation']).toBe('conv-123');
   });
@@ -559,11 +559,11 @@ describe('processMCPEnv', () => {
       type: 'stdio',
       command: 'mcp-server',
       env: {
-        USER_ID: '{{LIBRECHAT_USER_ID}}',
-        USER_EMAIL: '{{LIBRECHAT_USER_EMAIL}}',
-        USER_ROLE: '{{LIBRECHAT_USER_ROLE}}',
+        USER_ID: '{{AIPYQ_USER_ID}}',
+        USER_EMAIL: '{{AIPYQ_USER_EMAIL}}',
+        USER_ROLE: '{{AIPYQ_USER_ROLE}}',
       },
-      args: ['--user', '{{LIBRECHAT_USER_USERNAME}}', '--id', '{{LIBRECHAT_USER_ID}}'],
+      args: ['--user', '{{AIPYQ_USER_USERNAME}}', '--id', '{{AIPYQ_USER_ID}}'],
     };
 
     const result = processMCPEnv({ options, user });
@@ -616,10 +616,10 @@ describe('processMCPEnv', () => {
 
     const options: MCPOptions = {
       type: 'streamable-http',
-      url: 'https://api.example.com/conversations/{{LIBRECHAT_BODY_CONVERSATIONID}}',
+      url: 'https://api.example.com/conversations/{{AIPYQ_BODY_CONVERSATIONID}}',
       headers: {
-        'X-Parent-Message': '{{LIBRECHAT_BODY_PARENTMESSAGEID}}',
-        'X-Message-Id': '{{LIBRECHAT_BODY_MESSAGEID}}',
+        'X-Parent-Message': '{{AIPYQ_BODY_PARENTMESSAGEID}}',
+        'X-Message-Id': '{{AIPYQ_BODY_MESSAGEID}}',
       },
     };
 
@@ -655,8 +655,8 @@ describe('processMCPEnv', () => {
         token_url: 'https://auth.example.com/{{TENANT_ID}}/token',
         client_id: '${OAUTH_CLIENT_ID}',
         client_secret: '${OAUTH_CLIENT_SECRET}',
-        scope: 'user:{{LIBRECHAT_USER_ID}} conversation:{{LIBRECHAT_BODY_CONVERSATIONID}}',
-        redirect_uri: 'http://localhost:3000/user/{{LIBRECHAT_USER_EMAIL}}/callback',
+        scope: 'user:{{AIPYQ_USER_ID}} conversation:{{AIPYQ_BODY_CONVERSATIONID}}',
+        redirect_uri: 'http://localhost:3000/user/{{AIPYQ_USER_EMAIL}}/callback',
       },
     };
 
@@ -760,7 +760,7 @@ describe('processMCPEnv', () => {
       args: [],
       env: {
         COMPLEX_VALUE:
-          'User: {{LIBRECHAT_USER_ID}}, Custom: {{CUSTOM_VAR}}, Body: {{LIBRECHAT_BODY_CONVERSATIONID}}, Env: ${TEST_API_KEY}',
+          'User: {{AIPYQ_USER_ID}}, Custom: {{CUSTOM_VAR}}, Body: {{AIPYQ_BODY_CONVERSATIONID}}, Env: ${TEST_API_KEY}',
       },
     };
 

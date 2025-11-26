@@ -1,7 +1,7 @@
 {
-  "name": "@librechat/client",
+  "name": "@aipyq/client",
   "version": "0.3.1",
-  "description": "React components for LibreChat",
+  "description": "React components for Aipyq",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/types/index.d.ts",

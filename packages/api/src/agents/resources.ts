@@ -1,7 +1,7 @@
-import { logger } from '@librechat/data-schemas';
-import { EModelEndpoint, EToolResources, AgentCapabilities } from 'librechat-data-provider';
-import type { AgentToolResources, TFile, AgentBaseResource } from 'librechat-data-provider';
-import type { IMongoFile, AppConfig, IUser } from '@librechat/data-schemas';
+import { logger } from '@aipyq/data-schemas';
+import { EModelEndpoint, EToolResources, AgentCapabilities } from 'aipyq-data-provider';
+import type { AgentToolResources, TFile, AgentBaseResource } from 'aipyq-data-provider';
+import type { IMongoFile, AppConfig, IUser } from '@aipyq/data-schemas';
 import type { FilterQuery, QueryOptions, ProjectionType } from 'mongoose';
 import type { Request as ServerRequest } from 'express';
 

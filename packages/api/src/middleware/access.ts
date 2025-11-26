@@ -1,13 +1,13 @@
-import { logger } from '@librechat/data-schemas';
+import { logger } from '@aipyq/data-schemas';
 import {
   Permissions,
   EndpointURLs,
   EModelEndpoint,
   PermissionTypes,
   isAgentsEndpoint,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import type { NextFunction, Request as ServerRequest, Response as ServerResponse } from 'express';
-import type { IRole, IUser } from '@librechat/data-schemas';
+import type { IRole, IUser } from '@aipyq/data-schemas';
 
 export function skipAgentCheck(req?: ServerRequest): boolean {
   if (!req || !req?.body?.endpoint) {

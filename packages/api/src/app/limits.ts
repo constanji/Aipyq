@@ -1,5 +1,5 @@
-import { RateLimitPrefix } from 'librechat-data-provider';
-import type { TCustomConfig } from 'librechat-data-provider';
+import { RateLimitPrefix } from 'aipyq-data-provider';
+import type { TCustomConfig } from 'aipyq-data-provider';
 
 /**
  *

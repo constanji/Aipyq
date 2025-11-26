@@ -4,9 +4,9 @@ const OpenAI = require('openai');
 const { v4: uuidv4 } = require('uuid');
 const { ProxyAgent, fetch } = require('undici');
 const { Tool } = require('@langchain/core/tools');
-const { logger } = require('@librechat/data-schemas');
-const { getImageBasename } = require('@librechat/api');
-const { FileContext, ContentTypes } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { getImageBasename } = require('@aipyq/api');
+const { FileContext, ContentTypes } = require('aipyq-data-provider');
 const extractBaseURL = require('~/utils/extractBaseURL');
 
 const displayMessage =

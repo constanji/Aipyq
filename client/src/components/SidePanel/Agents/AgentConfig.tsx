@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { useToastContext } from '@librechat/client';
-import { EModelEndpoint } from 'librechat-data-provider';
+import { useToastContext } from '@aipyq/client';
+import { EModelEndpoint } from 'aipyq-data-provider';
 import { Controller, useWatch, useFormContext, useForm, FormProvider } from 'react-hook-form';
 import {
   AuthTypeEnum,
   AuthorizationTypeEnum,
   TokenExchangeMethodEnum,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import type { AgentForm, AgentPanelProps, IconComponentTypes, ActionAuthForm } from '~/common';
 import {
   removeFocusOutlines,

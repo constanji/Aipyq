@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { isEnabled } = require('@librechat/api');
+const { isEnabled } = require('@aipyq/api');
 const createValidateImageRequest = require('~/server/middleware/validateImageRequest');
 
-jest.mock('@librechat/api', () => ({
+jest.mock('@aipyq/api', () => ({
   isEnabled: jest.fn(),
 }));
 
@@ -48,7 +48,7 @@ describe('validateImageRequest middleware', () => {
     });
   });
 
-  describe('Standard LibreChat token flow', () => {
+  describe('Standard Aipyq token flow', () => {
     beforeEach(() => {
       validateImageRequest = createValidateImageRequest(true);
     });

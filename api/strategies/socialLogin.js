@@ -1,6 +1,6 @@
-const { logger } = require('@librechat/data-schemas');
-const { ErrorTypes } = require('librechat-data-provider');
-const { isEnabled, isEmailDomainAllowed } = require('@librechat/api');
+const { logger } = require('@aipyq/data-schemas');
+const { ErrorTypes } = require('aipyq-data-provider');
+const { isEnabled, isEmailDomainAllowed } = require('@aipyq/api');
 const { createSocialUser, handleExistingUser } = require('./process');
 const { getAppConfig } = require('~/server/services/Config');
 const { findUser } = require('~/models');

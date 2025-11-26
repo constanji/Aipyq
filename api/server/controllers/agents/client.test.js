@@ -1,5 +1,5 @@
 const { Providers } = require('@librechat/agents');
-const { Constants, EModelEndpoint } = require('librechat-data-provider');
+const { Constants, EModelEndpoint } = require('aipyq-data-provider');
 const AgentClient = require('./client');
 
 jest.mock('@librechat/agents', () => ({
@@ -10,8 +10,8 @@ jest.mock('@librechat/agents', () => ({
   }),
 }));
 
-jest.mock('@librechat/api', () => ({
-  ...jest.requireActual('@librechat/api'),
+jest.mock('@aipyq/api', () => ({
+  ...jest.requireActual('@aipyq/api'),
 }));
 
 describe('AgentClient - titleConvo', () => {
@@ -1296,7 +1296,7 @@ describe('AgentClient - titleConvo', () => {
 
     it('should handle mixed content types correctly', async () => {
       const { HumanMessage } = require('@langchain/core/messages');
-      const { ContentTypes } = require('librechat-data-provider');
+      const { ContentTypes } = require('aipyq-data-provider');
 
       const messages = [
         new HumanMessage({

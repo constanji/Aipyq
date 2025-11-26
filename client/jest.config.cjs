@@ -29,8 +29,8 @@ module.exports = {
       'jest-file-loader',
     '^test/(.*)$': '<rootDir>/test/$1',
     '^~/(.*)$': '<rootDir>/src/$1',
-    '^librechat-data-provider/react-query$':
-      '<rootDir>/../node_modules/librechat-data-provider/src/react-query',
+    '^aipyq-data-provider/react-query$':
+      '<rootDir>/../node_modules/aipyq-data-provider/src/react-query',
   },
   restoreMocks: true,
   testResultsProcessor: 'jest-junit',

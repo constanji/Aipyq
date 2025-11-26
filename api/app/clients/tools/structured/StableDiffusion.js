@@ -6,8 +6,8 @@ const axios = require('axios');
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
 const { Tool } = require('@langchain/core/tools');
-const { logger } = require('@librechat/data-schemas');
-const { FileContext, ContentTypes } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { FileContext, ContentTypes } = require('aipyq-data-provider');
 const paths = require('~/config/paths');
 
 const displayMessage =

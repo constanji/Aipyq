@@ -1,4 +1,4 @@
-const { CacheKeys } = require('librechat-data-provider');
+const { CacheKeys } = require('aipyq-data-provider');
 const getLogStores = require('~/cache/getLogStores');
 
 /**

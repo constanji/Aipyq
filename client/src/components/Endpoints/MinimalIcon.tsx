@@ -1,5 +1,5 @@
 import { Feather } from 'lucide-react';
-import { EModelEndpoint, alternateName } from 'librechat-data-provider';
+import { EModelEndpoint, alternateName } from 'aipyq-data-provider';
 import {
   AzureMinimalIcon,
   OpenAIMinimalIcon,
@@ -10,7 +10,7 @@ import {
   AnthropicIcon,
   BedrockIcon,
   Sparkles,
-} from '@librechat/client';
+} from '@aipyq/client';
 import UnknownIcon from '~/hooks/Endpoint/UnknownIcon';
 import { IconProps } from '~/common';
 import { cn } from '~/utils';

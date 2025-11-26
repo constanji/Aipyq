@@ -1,5 +1,5 @@
 const { Tiktoken } = require('tiktoken/lite');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const p50k_base = require('tiktoken/encoders/p50k_base.json');
 const cl100k_base = require('tiktoken/encoders/cl100k_base.json');
 

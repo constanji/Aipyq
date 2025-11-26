@@ -1,5 +1,5 @@
-import { ContentTypes, QueryKeys, Constants } from 'librechat-data-provider';
-import type { TMessage, TMessageContentParts } from 'librechat-data-provider';
+import { ContentTypes, QueryKeys, Constants } from 'aipyq-data-provider';
+import type { TMessage, TMessageContentParts } from 'aipyq-data-provider';
 import type { QueryClient } from '@tanstack/react-query';
 
 export const TEXT_KEY_DIVIDER = '|||';

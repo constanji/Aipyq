@@ -3,12 +3,12 @@ import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import * as Ariakit from '@ariakit/react';
 import { Upload, Share2, Blocks } from 'lucide-react';
-import { DropdownPopup, TooltipAnchor, useMediaQuery } from '@librechat/client';
+import { DropdownPopup, TooltipAnchor, useMediaQuery } from '@aipyq/client';
 import type * as t from '~/common';
 import ExportModal from '~/components/Nav/ExportConversation/ExportModal';
 import { ShareButton } from '~/components/Conversations/ConvoOptions';
 import { useLocalize, useHasAccess } from '~/hooks';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
+import { PermissionTypes, Permissions } from 'aipyq-data-provider';
 import store from '~/store';
 
 export default function ExportAndShareMenu({

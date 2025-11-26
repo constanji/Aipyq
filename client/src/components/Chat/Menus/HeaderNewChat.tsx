@@ -1,6 +1,6 @@
-import { QueryKeys } from 'librechat-data-provider';
+import { QueryKeys } from 'aipyq-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
-import { TooltipAnchor, Button, NewChatIcon } from '@librechat/client';
+import { TooltipAnchor, Button, NewChatIcon } from '@aipyq/client';
 import { useChatContext } from '~/Providers';
 import { clearMessagesCache } from '~/utils';
 import { useLocalize } from '~/hooks';

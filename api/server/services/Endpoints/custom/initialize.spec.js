@@ -1,13 +1,13 @@
 const initializeClient = require('./initialize');
 
-jest.mock('@librechat/api', () => ({
-  ...jest.requireActual('@librechat/api'),
+jest.mock('@aipyq/api', () => ({
+  ...jest.requireActual('@aipyq/api'),
   resolveHeaders: jest.fn(),
   getOpenAIConfig: jest.fn(),
   getCustomEndpointConfig: jest.fn().mockReturnValue({
     apiKey: 'test-key',
     baseURL: 'https://test.com',
-    headers: { 'x-user': '{{LIBRECHAT_USER_ID}}', 'x-email': '{{LIBRECHAT_USER_EMAIL}}' },
+    headers: { 'x-user': '{{AIPYQ_USER_ID}}', 'x-email': '{{AIPYQ_USER_EMAIL}}' },
     models: { default: ['test-model'] },
   }),
 }));
@@ -52,11 +52,11 @@ describe('custom/initializeClient', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    const { getCustomEndpointConfig, resolveHeaders, getOpenAIConfig } = require('@librechat/api');
+    const { getCustomEndpointConfig, resolveHeaders, getOpenAIConfig } = require('@aipyq/api');
     getCustomEndpointConfig.mockReturnValue({
       apiKey: 'test-key',
       baseURL: 'https://test.com',
-      headers: { 'x-user': '{{LIBRECHAT_USER_ID}}', 'x-email': '{{LIBRECHAT_USER_EMAIL}}' },
+      headers: { 'x-user': '{{AIPYQ_USER_ID}}', 'x-email': '{{AIPYQ_USER_EMAIL}}' },
       models: { default: ['test-model'] },
     });
     resolveHeaders.mockReturnValue({ 'x-user': 'user-123', 'x-email': 'test@example.com' });
@@ -70,20 +70,20 @@ describe('custom/initializeClient', () => {
   });
 
   it('calls resolveHeaders with headers, user, and body for body placeholder support', async () => {
-    const { resolveHeaders } = require('@librechat/api');
+    const { resolveHeaders } = require('@aipyq/api');
     await initializeClient({ req: mockRequest, res: mockResponse, optionsOnly: true });
     expect(resolveHeaders).toHaveBeenCalledWith({
-      headers: { 'x-user': '{{LIBRECHAT_USER_ID}}', 'x-email': '{{LIBRECHAT_USER_EMAIL}}' },
+      headers: { 'x-user': '{{AIPYQ_USER_ID}}', 'x-email': '{{AIPYQ_USER_EMAIL}}' },
       user: { id: 'user-123', email: 'test@example.com', role: 'user' },
       /**
        * Note: Request-based Header Resolution is deferred until right before LLM request is made
-      body: { endpoint: 'test-endpoint' }, // body - supports {{LIBRECHAT_BODY_*}} placeholders
+      body: { endpoint: 'test-endpoint' }, // body - supports {{AIPYQ_BODY_*}} placeholders
        */
     });
   });
 
   it('throws if endpoint config is missing', async () => {
-    const { getCustomEndpointConfig } = require('@librechat/api');
+    const { getCustomEndpointConfig } = require('@aipyq/api');
     getCustomEndpointConfig.mockReturnValueOnce(null);
     await expect(
       initializeClient({ req: mockRequest, res: mockResponse, optionsOnly: true }),

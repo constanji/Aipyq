@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGetModelsQuery } from 'librechat-data-provider/react-query';
+import { useGetModelsQuery } from 'aipyq-data-provider/react-query';
 import {
   Constants,
   FileSources,
@@ -8,7 +8,7 @@ import {
   isParamEndpoint,
   LocalStorageKeys,
   isAssistantsEndpoint,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import { useRecoilState, useRecoilValue, useSetRecoilState, useRecoilCallback } from 'recoil';
 import type {
   TPreset,
@@ -16,7 +16,7 @@ import type {
   TModelsConfig,
   TConversation,
   TEndpointsConfig,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import type { AssistantListItem } from '~/common';
 import {
   getEndpointField,

@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import React, { useContext, useState } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
-import { ThemeContext, Spinner, Button, isDark } from '@librechat/client';
+import { ThemeContext, Spinner, Button, isDark } from '@aipyq/client';
 import { useNavigate, useOutletContext, useLocation } from 'react-router-dom';
-import { useRegisterUserMutation } from 'librechat-data-provider/react-query';
-import type { TRegisterUser, TError } from 'librechat-data-provider';
+import { useRegisterUserMutation } from 'aipyq-data-provider/react-query';
+import type { TRegisterUser, TError } from 'aipyq-data-provider';
 import type { TLoginLayoutContext } from '~/common';
 import { useLocalize, TranslationKeys } from '~/hooks';
 import { ErrorMessage } from './ErrorMessage';

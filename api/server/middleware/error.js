@@ -1,7 +1,7 @@
 const crypto = require('crypto');
-const { logger } = require('@librechat/data-schemas');
-const { parseConvo } = require('librechat-data-provider');
-const { sendEvent, handleError } = require('@librechat/api');
+const { logger } = require('@aipyq/data-schemas');
+const { parseConvo } = require('aipyq-data-provider');
+const { sendEvent, handleError } = require('@aipyq/api');
 const { saveMessage, getMessages } = require('~/models/Message');
 const { getConvo } = require('~/models/Conversation');
 

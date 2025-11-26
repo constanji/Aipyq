@@ -1,5 +1,5 @@
 const express = require('express');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const {
   generateCheckAccess,
   markPublicPromptGroups,
@@ -7,7 +7,7 @@ const {
   formatPromptGroupsResponse,
   createEmptyPromptGroupsResponse,
   filterAccessibleIdsBySharedLogic,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   Permissions,
   SystemRoles,
@@ -16,7 +16,7 @@ const {
   PrincipalType,
   PermissionBits,
   PermissionTypes,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const {
   getListPromptGroupsByAccess,
   makePromptProduction,

@@ -1,5 +1,5 @@
 /**
- * Client-side image resizing utility for LibreChat
+ * Client-side image resizing utility for Aipyq
  * Resizes images to prevent backend upload errors while maintaining quality
  */
 

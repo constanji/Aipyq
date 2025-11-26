@@ -1,9 +1,9 @@
 const multer = require('multer');
 const express = require('express');
 const { sleep } = require('@librechat/agents');
-const { isEnabled } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
-const { CacheKeys, EModelEndpoint } = require('librechat-data-provider');
+const { isEnabled } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
+const { CacheKeys, EModelEndpoint } = require('aipyq-data-provider');
 const {
   createImportLimiters,
   createForkLimiters,

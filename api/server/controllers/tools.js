@@ -1,14 +1,14 @@
 const { nanoid } = require('nanoid');
 const { EnvVar } = require('@librechat/agents');
-const { logger } = require('@librechat/data-schemas');
-const { checkAccess, loadWebSearchAuth } = require('@librechat/api');
+const { logger } = require('@aipyq/data-schemas');
+const { checkAccess, loadWebSearchAuth } = require('@aipyq/api');
 const {
   Tools,
   AuthType,
   Permissions,
   ToolCallTypes,
   PermissionTypes,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { processFileURL, uploadImageBuffer } = require('~/server/services/Files/process');
 const { processCodeOutput } = require('~/server/services/Files/Code/process');
 const { createToolCall, getToolCallsByConvo } = require('~/models/ToolCall');

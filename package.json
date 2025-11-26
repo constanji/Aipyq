@@ -1,5 +1,5 @@
 {
-  "name": "LibreChat",
+  "name": "Aipyq",
   "version": "v0.8.1-rc1",
   "description": "",
   "workspaces": [
@@ -87,14 +87,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danny-avila/LibreChat.git"
+    "url": "git+https://github.com/constanji/Aipyq.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danny-avila/LibreChat/issues"
+    "url": "https://github.com/constanji/Aipyq/issues"
   },
-  "homepage": "https://librechat.ai/",
+  "homepage": "https://aipyq.com/",
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
     "@eslint/compat": "^1.2.6",

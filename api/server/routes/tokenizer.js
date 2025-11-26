@@ -1,5 +1,5 @@
 const express = require('express');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
 const { countTokens } = require('~/server/utils');
 

@@ -1,8 +1,8 @@
-import type { MCPOptions } from 'librechat-data-provider';
+import type { MCPOptions } from 'aipyq-data-provider';
 import type { AuthorizationServerMetadata } from '@modelcontextprotocol/sdk/shared/auth.js';
 import { MCPOAuthFlowMetadata, MCPOAuthHandler, MCPOAuthTokens } from '~/mcp/oauth';
 
-jest.mock('@librechat/data-schemas', () => ({
+jest.mock('@aipyq/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     info: jest.fn(),

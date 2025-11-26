@@ -1,5 +1,5 @@
 const Anthropic = require('@anthropic-ai/sdk');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const { HttpsProxyAgent } = require('https-proxy-agent');
 const {
   Constants,
@@ -9,7 +9,7 @@ const {
   anthropicSettings,
   getResponseSender,
   validateVisionModel,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { sleep, SplitStreamHandler: _Handler, addCacheControl } = require('@librechat/agents');
 const {
   Tokenizer,
@@ -21,7 +21,7 @@ const {
   checkPromptCacheSupport,
   getModelMaxOutputTokens,
   createStreamEventHandlers,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   truncateText,
   formatMessage,

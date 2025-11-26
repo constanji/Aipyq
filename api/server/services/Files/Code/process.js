@@ -1,8 +1,8 @@
 const path = require('path');
 const { v4 } = require('uuid');
 const axios = require('axios');
-const { logAxiosError } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
+const { logAxiosError } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
 const { getCodeBaseURL } = require('@librechat/agents');
 const {
   Tools,
@@ -10,7 +10,7 @@ const {
   FileSources,
   imageExtRegex,
   EToolResources,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { filterFilesByAgentAccess } = require('~/server/services/Files/permissions');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
 const { convertImage } = require('~/server/services/Files/images/convert');
@@ -61,7 +61,7 @@ const processCodeOutput = async ({
       url: `${baseURL}/download/${session_id}/${id}`,
       responseType: 'arraybuffer',
       headers: {
-        'User-Agent': 'LibreChat/1.0',
+        'User-Agent': 'Aipyq/1.0',
         'X-API-Key': apiKey,
       },
       timeout: 15000,
@@ -133,7 +133,7 @@ async function getSessionInfo(fileIdentifier, apiKey) {
         ...queryParams,
       },
       headers: {
-        'User-Agent': 'LibreChat/1.0',
+        'User-Agent': 'Aipyq/1.0',
         'X-API-Key': apiKey,
       },
       timeout: 5000,

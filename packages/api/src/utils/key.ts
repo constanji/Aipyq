@@ -1,6 +1,6 @@
 import path from 'path';
 import axios from 'axios';
-import { logger } from '@librechat/data-schemas';
+import { logger } from '@aipyq/data-schemas';
 import { readFileAsString } from './files';
 
 export interface GoogleServiceKey {

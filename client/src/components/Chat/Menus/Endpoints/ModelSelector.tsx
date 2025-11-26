@@ -17,7 +17,7 @@ function ModelSelectorContent() {
   const localize = useLocalize();
 
   const {
-    // LibreChat
+    // Aipyq
     agentsMap,
     modelSpecs,
     mappedEndpoints,

@@ -1,7 +1,7 @@
-import { logger } from '@librechat/data-schemas';
-import { EModelEndpoint, removeNullishValues } from 'librechat-data-provider';
-import type { TCustomConfig, TEndpoint, TTransactionsConfig } from 'librechat-data-provider';
-import type { AppConfig } from '@librechat/data-schemas';
+import { logger } from '@aipyq/data-schemas';
+import { EModelEndpoint, removeNullishValues } from 'aipyq-data-provider';
+import type { TCustomConfig, TEndpoint, TTransactionsConfig } from 'aipyq-data-provider';
+import type { AppConfig } from '@aipyq/data-schemas';
 import { isEnabled, normalizeEndpointName } from '~/utils';
 
 /**

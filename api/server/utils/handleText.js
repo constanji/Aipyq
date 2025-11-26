@@ -6,8 +6,8 @@ const {
   defaultRetrievalModels,
   defaultAssistantsVersion,
   defaultAgentCapabilities,
-} = require('librechat-data-provider');
-const { sendEvent } = require('@librechat/api');
+} = require('aipyq-data-provider');
+const { sendEvent } = require('@aipyq/api');
 const partialRight = require('lodash/partialRight');
 
 /** Helper function to escape special characters in regex

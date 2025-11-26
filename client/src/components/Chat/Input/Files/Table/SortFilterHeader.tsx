@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@librechat/client';
+} from '@aipyq/client';
 import { useLocalize, TranslationKeys } from '~/hooks';
 import { cn } from '~/utils';
 

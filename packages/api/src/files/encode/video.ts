@@ -1,6 +1,6 @@
 import { Providers } from '@librechat/agents';
-import { isDocumentSupportedProvider } from 'librechat-data-provider';
-import type { IMongoFile } from '@librechat/data-schemas';
+import { isDocumentSupportedProvider } from 'aipyq-data-provider';
+import type { IMongoFile } from '@aipyq/data-schemas';
 import type { Request } from 'express';
 import type { StrategyFunctions, VideoResult } from '~/types/files';
 import { validateVideo } from '~/files/validation';

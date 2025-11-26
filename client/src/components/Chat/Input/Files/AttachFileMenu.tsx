@@ -13,15 +13,15 @@ import {
   EModelEndpoint,
   defaultAgentCapabilities,
   isDocumentSupportedProvider,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import {
   FileUpload,
   TooltipAnchor,
   DropdownPopup,
   AttachmentIcon,
   SharePointIcon,
-} from '@librechat/client';
-import type { EndpointFileConfig } from 'librechat-data-provider';
+} from '@aipyq/client';
+import type { EndpointFileConfig } from 'aipyq-data-provider';
 import {
   useAgentToolPermissions,
   useAgentCapabilities,

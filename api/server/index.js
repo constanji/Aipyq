@@ -27,14 +27,14 @@ const compression = require('compression'); // 响应压缩
 const cookieParser = require('cookie-parser'); // Cookie 解析
 
 // 项目内部依赖
-const { logger } = require('@librechat/data-schemas'); // 日志工具
+const { logger } = require('@aipyq/data-schemas'); // 日志工具
 const mongoSanitize = require('express-mongo-sanitize'); // MongoDB 注入防护
 const {
   isEnabled,
   ErrorController,
   performStartupChecks,
   initializeFileStorage,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 
 // 数据库和搜索引擎
 const { connectDb, indexSync } = require('~/db'); // MongoDB 连接和 Meilisearch 同步

@@ -1,5 +1,5 @@
-import { removeNullishValues } from 'librechat-data-provider';
-import type { TCustomConfig, TConfigDefaults } from 'librechat-data-provider';
+import { removeNullishValues } from 'aipyq-data-provider';
+import type { TCustomConfig, TConfigDefaults } from 'aipyq-data-provider';
 import type { AppConfig } from '~/types/app';
 import { isMemoryEnabled } from './memory';
 

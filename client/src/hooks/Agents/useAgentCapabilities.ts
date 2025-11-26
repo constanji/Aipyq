@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { AgentCapabilities } from 'librechat-data-provider';
+import { AgentCapabilities } from 'aipyq-data-provider';
 
 interface AgentCapabilitiesResult {
   toolsEnabled: boolean;

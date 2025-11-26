@@ -1,6 +1,6 @@
-import { logger } from '@librechat/data-schemas';
+import { logger } from '@aipyq/data-schemas';
 import { AnthropicClientOptions } from '@librechat/agents';
-import { EModelEndpoint, anthropicSettings } from 'librechat-data-provider';
+import { EModelEndpoint, anthropicSettings } from 'aipyq-data-provider';
 import { matchModelName } from '~/utils/tokens';
 
 /**

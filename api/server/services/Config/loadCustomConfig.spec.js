@@ -1,11 +1,11 @@
 jest.mock('axios');
 jest.mock('~/cache/getLogStores');
-jest.mock('@librechat/api', () => ({
-  ...jest.requireActual('@librechat/api'),
+jest.mock('@aipyq/api', () => ({
+  ...jest.requireActual('@aipyq/api'),
   loadYaml: jest.fn(),
 }));
-jest.mock('librechat-data-provider', () => {
-  const actual = jest.requireActual('librechat-data-provider');
+jest.mock('aipyq-data-provider', () => {
+  const actual = jest.requireActual('aipyq-data-provider');
   return {
     ...actual,
     paramSettings: { foo: {}, bar: {}, custom: {} },
@@ -33,7 +33,7 @@ jest.mock('librechat-data-provider', () => {
   };
 });
 
-jest.mock('@librechat/data-schemas', () => {
+jest.mock('@aipyq/data-schemas', () => {
   return {
     logger: {
       info: jest.fn(),
@@ -45,8 +45,8 @@ jest.mock('@librechat/data-schemas', () => {
 });
 
 const axios = require('axios');
-const { loadYaml } = require('@librechat/api');
-const { logger } = require('@librechat/data-schemas');
+const { loadYaml } = require('@aipyq/api');
+const { logger } = require('@aipyq/data-schemas');
 const loadCustomConfig = require('./loadCustomConfig');
 
 describe('loadCustomConfig', () => {

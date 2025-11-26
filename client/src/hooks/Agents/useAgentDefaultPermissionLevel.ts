@@ -1,4 +1,4 @@
-import { PermissionBits } from 'librechat-data-provider';
+import { PermissionBits } from 'aipyq-data-provider';
 
 /**
  * Hook to determine the appropriate permission level for agent queries

@@ -1,4 +1,4 @@
-import { TooltipAnchor } from '@librechat/client';
+import { TooltipAnchor } from '@aipyq/client';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

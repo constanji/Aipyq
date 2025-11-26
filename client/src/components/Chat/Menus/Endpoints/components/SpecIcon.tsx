@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import type { TModelSpec, TEndpointsConfig } from 'librechat-data-provider';
+import type { TModelSpec, TEndpointsConfig } from 'aipyq-data-provider';
 import type { IconMapProps } from '~/common';
 import { getModelSpecIconURL, getIconKey, getEndpointField } from '~/utils';
 import { URLIcon } from '~/components/Endpoints/URLIcon';

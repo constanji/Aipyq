@@ -1,9 +1,9 @@
 const { z } = require('zod');
 const axios = require('axios');
 const { tool } = require('@langchain/core/tools');
-const { logger } = require('@librechat/data-schemas');
-const { generateShortLivedToken } = require('@librechat/api');
-const { Tools, EToolResources } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { generateShortLivedToken } = require('@aipyq/api');
+const { Tools, EToolResources } = require('aipyq-data-provider');
 const { filterFilesByAgentAccess } = require('~/server/services/Files/permissions');
 const { getFiles } = require('~/models/File');
 
@@ -87,7 +87,7 @@ const createFileSearchTool = async ({ userId, files, entity_id, fileCitations = 
 
       /**
        *
-       * @param {import('librechat-data-provider').TFile} file
+       * @param {import('aipyq-data-provider').TFile} file
        * @returns {{ file_id: string, query: string, k: number, entity_id?: string }}
        */
       const createQueryBody = (file) => {

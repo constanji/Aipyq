@@ -1,8 +1,8 @@
 import { useCallback, memo, ReactNode } from 'react';
-import { Spinner } from '@librechat/client';
+import { Spinner } from '@aipyq/client';
 import { ChevronDownIcon, LucideProps } from 'lucide-react';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
-import type { TResPlugin, TInput } from 'librechat-data-provider';
+import type { TResPlugin, TInput } from 'aipyq-data-provider';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { useShareContext } from '~/Providers';
 import { cn, formatJSON } from '~/utils';

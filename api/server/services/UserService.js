@@ -1,6 +1,6 @@
-const { logger } = require('@librechat/data-schemas');
-const { encrypt, decrypt } = require('@librechat/api');
-const { ErrorTypes } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { encrypt, decrypt } = require('@aipyq/api');
+const { ErrorTypes } = require('aipyq-data-provider');
 const { updateUser } = require('~/models');
 const { Key } = require('~/db/models');
 

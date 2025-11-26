@@ -4,7 +4,7 @@ import {
   AuthorizationTypeEnum,
   TokenExchangeMethodEnum,
   AuthTypeEnum,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import ActionsAuth from '~/components/SidePanel/Builder/ActionsAuth';
 
 export default function MCPAuth() {

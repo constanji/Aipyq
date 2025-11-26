@@ -3,16 +3,16 @@
         "days": true,
         "amount": 14
     },
-    "auditLog": "/Users/constanjin/Desktop/LibreChat/LibreChat-main/api/logs/.b2f0844927fec1ba6374a8613e3b23566981f1bf-audit.json",
+    "auditLog": "/Users/constanjin/Desktop/Aipyq/Aipyq-main/api/logs/.b2f0844927fec1ba6374a8613e3b23566981f1bf-audit.json",
     "files": [
         {
             "date": 1763457901013,
-            "name": "/Users/constanjin/Desktop/LibreChat/LibreChat-main/api/logs/meiliSync-2025-11-18.log",
+            "name": "/Users/constanjin/Desktop/Aipyq/Aipyq-main/api/logs/meiliSync-2025-11-18.log",
             "hash": "4d584fb64593e2f4fccff1397c90b6c4ff244e3a57d87fdd2c9225e30d22626e"
         },
         {
             "date": 1763523093372,
-            "name": "/Users/constanjin/Desktop/LibreChat/LibreChat-main/api/logs/meiliSync-2025-11-19.log",
+            "name": "/Users/constanjin/Desktop/Aipyq/Aipyq-main/api/logs/meiliSync-2025-11-19.log",
             "hash": "f4e01737cb021fdc5e2f1c0819a6e76b450ff5dc21dc7331361e8e2c1bc1cf11"
         }
     ],

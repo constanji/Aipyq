@@ -1,6 +1,6 @@
-import { OptionTypes } from 'librechat-data-provider';
-import { Label, Input, HoverCard, HoverCardTrigger } from '@librechat/client';
-import type { DynamicSettingProps } from 'librechat-data-provider';
+import { OptionTypes } from 'aipyq-data-provider';
+import { Label, Input, HoverCard, HoverCardTrigger } from '@aipyq/client';
+import type { DynamicSettingProps } from 'aipyq-data-provider';
 import { useLocalize, useDebouncedInput, useParameterEffects, TranslationKeys } from '~/hooks';
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';

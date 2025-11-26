@@ -1,18 +1,18 @@
 const express = require('express');
-const { logger } = require('@librechat/data-schemas');
-const { isEnabled, getBalanceConfig } = require('@librechat/api');
+const { logger } = require('@aipyq/data-schemas');
+const { isEnabled, getBalanceConfig } = require('@aipyq/api');
 const {
   Constants,
   CacheKeys,
   removeNullishValues,
   defaultSocialLogins,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const { getLdapConfig } = require('~/server/services/Config/ldap');
 const { getAppConfig } = require('~/server/services/Config/app');
 const { getProjectByName } = require('~/models/Project');
 const { getMCPManager } = require('~/config');
 const { getLogStores } = require('~/cache');
-const { mcpServersRegistry } = require('@librechat/api');
+const { mcpServersRegistry } = require('@aipyq/api');
 
 const router = express.Router();
 const emailLoginEnabled =

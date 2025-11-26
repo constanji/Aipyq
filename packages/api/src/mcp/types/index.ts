@@ -7,10 +7,10 @@ import {
   WebSocketOptionsSchema,
   StreamableHTTPOptionsSchema,
   Tools,
-} from 'librechat-data-provider';
-import type { SearchResultData, UIResource, TPlugin, TUser } from 'librechat-data-provider';
+} from 'aipyq-data-provider';
+import type { SearchResultData, UIResource, TPlugin, TUser } from 'aipyq-data-provider';
 import type * as t from '@modelcontextprotocol/sdk/types.js';
-import type { TokenMethods, JsonSchemaType } from '@librechat/data-schemas';
+import type { TokenMethods, JsonSchemaType } from '@aipyq/data-schemas';
 import type { FlowStateManager } from '~/flow/manager';
 import type { RequestBody } from '~/types/http';
 import type * as o from '~/mcp/oauth/types';

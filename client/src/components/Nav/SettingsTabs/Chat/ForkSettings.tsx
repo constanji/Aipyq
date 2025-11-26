@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import { ForkOptions } from 'librechat-data-provider';
-import { Dropdown, Switch, InfoHoverCard, ESide } from '@librechat/client';
+import { ForkOptions } from 'aipyq-data-provider';
+import { Dropdown, Switch, InfoHoverCard, ESide } from '@aipyq/client';
 import { useLocalize } from '~/hooks';
 import store from '~/store';
 

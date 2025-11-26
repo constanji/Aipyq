@@ -1,5 +1,5 @@
-import { EModelEndpoint } from 'librechat-data-provider';
-import type { TEndpointsConfig, TConfig } from 'librechat-data-provider';
+import { EModelEndpoint } from 'aipyq-data-provider';
+import type { TEndpointsConfig, TConfig } from 'aipyq-data-provider';
 import {
   getEndpointField,
   getAvailableEndpoints,

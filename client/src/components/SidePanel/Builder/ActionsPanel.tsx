@@ -5,7 +5,7 @@ import {
   AuthTypeEnum,
   AuthorizationTypeEnum,
   TokenExchangeMethodEnum,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import {
   OGDialog,
   OGDialogTrigger,
@@ -13,7 +13,7 @@ import {
   OGDialogTemplate,
   useToastContext,
   TrashIcon,
-} from '@librechat/client';
+} from '@aipyq/client';
 import type { AssistantPanelProps, ActionAuthForm } from '~/common';
 import { useAssistantsMapContext } from '~/Providers';
 import { useDeleteAction } from '~/data-provider';

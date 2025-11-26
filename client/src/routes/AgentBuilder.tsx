@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Spinner } from '@librechat/client';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
+import { Spinner } from '@aipyq/client';
+import { PermissionTypes, Permissions } from 'aipyq-data-provider';
 import { useGetStartupConfig, useGetEndpointsQuery } from '~/data-provider';
 import { useAppStartup, useHasAccess } from '~/hooks';
 import { AgentPanelProvider, ChatContext } from '~/Providers';

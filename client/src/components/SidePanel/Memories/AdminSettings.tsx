@@ -2,7 +2,7 @@ import * as Ariakit from '@ariakit/react';
 import { useMemo, useEffect, useState } from 'react';
 import { ShieldEllipsis } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
-import { Permissions, SystemRoles, roleDefaults, PermissionTypes } from 'librechat-data-provider';
+import { Permissions, SystemRoles, roleDefaults, PermissionTypes } from 'aipyq-data-provider';
 import {
   OGDialog,
   OGDialogTitle,
@@ -12,7 +12,7 @@ import {
   Switch,
   DropdownPopup,
   useToastContext,
-} from '@librechat/client';
+} from '@aipyq/client';
 import type { Control, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { useUpdateMemoryPermissionsMutation } from '~/data-provider';
 import { useLocalize, useAuthContext } from '~/hooks';
@@ -189,7 +189,7 @@ const AdminSettings = () => {
                         <span>{localize('com_ui_admin_access_warning')}</span>
                         {'\n'}
                         <a
-                          href="https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/interface"
+                          href="https://www.aipyq.ai/docs/configuration/aipyq_yaml/object_structure/interface"
                           target="_blank"
                           rel="noreferrer"
                           className="text-blue-500 underline"

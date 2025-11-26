@@ -2,15 +2,15 @@
  * MCP Tools Controller
  * Handles MCP-specific tool endpoints, decoupled from regular tools
  */
-const { logger } = require('@librechat/data-schemas');
-const { Constants } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { Constants } = require('aipyq-data-provider');
 const {
   cacheMCPServerTools,
   getMCPServerTools,
   getAppConfig,
 } = require('~/server/services/Config');
 const { getMCPManager } = require('~/config');
-const { mcpServersRegistry } = require('@librechat/api');
+const { mcpServersRegistry } = require('@aipyq/api');
 
 /**
  * Get all MCP tools available to the user

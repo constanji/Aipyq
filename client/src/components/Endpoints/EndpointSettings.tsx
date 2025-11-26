@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
-import { SettingsViews, TConversation } from 'librechat-data-provider';
-import { useGetModelsQuery } from 'librechat-data-provider/react-query';
+import { SettingsViews, TConversation } from 'aipyq-data-provider';
+import { useGetModelsQuery } from 'aipyq-data-provider/react-query';
 import type { TSettingsProps } from '~/common';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { cn, getEndpointField } from '~/utils';

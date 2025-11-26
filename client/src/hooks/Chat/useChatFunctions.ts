@@ -10,7 +10,7 @@ import {
   parseCompactConvo,
   replaceSpecialVars,
   isAssistantsEndpoint,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import { useSetRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
 import type {
   TMessage,
@@ -19,7 +19,7 @@ import type {
   TEndpointOption,
   TEndpointsConfig,
   EndpointSchemaKey,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import type { SetterOrUpdater } from 'recoil';
 import type { TAskFunction, ExtendedFile } from '~/common';
 import useSetFilesToDelete from '~/hooks/Files/useSetFilesToDelete';

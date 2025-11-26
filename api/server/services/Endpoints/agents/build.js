@@ -1,5 +1,5 @@
-const { logger } = require('@librechat/data-schemas');
-const { isAgentsEndpoint, removeNullishValues, Constants } = require('librechat-data-provider');
+const { logger } = require('@aipyq/data-schemas');
+const { isAgentsEndpoint, removeNullishValues, Constants } = require('aipyq-data-provider');
 const { loadAgent } = require('~/models/Agent');
 
 const buildOptions = (req, endpoint, parsedBody, endpointType) => {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Spinner } from '@librechat/client';
+import { Spinner } from '@aipyq/client';
 import { SettingsIcon, AlertTriangle, KeyRound, PlugZap, X } from 'lucide-react';
-import type { MCPServerStatus, TPlugin } from 'librechat-data-provider';
+import type { MCPServerStatus, TPlugin } from 'aipyq-data-provider';
 import { useLocalize } from '~/hooks';
 
 let localize: ReturnType<typeof useLocalize>;

@@ -1,13 +1,13 @@
 const { z } = require('zod');
 const fs = require('fs').promises;
 const { nanoid } = require('nanoid');
-const { logger } = require('@librechat/data-schemas');
+const { logger } = require('@aipyq/data-schemas');
 const {
   agentCreateSchema,
   agentUpdateSchema,
   mergeAgentOcrConversion,
   convertOcrToContextInPlace,
-} = require('@librechat/api');
+} = require('@aipyq/api');
 const {
   Tools,
   Constants,
@@ -20,7 +20,7 @@ const {
   PermissionBits,
   actionDelimiter,
   removeNullishValues,
-} = require('librechat-data-provider');
+} = require('aipyq-data-provider');
 const {
   getListAgentsByAccess,
   countPromotedAgents,

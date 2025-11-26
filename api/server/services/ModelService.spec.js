@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { logAxiosError, resolveHeaders } = require('@librechat/api');
-const { EModelEndpoint, defaultModels } = require('librechat-data-provider');
+const { logAxiosError, resolveHeaders } = require('@aipyq/api');
+const { EModelEndpoint, defaultModels } = require('aipyq-data-provider');
 
 const {
   fetchModels,
@@ -11,8 +11,8 @@ const {
   getAnthropicModels,
 } = require('./ModelService');
 
-jest.mock('@librechat/api', () => {
-  const originalUtils = jest.requireActual('@librechat/api');
+jest.mock('@aipyq/api', () => {
+  const originalUtils = jest.requireActual('@aipyq/api');
   return {
     ...originalUtils,
     processModelData: jest.fn((...args) => {
@@ -30,8 +30,8 @@ jest.mock('~/cache/getLogStores', () =>
     set: jest.fn().mockResolvedValue(true),
   })),
 );
-jest.mock('@librechat/data-schemas', () => ({
-  ...jest.requireActual('@librechat/data-schemas'),
+jest.mock('@aipyq/data-schemas', () => ({
+  ...jest.requireActual('@aipyq/data-schemas'),
   logger: {
     error: jest.fn(),
   },
@@ -110,7 +110,7 @@ describe('fetchModels with createTokenConfig true', () => {
 
   beforeEach(() => {
     // Clears the mock's history before each test
-    const _utils = require('@librechat/api');
+    const _utils = require('@aipyq/api');
     axios.get.mockResolvedValue({ data });
   });
 
@@ -122,7 +122,7 @@ describe('fetchModels with createTokenConfig true', () => {
       createTokenConfig: true,
     });
 
-    const { processModelData } = require('@librechat/api');
+    const { processModelData } = require('@aipyq/api');
     expect(processModelData).toHaveBeenCalled();
     expect(processModelData).toHaveBeenCalledWith(data);
   });
@@ -190,8 +190,8 @@ describe('getOpenAIModels with mocked config', () => {
         userProvidedOpenAI: true,
       },
     }));
-    jest.mock('librechat-data-provider', () => {
-      const original = jest.requireActual('librechat-data-provider');
+    jest.mock('aipyq-data-provider', () => {
+      const original = jest.requireActual('aipyq-data-provider');
       return {
         ...original,
         defaultModels: {

@@ -1,8 +1,8 @@
 import { useMemo, useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Button } from '@librechat/client';
+import { Button } from '@aipyq/client';
 import { TriangleAlert } from 'lucide-react';
-import { actionDelimiter, actionDomainSeparator, Constants } from 'librechat-data-provider';
-import type { TAttachment } from 'librechat-data-provider';
+import { actionDelimiter, actionDomainSeparator, Constants } from 'aipyq-data-provider';
+import type { TAttachment } from 'aipyq-data-provider';
 import { useLocalize, useProgress } from '~/hooks';
 import { AttachmentGroup } from './Parts';
 import ToolCallInfo from './ToolCallInfo';

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createSetBalanceConfig } = require('@librechat/api');
+const { createSetBalanceConfig } = require('@aipyq/api');
 const {
   resetPasswordRequestController,
   resetPasswordController,

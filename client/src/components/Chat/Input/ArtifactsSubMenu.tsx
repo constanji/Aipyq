@@ -1,8 +1,8 @@
 import React from 'react';
 import * as Ariakit from '@ariakit/react';
-import { PinIcon } from '@librechat/client';
+import { PinIcon } from '@aipyq/client';
 import { ChevronRight, WandSparkles } from 'lucide-react';
-import { ArtifactModes } from 'librechat-data-provider';
+import { ArtifactModes } from 'aipyq-data-provider';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

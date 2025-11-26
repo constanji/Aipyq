@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
-import { isAgentsEndpoint } from 'librechat-data-provider';
+import { isAgentsEndpoint } from 'aipyq-data-provider';
 import { Dialog, DialogPanel, DialogTitle, Description } from '@headlessui/react';
-import { useUpdateUserPluginsMutation } from 'librechat-data-provider/react-query';
+import { useUpdateUserPluginsMutation } from 'aipyq-data-provider/react-query';
 import type {
   AssistantsEndpoint,
   EModelEndpoint,
   TPluginAction,
   TPlugin,
   TError,
-} from 'librechat-data-provider';
+} from 'aipyq-data-provider';
 import type { AgentForm, TPluginStoreDialogProps } from '~/common';
 import { PluginPagination, PluginAuthForm } from '~/components/Plugins/Store';
 import { useAgentPanelContext } from '~/Providers/AgentPanelContext';

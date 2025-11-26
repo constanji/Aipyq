@@ -1,5 +1,5 @@
 import { Run, Providers } from '@librechat/agents';
-import { providerEndpointMap, KnownEndpoints } from 'librechat-data-provider';
+import { providerEndpointMap, KnownEndpoints } from 'aipyq-data-provider';
 import type {
   MultiAgentGraphConfig,
   OpenAIClientOptions,
@@ -9,7 +9,7 @@ import type {
   RunConfig,
   IState,
 } from '@librechat/agents';
-import type { Agent } from 'librechat-data-provider';
+import type { Agent } from 'aipyq-data-provider';
 import type * as t from '~/types';
 import { resolveHeaders } from '~/utils/env';
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { SystemRoles } from 'librechat-data-provider';
+import { SystemRoles } from 'aipyq-data-provider';
 import { render, screen } from '@testing-library/react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import '@testing-library/jest-dom/extend-expect';
-import type { Agent, AgentCreateParams, TUser, ResourceType } from 'librechat-data-provider';
+import type { Agent, AgentCreateParams, TUser, ResourceType } from 'aipyq-data-provider';
 import AgentFooter from '../AgentFooter';
 import { Panel } from '~/common';
 

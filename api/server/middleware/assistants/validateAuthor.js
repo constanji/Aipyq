@@ -1,4 +1,4 @@
-const { SystemRoles } = require('librechat-data-provider');
+const { SystemRoles } = require('aipyq-data-provider');
 const { getAssistant } = require('~/models/Assistant');
 
 /**
