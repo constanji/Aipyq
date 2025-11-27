@@ -69,7 +69,7 @@ class BaseClient {
     this.fetchedConvo;
     /** @type {TMessage[]} */
     this.currentMessages = [];
-    /** @type {import('librechat-data-provider').VisionModes | undefined} */
+    /** @type {import('aipyq-data-provider').VisionModes | undefined} */
     this.visionMode;
   }
 
