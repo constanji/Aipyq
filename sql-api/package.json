@@ -1,0 +1,17 @@
+{
+  "name": "hsp-sql-api",
+  "version": "1.0.0",
+  "description": "SQL API Server for HSP 医院预约挂号系统",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "mcp": "node mcp-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.23.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "mysql2": "^3.11.0"
+  }
+}

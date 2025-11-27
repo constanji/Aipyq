@@ -1,0 +1,23 @@
+name: hsp-sql-api
+
+services:
+  sql-api:
+    container_name: HSP-SQL-API
+    build: .
+    ports:
+      - "3001:3001"
+    restart: always
+    extra_hosts:
+      # 允许容器访问宿主机的 MySQL
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=hsp
+      - SQL_API_PORT=3001
+    # 或者使用 env_file 方式（需要先修改 .env 中的 DB_HOST）
+    # env_file:
+    #   - .env.docker
+
