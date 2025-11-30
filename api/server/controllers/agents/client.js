@@ -275,8 +275,8 @@ class AgentClient extends BaseClient {
       if (message.fileContext && i !== orderedMessages.length - 1) {
         if (typeof formattedMessage.content === 'string') {
           formattedMessage.content = message.fileContext + '\n' + formattedMessage.content;
-        } else {
-          const textPart = formattedMessage.content.find((part) => part.type === 'text');
+        } else if (Array.isArray(formattedMessage.content)) {
+          const textPart = formattedMessage.content.find((part) => part && part.type === 'text');
           textPart
             ? (textPart.text = message.fileContext + '\n' + textPart.text)
             : formattedMessage.content.unshift({ type: 'text', text: message.fileContext });
@@ -542,10 +542,10 @@ class AgentClient extends BaseClient {
 
     if (Array.isArray(message.content)) {
       const filteredContent = message.content.filter(
-        (part) => part.type !== ContentTypes.IMAGE_URL,
+        (part) => part && part.type !== ContentTypes.IMAGE_URL,
       );
 
-      if (filteredContent.length === 1 && filteredContent[0].type === ContentTypes.TEXT) {
+      if (filteredContent.length === 1 && filteredContent[0]?.type === ContentTypes.TEXT) {
         const MessageClass = message.constructor;
         return new MessageClass({
           content: filteredContent[0].text,
@@ -885,6 +885,10 @@ class AgentClient extends BaseClient {
       /** @deprecated Agent Chain */
       if (config.configurable.hide_sequential_outputs) {
         this.contentParts = this.contentParts.filter((part, index) => {
+          // Skip null or undefined parts
+          if (!part) {
+            return false;
+          }
           // Include parts that are either:
           // 1. At or after the finalContentStart index
           // 2. Of type tool_call

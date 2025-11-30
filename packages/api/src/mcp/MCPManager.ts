@@ -243,6 +243,21 @@ Please follow these instructions when using tools from the respective MCP server
           ...options,
         },
       );
+
+      // 检查 MCP 服务是否返回了有效响应
+      if (result == null) {
+        throw new McpError(
+          ErrorCode.InternalError,
+          `${logPrefix}[${toolName}] MCP server returned null response`,
+        );
+      }
+
+      // 调试日志：记录 MCP 工具调用的原始响应
+      logger.debug(
+        `${logPrefix}[${toolName}] MCP tool call response:`,
+        JSON.stringify(result, null, 2),
+      );
+
       if (userId) {
         this.updateUserLastActivity(userId);
       }

@@ -25,6 +25,16 @@ COPY --chown=node:node client/package.json ./client/package.json
 COPY --chown=node:node packages/data-provider/package.json ./packages/data-provider/package.json
 COPY --chown=node:node packages/data-schemas/package.json ./packages/data-schemas/package.json
 COPY --chown=node:node packages/api/package.json ./packages/api/package.json
+COPY --chown=node:node packages/agents/package.json ./packages/agents/package.json
+COPY --chown=node:node packages/client/package.json ./packages/client/package.json
+
+# 复制预编译的包
+COPY --chown=node:node packages/agents/dist ./packages/agents/dist
+COPY --chown=node:node packages/data-provider/dist ./packages/data-provider/dist
+COPY --chown=node:node packages/data-schemas/dist ./packages/data-schemas/dist
+COPY --chown=node:node packages/api/dist ./packages/api/dist
+COPY --chown=node:node packages/client/dist ./packages/client/dist
+COPY --chown=node:node client/dist ./client/dist
 
 RUN \
     # 创建 .env 文件，允许挂载（如果没有默认值）
@@ -34,15 +44,16 @@ RUN \
     npm config set fetch-retry-maxtimeout 600000 ; \
     npm config set fetch-retries 5 ; \
     npm config set fetch-retry-mintimeout 15000 ; \
-    npm ci --no-audit
+    npm ci --no-audit ; \
+    # 强制重新安装 sharp 以获取正确的平台二进制文件
+    cd api && npm uninstall sharp && npm install sharp --os=linux --libc=musl --cpu=arm64 && cd ..
 
 COPY --chown=node:node . .
 
-RUN \
-    # 构建 React 前端
-    NODE_OPTIONS="--max-old-space-size=2048" npm run frontend; \
-    npm prune --production; \
-    npm cache clean --force
+# 重新编译 agents 包（如果源代码有更新）
+RUN cd packages/agents && NODE_OPTIONS="--max-old-space-size=4096" npx tsc -p tsconfig.build.json --skipLibCheck 2>&1 || echo "TypeScript编译失败，使用预编译的dist"
+
+RUN npm cache clean --force
 
 # Node.js API 配置
 EXPOSE 3080

@@ -67,22 +67,24 @@ export default function useMessageProcess({ message }: { message?: TMessage | nu
     }
   }, [hasNoChildren, message, setLatestMessage, conversation?.conversationId]);
 
-  const handleScroll = useCallback(
-    (event: unknown | TouchEvent | WheelEvent) => {
-      throttle(() => {
+  // Create a persistent throttled function using useMemo
+  const throttledSetAbortScroll = useMemo(
+    () =>
+      throttle((shouldAbort: boolean) => {
         logger.log(
           'message_scrolling',
-          `useMessageProcess: setting abort scroll to ${isSubmittingFamily}, handleScroll event`,
-          event,
+          `useMessageProcess: setting abort scroll to ${shouldAbort}, handleScroll event`,
         );
-        if (isSubmittingFamily) {
-          setAbortScroll(true);
-        } else {
-          setAbortScroll(false);
-        }
-      }, 500)();
+        setAbortScroll(shouldAbort);
+      }, 500),
+    [setAbortScroll],
+  );
+
+  const handleScroll = useCallback(
+    (event: unknown | TouchEvent | WheelEvent) => {
+      throttledSetAbortScroll(isSubmittingFamily);
     },
-    [isSubmittingFamily, setAbortScroll],
+    [isSubmittingFamily, throttledSetAbortScroll],
   );
 
   const showSibling = useMemo(

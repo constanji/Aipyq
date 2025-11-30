@@ -155,8 +155,48 @@ async function processRequiredActions(client, requiredActions) {
 
       const toolCallIndex = client.mappedOrder.get(toolCall.id);
 
-      if (imageGenTools.has(currentAction.tool)) {
-        const imageOutput = output;
+      // 检查是否是图像生成工具（包括 MCP 工具返回的 artifact 中包含图像的情况）
+      const isImageGenTool = imageGenTools.has(currentAction.tool);
+      const hasImageArtifact = output?.artifact?.content && Array.isArray(output.artifact.content) && 
+        output.artifact.content.some(item => item?.type === 'image_url' || item?.type === 'image');
+
+      if (isImageGenTool || hasImageArtifact) {
+        // 对于 MCP 工具，从 artifact.content 中提取图像信息
+        let imageOutput = output;
+        if (hasImageArtifact && output.artifact?.content) {
+          // 提取第一个图像 URL
+          const imageItem = output.artifact.content.find(item => 
+            item?.type === 'image_url' || item?.type === 'image'
+          );
+          if (imageItem) {
+            const imageUrl = imageItem.image_url?.url || imageItem.url || imageItem.data;
+            if (imageUrl) {
+              imageOutput = {
+                url: imageUrl,
+                ...currentAction.toolInput,
+              };
+            } else {
+              // 如果无法提取 URL，使用默认格式
+              imageOutput = {
+                ...output,
+                ...currentAction.toolInput,
+              };
+            }
+          } else {
+            // 如果没有找到图像项，使用默认格式
+            imageOutput = {
+              ...output,
+              ...currentAction.toolInput,
+            };
+          }
+        } else if (isImageGenTool) {
+          // 对于传统的图像生成工具，直接使用 output
+          imageOutput = {
+            ...output,
+            ...currentAction.toolInput,
+          };
+        }
+
         toolCall.function.output = `${currentAction.tool} displayed an image. All generated images are already plainly visible, so don't repeat the descriptions in detail. Do not list download links as they are available in the UI already. The user may download the images by clicking on them, but do not mention anything about downloading to the user.`;
 
         // Streams the "Finished" state of the tool call in the UI

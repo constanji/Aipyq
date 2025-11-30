@@ -78,22 +78,24 @@ export default function useMessageHelpers(props: TMessageProps) {
     [messageId, setCurrentEditId],
   );
 
-  const handleScroll = useCallback(
-    (event: unknown) => {
-      throttle(() => {
+  // Create a persistent throttled function using useMemo
+  const throttledSetAbortScroll = useMemo(
+    () =>
+      throttle((shouldAbort: boolean) => {
         logger.log(
           'message_scrolling',
-          `useMessageHelpers: setting abort scroll to ${isSubmitting}, handleScroll event`,
-          event,
+          `useMessageHelpers: setting abort scroll to ${shouldAbort}, handleScroll event`,
         );
-        if (isSubmitting) {
-          setAbortScroll(true);
-        } else {
-          setAbortScroll(false);
-        }
-      }, 500)();
+        setAbortScroll(shouldAbort);
+      }, 500),
+    [setAbortScroll],
+  );
+
+  const handleScroll = useCallback(
+    (event: unknown) => {
+      throttledSetAbortScroll(isSubmitting);
     },
-    [isSubmitting, setAbortScroll],
+    [isSubmitting, throttledSetAbortScroll],
   );
 
   const assistant = useMemo(() => {

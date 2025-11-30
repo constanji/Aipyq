@@ -107,7 +107,8 @@ router.post(
       // Permissions already validated by middleware - load agent directly
       initialPromises.push(getAgent({ id: agent_id }));
       if (_action_id) {
-        initialPromises.push(getActions({ action_id }, true));
+        // Always query by both action_id and agent_id to ensure agent isolation
+        initialPromises.push(getActions({ action_id, agent_id }, true));
       }
 
       /** @type {[Agent, [Action|undefined]]} */
@@ -159,7 +160,8 @@ router.post(
       }
 
       /** @type {[Action]} */
-      const updatedAction = await updateAction({ action_id }, actionUpdateData);
+      // Always use both action_id and agent_id to ensure agent isolation
+      const updatedAction = await updateAction({ action_id, agent_id }, actionUpdateData);
 
       const sensitiveFields = ['api_key', 'oauth_client_id', 'oauth_client_secret'];
       for (let field of sensitiveFields) {
@@ -226,7 +228,8 @@ router.delete(
         { tools: updatedTools, actions: updatedActions },
         { updatingUserId: req.user.id, forceVersion: true },
       );
-      await deleteAction({ action_id });
+      // Always use both action_id and agent_id to ensure we only delete this agent's action
+      await deleteAction({ action_id, agent_id });
       res.status(200).json({ message: 'Action deleted successfully' });
     } catch (error) {
       const message = 'Trouble deleting the Agent Action';

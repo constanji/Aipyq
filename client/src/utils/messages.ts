@@ -1,6 +1,7 @@
 import { ContentTypes, QueryKeys, Constants } from 'aipyq-data-provider';
 import type { TMessage, TMessageContentParts } from 'aipyq-data-provider';
 import type { QueryClient } from '@tanstack/react-query';
+import logger from './logger';
 
 export const TEXT_KEY_DIVIDER = '|||';
 
@@ -43,10 +44,26 @@ export const getAllContentText = (message?: TMessage | null): string => {
   }
 
   if (message.content && message.content.length > 0) {
+    // Check for null/undefined values in content array
+    const hasNulls = message.content.some((part, i) => part == null || part === null);
+    if (hasNulls) {
+      logger.warn(
+        'getAllContentText',
+        `Found null/undefined values in message.content for messageId: ${message.messageId}`,
+        {
+          contentLength: message.content.length,
+          nullIndices: message.content
+            .map((part, i) => (part == null ? i : null))
+            .filter((i) => i !== null),
+          messageId: message.messageId,
+        },
+      );
+    }
+
     return message.content
-      .filter((part) => part.type === ContentTypes.TEXT)
+      .filter((part) => part != null && part.type === ContentTypes.TEXT)
       .map((part) => {
-        if (!('text' in part)) return '';
+        if (!part || !('text' in part)) return '';
         const text = part.text;
         if (typeof text === 'string') return text;
         return text?.value || '';
@@ -82,23 +99,28 @@ const getLatestContentForKey = (message: TMessage): string => {
       continue;
     }
 
+    // Additional null check before using 'in' operator
+    if (part == null) {
+      continue;
+    }
+
     const type = part.type;
     let text = '';
 
     // Handle THINK type - extract think content
-    if (type === ContentTypes.THINK && 'think' in part) {
+    if (type === ContentTypes.THINK && part && 'think' in part) {
       text = typeof part.think === 'string' ? part.think : (part.think?.value ?? '');
     }
     // Handle TEXT type
-    else if (type === ContentTypes.TEXT && 'text' in part) {
+    else if (type === ContentTypes.TEXT && part && 'text' in part) {
       text = typeof part.text === 'string' ? part.text : (part.text?.value ?? '');
     }
     // Handle ERROR type
-    else if (type === ContentTypes.ERROR && 'error' in part) {
+    else if (type === ContentTypes.ERROR && part && 'error' in part) {
       text = String(part.error || 'err').slice(0, 30);
     }
     // Handle TOOL_CALL - use simple marker with type
-    else if (type === ContentTypes.TOOL_CALL && 'tool_call' in part) {
+    else if (type === ContentTypes.TOOL_CALL && part && 'tool_call' in part) {
       const tcType = part.tool_call?.type || 'x';
       const tcName = String(part.tool_call?.['name'] || 'unknown').slice(0, 20);
       const tcArgs = String(part.tool_call?.['args'] || 'none').slice(0, 20);
@@ -106,7 +128,7 @@ const getLatestContentForKey = (message: TMessage): string => {
       text = `tc_${tcType}_${tcName}_${tcArgs}_${tcOutput}`;
     }
     // Handle IMAGE_FILE - use simple marker with file_id suffix
-    else if (type === ContentTypes.IMAGE_FILE && 'image_file' in part) {
+    else if (type === ContentTypes.IMAGE_FILE && part && 'image_file' in part) {
       const fileId = part.image_file?.file_id || 'x';
       text = `if_${fileId.slice(-8)}`;
     }
@@ -115,7 +137,7 @@ const getLatestContentForKey = (message: TMessage): string => {
       text = 'iu';
     }
     // Handle AGENT_UPDATE - use simple marker with agentId suffix
-    else if (type === ContentTypes.AGENT_UPDATE && 'agent_update' in part) {
+    else if (type === ContentTypes.AGENT_UPDATE && part && 'agent_update' in part) {
       const agentId = String(part.agent_update?.agentId || 'x').slice(0, 30);
       text = `au_${agentId}`;
     } else {

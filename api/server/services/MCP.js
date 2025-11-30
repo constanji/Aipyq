@@ -381,6 +381,20 @@ function createToolInstance({ res, toolName, serverName, toolDefinition, provide
         oauthEnd,
       });
 
+      // formatToolContent 返回 [formattedContent, artifacts]
+      // 对于 CONTENT_AND_ARTIFACT 格式，需要返回 { content, artifact } 对象
+      if (Array.isArray(result) && result.length === 2) {
+        const [content, artifacts] = result;
+        
+        // 始终返回 { content, artifact } 格式，即使 artifact 是 undefined
+        // 这样 LangChain 可以正确处理，artifact 为 undefined 时表示没有附件
+        return {
+          content: content,
+          artifact: artifacts,
+        };
+      }
+      
+      // 兼容旧格式
       if (isAssistantsEndpoint(provider) && Array.isArray(result)) {
         return result[0];
       }

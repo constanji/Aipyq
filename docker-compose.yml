@@ -26,7 +26,6 @@ services:
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
       - AIPYQ_LOG_DIR=/app/api/logs
       - CONFIG_PATH=/app/Aipyq.yaml
-      - HELP_AND_FAQ_URL=/
 
 
     
@@ -44,9 +43,9 @@ services:
       - ./logs:/app/logs
       - ./Aipyq.yaml:/app/Aipyq.yaml
       # 挂载本地静态资源
-      - ./client/dist:/app/client/dist
-      - ./client/public/assets:/app/client/public/assets
-      - ./client/public/fonts:/app/client/public/fonts
+      #- ./client/dist:/app/client/dist
+      #- ./client/public/assets:/app/client/public/assets
+      #- ./client/public/fonts:/app/client/public/fonts
   mongodb:
     container_name: PYQ-MongoDB
     image: mongo

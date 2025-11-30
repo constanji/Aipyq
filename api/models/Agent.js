@@ -12,7 +12,7 @@ const {
 } = require('./Project');
 const { removeAllPermissions } = require('~/server/services/PermissionService');
 const { getMCPServerTools } = require('~/server/services/Config');
-const { getActions } = require('./Action');
+const { getActions, deleteActions } = require('./Action');
 const { Agent } = require('~/db/models');
 
 /**
@@ -535,6 +535,11 @@ const deleteAgent = async (searchParameter) => {
       resourceType: ResourceType.AGENT,
       resourceId: agent._id,
     });
+    // Delete all actions associated with this agent
+    const deletedCount = await deleteActions({ agent_id: agent.id });
+    if (deletedCount > 0) {
+      logger.debug(`[deleteAgent] Deleted ${deletedCount} action(s) for agent ${agent.id}`);
+    }
   }
   return agent;
 };

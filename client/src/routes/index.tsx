@@ -19,6 +19,7 @@ import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
 import AgentBuilder from './AgentBuilder';
+import GlobalConfigManager from './GlobalConfigManager';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -113,6 +114,10 @@ export const router = createBrowserRouter(
             {
               path: 'agent-builder',
               element: <AgentBuilder />,
+            },
+            {
+              path: 'global-config',
+              element: <GlobalConfigManager />,
             },
           ],
         },

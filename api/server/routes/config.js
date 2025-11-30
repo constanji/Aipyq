@@ -1,4 +1,7 @@
 const express = require('express');
+const fs = require('fs').promises;
+const path = require('path');
+const yaml = require('js-yaml');
 const { logger } = require('@aipyq/data-schemas');
 const { isEnabled, getBalanceConfig } = require('@aipyq/api');
 const {
@@ -6,6 +9,8 @@ const {
   CacheKeys,
   removeNullishValues,
   defaultSocialLogins,
+  SystemRoles,
+  specsConfigSchema,
 } = require('aipyq-data-provider');
 const { getLdapConfig } = require('~/server/services/Config/ldap');
 const { getAppConfig } = require('~/server/services/Config/app');
@@ -13,6 +18,7 @@ const { getProjectByName } = require('~/models/Project');
 const { getMCPManager } = require('~/config');
 const { getLogStores } = require('~/cache');
 const { mcpServersRegistry } = require('@aipyq/api');
+const requireAdmin = require('~/server/middleware/roles/admin');
 
 const router = express.Router();
 const emailLoginEnabled =
@@ -188,6 +194,95 @@ router.get('/', async function (req, res) {
   } catch (err) {
     logger.error('Error in startup config', err);
     return res.status(500).send({ error: err.message });
+  }
+});
+
+/**
+ * POST /config/modelSpecs
+ * Updates the modelSpecs configuration in Aipyq.yaml file
+ * Requires admin role
+ */
+router.post('/modelSpecs', requireAdmin, async function (req, res) {
+  try {
+    const { modelSpecs } = req.body;
+
+    if (!modelSpecs || !Array.isArray(modelSpecs)) {
+      return res.status(400).json({ error: 'modelSpecs must be an array' });
+    }
+
+    // Validate the modelSpecs using the schema
+    const validationResult = specsConfigSchema.safeParse({
+      list: modelSpecs,
+      enforce: false,
+      prioritize: true,
+    });
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: 'Invalid modelSpecs format',
+        details: validationResult.error.errors,
+      });
+    }
+
+    // Get the config file path
+    const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
+    const configPath = process.env.CONFIG_PATH || path.resolve(projectRoot, 'Aipyq.yaml');
+
+    // Check if config file exists and is a local file (not a URL)
+    if (/^https?:\/\//.test(configPath)) {
+      return res.status(400).json({
+        error: 'Cannot update remote config file. Please use a local Aipyq.yaml file.',
+      });
+    }
+
+    // Read the current config file
+    let configContent;
+    try {
+      configContent = await fs.readFile(configPath, 'utf8');
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return res.status(404).json({ error: 'Config file not found' });
+      }
+      throw error;
+    }
+
+    // Parse the YAML
+    let config;
+    try {
+      config = yaml.load(configContent);
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid YAML format in config file' });
+    }
+
+    // Update the modelSpecs
+    if (!config.modelSpecs) {
+      config.modelSpecs = {};
+    }
+    config.modelSpecs.list = modelSpecs;
+
+    // Write back to file
+    const updatedYaml = yaml.dump(config, {
+      indent: 2,
+      lineWidth: -1,
+      noRefs: true,
+      sortKeys: false,
+    });
+
+    await fs.writeFile(configPath, updatedYaml, 'utf8');
+
+    // Clear the startup config cache
+    const cache = getLogStores(CacheKeys.CONFIG_STORE);
+    await cache.delete(CacheKeys.STARTUP_CONFIG);
+
+    logger.info('ModelSpecs configuration updated successfully');
+
+    return res.status(200).json({
+      success: true,
+      message: 'ModelSpecs configuration updated successfully',
+    });
+  } catch (err) {
+    logger.error('Error updating modelSpecs config', err);
+    return res.status(500).json({ error: err.message });
   }
 });
 

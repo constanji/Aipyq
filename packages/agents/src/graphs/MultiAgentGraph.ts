@@ -1,0 +1,598 @@
+import { z } from 'zod';
+import { tool } from '@langchain/core/tools';
+import { PromptTemplate } from '@langchain/core/prompts';
+import {
+  ToolMessage,
+  HumanMessage,
+  getBufferString,
+} from '@langchain/core/messages';
+import {
+  END,
+  START,
+  Command,
+  StateGraph,
+  Annotation,
+  getCurrentTaskInput,
+  messagesStateReducer,
+} from '@langchain/langgraph';
+import type { ToolRunnableConfig } from '@langchain/core/tools';
+import type { BaseMessage } from '@langchain/core/messages';
+import type * as t from '@/types';
+import { StandardGraph } from './Graph';
+import { Constants } from '@/common';
+
+/**
+ * MultiAgentGraph extends StandardGraph to support dynamic multi-agent workflows
+ * with handoffs, fan-in/fan-out, and other composable patterns.
+ *
+ * Key behavior:
+ * - Agents with ONLY handoff edges: Can dynamically route to any handoff destination
+ * - Agents with ONLY direct edges: Always follow their direct edges
+ * - Agents with BOTH: Use Command for exclusive routing (handoff OR direct, not both)
+ *   - If handoff occurs: Only the handoff destination executes
+ *   - If no handoff: Direct edges execute (potentially in parallel)
+ *
+ * This enables the common pattern where an agent either delegates (handoff)
+ * OR continues its workflow (direct edges), but not both simultaneously.
+ */
+export class MultiAgentGraph extends StandardGraph {
+  private edges: t.GraphEdge[];
+  private startingNodes: Set<string> = new Set();
+  private directEdges: t.GraphEdge[] = [];
+  private handoffEdges: t.GraphEdge[] = [];
+
+  constructor(input: t.MultiAgentGraphInput) {
+    super(input);
+    this.edges = input.edges;
+    this.categorizeEdges();
+    this.analyzeGraph();
+    this.createHandoffTools();
+  }
+
+  /**
+   * Categorize edges into handoff and direct types
+   */
+  private categorizeEdges(): void {
+    for (const edge of this.edges) {
+      // Default behavior: edges with conditions or explicit 'handoff' type are handoff edges
+      // Edges with explicit 'direct' type or multi-destination without conditions are direct edges
+      if (edge.edgeType === 'direct') {
+        this.directEdges.push(edge);
+      } else if (edge.edgeType === 'handoff' || edge.condition != null) {
+        this.handoffEdges.push(edge);
+      } else {
+        // Default: single-to-single edges are handoff, single-to-multiple are direct
+        const destinations = Array.isArray(edge.to) ? edge.to : [edge.to];
+        const sources = Array.isArray(edge.from) ? edge.from : [edge.from];
+
+        if (sources.length === 1 && destinations.length > 1) {
+          // Fan-out pattern defaults to direct
+          this.directEdges.push(edge);
+        } else {
+          // Everything else defaults to handoff
+          this.handoffEdges.push(edge);
+        }
+      }
+    }
+  }
+
+  /**
+   * Analyze graph structure to determine starting nodes and connections
+   */
+  private analyzeGraph(): void {
+    const hasIncomingEdge = new Set<string>();
+
+    // Track all nodes that have incoming edges
+    for (const edge of this.edges) {
+      const destinations = Array.isArray(edge.to) ? edge.to : [edge.to];
+      destinations.forEach((dest) => hasIncomingEdge.add(dest));
+    }
+
+    // Starting nodes are those without incoming edges
+    for (const agentId of this.agentContexts.keys()) {
+      if (!hasIncomingEdge.has(agentId)) {
+        this.startingNodes.add(agentId);
+      }
+    }
+
+    // If no starting nodes found, use the first agent
+    if (this.startingNodes.size === 0 && this.agentContexts.size > 0) {
+      this.startingNodes.add(this.agentContexts.keys().next().value!);
+    }
+  }
+
+  /**
+   * Create handoff tools for agents based on handoff edges only
+   */
+  private createHandoffTools(): void {
+    // Group handoff edges by source agent(s)
+    const handoffsByAgent = new Map<string, t.GraphEdge[]>();
+
+    // Only process handoff edges for tool creation
+    for (const edge of this.handoffEdges) {
+      const sources = Array.isArray(edge.from) ? edge.from : [edge.from];
+      sources.forEach((source) => {
+        if (!handoffsByAgent.has(source)) {
+          handoffsByAgent.set(source, []);
+        }
+        handoffsByAgent.get(source)!.push(edge);
+      });
+    }
+
+    // Create handoff tools for each agent
+    for (const [agentId, edges] of handoffsByAgent) {
+      const agentContext = this.agentContexts.get(agentId);
+      if (!agentContext) continue;
+
+      // Create handoff tools for this agent's outgoing edges
+      const handoffTools: t.GenericTool[] = [];
+      for (const edge of edges) {
+        handoffTools.push(...this.createHandoffToolsForEdge(edge));
+      }
+
+      // Add handoff tools to the agent's existing tools
+      if (!agentContext.tools) {
+        agentContext.tools = [];
+      }
+      agentContext.tools.push(...handoffTools);
+    }
+  }
+
+  /**
+   * Create handoff tools for an edge (handles multiple destinations)
+   */
+  private createHandoffToolsForEdge(edge: t.GraphEdge): t.GenericTool[] {
+    const tools: t.GenericTool[] = [];
+    const destinations = Array.isArray(edge.to) ? edge.to : [edge.to];
+
+    /** If there's a condition, create a single conditional handoff tool */
+    if (edge.condition != null) {
+      const toolName = 'conditional_transfer';
+      const toolDescription =
+        edge.description ?? 'Conditionally transfer control based on state';
+
+      /** Check if we have a prompt for handoff input */
+      const hasHandoffInput =
+        edge.prompt != null && typeof edge.prompt === 'string';
+      const handoffInputDescription = hasHandoffInput ? edge.prompt : undefined;
+      const promptKey = edge.promptKey ?? 'instructions';
+
+      tools.push(
+        tool(
+          async (input: Record<string, unknown>, config) => {
+            const state = getCurrentTaskInput() as t.BaseGraphState;
+            const toolCallId =
+              (config as ToolRunnableConfig | undefined)?.toolCall?.id ??
+              'unknown';
+
+            /** Evaluated condition */
+            const result = edge.condition!(state);
+            let destination: string;
+
+            if (typeof result === 'boolean') {
+              /** If true, use first destination; if false, don't transfer */
+              if (!result) return null;
+              destination = destinations[0];
+            } else if (typeof result === 'string') {
+              destination = result;
+            } else {
+              /** Array of destinations - for now, use the first */
+              destination = Array.isArray(result) ? result[0] : destinations[0];
+            }
+
+            let content = `Conditionally transferred to ${destination}`;
+            if (
+              hasHandoffInput &&
+              promptKey in input &&
+              input[promptKey] != null
+            ) {
+              content += `\n\n${promptKey.charAt(0).toUpperCase() + promptKey.slice(1)}: ${input[promptKey]}`;
+            }
+
+            const toolMessage = new ToolMessage({
+              content,
+              name: toolName,
+              tool_call_id: toolCallId,
+            });
+
+            return new Command({
+              goto: destination,
+              update: { messages: state.messages.concat(toolMessage) },
+              graph: Command.PARENT,
+            });
+          },
+          {
+            name: toolName,
+            schema: hasHandoffInput
+              ? z.object({
+                [promptKey]: z
+                  .string()
+                  .optional()
+                  .describe(handoffInputDescription as string),
+              })
+              : z.object({}),
+            description: toolDescription,
+          }
+        )
+      );
+    } else {
+      /** Create individual tools for each destination */
+      for (const destination of destinations) {
+        const toolName = `${Constants.LC_TRANSFER_TO_}${destination}`;
+        const toolDescription =
+          edge.description ?? `Transfer control to agent '${destination}'`;
+
+        /** Check if we have a prompt for handoff input */
+        const hasHandoffInput =
+          edge.prompt != null && typeof edge.prompt === 'string';
+        const handoffInputDescription = hasHandoffInput
+          ? edge.prompt
+          : undefined;
+        const promptKey = edge.promptKey ?? 'instructions';
+
+        tools.push(
+          tool(
+            async (input: Record<string, unknown>, config) => {
+              const toolCallId =
+                (config as ToolRunnableConfig | undefined)?.toolCall?.id ??
+                'unknown';
+
+              let content = `Successfully transferred to ${destination}`;
+              if (
+                hasHandoffInput &&
+                promptKey in input &&
+                input[promptKey] != null
+              ) {
+                content += `\n\n${promptKey.charAt(0).toUpperCase() + promptKey.slice(1)}: ${input[promptKey]}`;
+              }
+
+              const toolMessage = new ToolMessage({
+                content,
+                name: toolName,
+                tool_call_id: toolCallId,
+              });
+
+              const state = getCurrentTaskInput() as t.BaseGraphState;
+
+              return new Command({
+                goto: destination,
+                update: { messages: state.messages.concat(toolMessage) },
+                graph: Command.PARENT,
+              });
+            },
+            {
+              name: toolName,
+              schema: hasHandoffInput
+                ? z.object({
+                  [promptKey]: z
+                    .string()
+                    .optional()
+                    .describe(handoffInputDescription as string),
+                })
+                : z.object({}),
+              description: toolDescription,
+            }
+          )
+        );
+      }
+    }
+
+    return tools;
+  }
+
+  /**
+   * Create a complete agent subgraph (similar to createReactAgent)
+   */
+  private createAgentSubgraph(agentId: string): t.CompiledAgentWorfklow {
+    /** This is essentially the same as `createAgentNode` from `StandardGraph` */
+    return this.createAgentNode(agentId);
+  }
+
+  /**
+   * Create the multi-agent workflow with dynamic handoffs
+   */
+  override createWorkflow(): t.CompiledMultiAgentWorkflow {
+    const StateAnnotation = Annotation.Root({
+      messages: Annotation<BaseMessage[]>({
+        reducer: (a, b) => {
+          if (!a.length) {
+            this.startIndex = a.length + b.length;
+          }
+          const result = messagesStateReducer(a, b);
+          this.messages = result;
+          return result;
+        },
+        default: () => [],
+      }),
+      /** Channel for passing filtered messages to agents when excludeResults is true */
+      agentMessages: Annotation<BaseMessage[]>({
+        /** Replaces state entirely */
+        reducer: (a, b) => b,
+        default: () => [],
+      }),
+    });
+
+    const builder = new StateGraph(StateAnnotation);
+
+    // Add all agents as complete subgraphs
+    for (const [agentId] of this.agentContexts) {
+      // Get all possible destinations for this agent
+      const handoffDestinations = new Set<string>();
+      const directDestinations = new Set<string>();
+
+      // Check handoff edges for destinations
+      for (const edge of this.handoffEdges) {
+        const sources = Array.isArray(edge.from) ? edge.from : [edge.from];
+        if (sources.includes(agentId) === true) {
+          const dests = Array.isArray(edge.to) ? edge.to : [edge.to];
+          dests.forEach((dest) => handoffDestinations.add(dest));
+        }
+      }
+
+      // Check direct edges for destinations
+      for (const edge of this.directEdges) {
+        const sources = Array.isArray(edge.from) ? edge.from : [edge.from];
+        if (sources.includes(agentId) === true) {
+          const dests = Array.isArray(edge.to) ? edge.to : [edge.to];
+          dests.forEach((dest) => directDestinations.add(dest));
+        }
+      }
+
+      /** Check if this agent has BOTH handoff and direct edges */
+      const hasHandoffEdges = handoffDestinations.size > 0;
+      const hasDirectEdges = directDestinations.size > 0;
+      const needsCommandRouting = hasHandoffEdges && hasDirectEdges;
+
+      /** Collect all possible destinations for this agent */
+      const allDestinations = new Set([
+        ...handoffDestinations,
+        ...directDestinations,
+      ]);
+      if (handoffDestinations.size > 0 || directDestinations.size === 0) {
+        allDestinations.add(END);
+      }
+
+      /** Agent subgraph (includes agent + tools) */
+      const agentSubgraph = this.createAgentSubgraph(agentId);
+
+      /** Wrapper function that handles agentMessages channel and conditional routing */
+      const agentWrapper = async (
+        state: t.MultiAgentGraphState
+      ): Promise<t.MultiAgentGraphState | Command> => {
+        let result: t.MultiAgentGraphState;
+
+        if (state.agentMessages != null && state.agentMessages.length > 0) {
+          /**
+           * When using agentMessages (excludeResults=true), we need to update
+           * the token map to account for the new prompt message
+           */
+          const agentContext = this.agentContexts.get(agentId);
+          if (agentContext && agentContext.tokenCounter) {
+            // The agentMessages contains:
+            // 1. Filtered messages (0 to startIndex) - already have token counts
+            // 2. New prompt message - needs token counting
+
+            const freshTokenMap: Record<string, number> = {};
+
+            // Copy existing token counts for filtered messages (0 to startIndex)
+            for (let i = 0; i < this.startIndex; i++) {
+              const tokenCount = agentContext.indexTokenCountMap[i];
+              if (tokenCount !== undefined) {
+                freshTokenMap[i] = tokenCount;
+              }
+            }
+
+            // Calculate tokens only for the new prompt message (last message)
+            const promptMessageIndex = state.agentMessages.length - 1;
+            if (promptMessageIndex >= this.startIndex) {
+              const promptMessage = state.agentMessages[promptMessageIndex];
+              freshTokenMap[promptMessageIndex] =
+                agentContext.tokenCounter(promptMessage);
+            }
+
+            // Update the agent's token map with instructions added
+            agentContext.updateTokenMapWithInstructions(freshTokenMap);
+          }
+
+          /** Temporary state with messages replaced by `agentMessages` */
+          const transformedState: t.MultiAgentGraphState = {
+            ...state,
+            messages: state.agentMessages,
+          };
+          result = await agentSubgraph.invoke(transformedState);
+          result = {
+            ...result,
+            /** Clear agentMessages for next agent */
+            agentMessages: [],
+          };
+        } else {
+          result = await agentSubgraph.invoke(state);
+        }
+
+        /** If agent has both handoff and direct edges, use Command for exclusive routing */
+        if (needsCommandRouting) {
+          /** Check if a handoff occurred */
+          const lastMessage = result.messages[
+            result.messages.length - 1
+          ] as BaseMessage | null;
+          if (
+            lastMessage != null &&
+            lastMessage.getType() === 'tool' &&
+            typeof lastMessage.name === 'string' &&
+            lastMessage.name.startsWith(Constants.LC_TRANSFER_TO_)
+          ) {
+            /** Handoff occurred - extract destination and navigate there exclusively */
+            const handoffDest = lastMessage.name.replace(
+              Constants.LC_TRANSFER_TO_,
+              ''
+            );
+            return new Command({
+              update: result,
+              goto: handoffDest,
+            });
+          } else {
+            /** No handoff - proceed with direct edges */
+            const directDests = Array.from(directDestinations);
+            if (directDests.length === 1) {
+              return new Command({
+                update: result,
+                goto: directDests[0],
+              });
+            } else if (directDests.length > 1) {
+              /** Multiple direct destinations - they'll run in parallel */
+              return new Command({
+                update: result,
+                goto: directDests,
+              });
+            }
+          }
+        }
+
+        /** No special routing needed - return state normally */
+        return result;
+      };
+
+      /** Wrapped agent as a node with its possible destinations */
+      builder.addNode(agentId, agentWrapper, {
+        ends: Array.from(allDestinations),
+      });
+    }
+
+    // Add starting edges for all starting nodes
+    for (const startNode of this.startingNodes) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      /** @ts-ignore */
+      builder.addEdge(START, startNode);
+    }
+
+    /**
+     * Add direct edges for automatic transitions
+     * Group edges by destination to handle fan-in scenarios
+     */
+    const edgesByDestination = new Map<string, t.GraphEdge[]>();
+
+    for (const edge of this.directEdges) {
+      const destinations = Array.isArray(edge.to) ? edge.to : [edge.to];
+      for (const destination of destinations) {
+        if (!edgesByDestination.has(destination)) {
+          edgesByDestination.set(destination, []);
+        }
+        edgesByDestination.get(destination)!.push(edge);
+      }
+    }
+
+    for (const [destination, edges] of edgesByDestination) {
+      /** Checks if this is a fan-in scenario with prompt instructions */
+      const edgesWithPrompt = edges.filter(
+        (edge) => edge.prompt != null && edge.prompt !== ''
+      );
+
+      if (edgesWithPrompt.length > 0) {
+        /**
+         * Single wrapper node for destination (Fan-in with prompt)
+         */
+        const wrapperNodeId = `fan_in_${destination}_prompt`;
+        /**
+         * First edge's `prompt`
+         * (they should all be the same for fan-in)
+         */
+        const prompt = edgesWithPrompt[0].prompt;
+        /**
+         * First edge's `excludeResults` flag
+         * (they should all be the same for fan-in)
+         */
+        const excludeResults = edgesWithPrompt[0].excludeResults;
+
+        builder.addNode(wrapperNodeId, async (state: t.BaseGraphState) => {
+          let promptText: string | undefined;
+          let effectiveExcludeResults = excludeResults;
+
+          if (typeof prompt === 'function') {
+            promptText = await prompt(state.messages, this.startIndex);
+          } else if (prompt != null) {
+            if (prompt.includes('{results}')) {
+              const resultsMessages = state.messages.slice(this.startIndex);
+              const resultsString = getBufferString(resultsMessages);
+              const promptTemplate = PromptTemplate.fromTemplate(prompt);
+              const result = await promptTemplate.invoke({
+                results: resultsString,
+              });
+              promptText = result.value;
+              effectiveExcludeResults =
+                excludeResults !== false && promptText !== '';
+            } else {
+              promptText = prompt;
+            }
+          }
+
+          if (promptText != null && promptText !== '') {
+            if (
+              effectiveExcludeResults == null ||
+              effectiveExcludeResults === false
+            ) {
+              return {
+                messages: [new HumanMessage(promptText)],
+              };
+            }
+
+            /** When `excludeResults` is true, use agentMessages channel
+             * to pass filtered messages + prompt to the destination agent
+             */
+            const filteredMessages = state.messages.slice(0, this.startIndex);
+            return {
+              messages: [new HumanMessage(promptText)],
+              agentMessages: messagesStateReducer(filteredMessages, [
+                new HumanMessage(promptText),
+              ]),
+            };
+          }
+
+          /** No prompt needed, return empty update */
+          return {};
+        });
+
+        /** Add edges from all sources to the wrapper, then wrapper to destination */
+        for (const edge of edges) {
+          const sources = Array.isArray(edge.from) ? edge.from : [edge.from];
+          for (const source of sources) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            /** @ts-ignore */
+            builder.addEdge(source, wrapperNodeId);
+          }
+        }
+
+        /** Single edge from wrapper to destination */
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        /** @ts-ignore */
+        builder.addEdge(wrapperNodeId, destination);
+      } else {
+        /** No prompt instructions, add direct edges (skip if source uses Command routing) */
+        for (const edge of edges) {
+          const sources = Array.isArray(edge.from) ? edge.from : [edge.from];
+          for (const source of sources) {
+            /** Check if this source node has both handoff and direct edges */
+            const sourceHandoffEdges = this.handoffEdges.filter((e) => {
+              const eSources = Array.isArray(e.from) ? e.from : [e.from];
+              return eSources.includes(source);
+            });
+            const sourceDirectEdges = this.directEdges.filter((e) => {
+              const eSources = Array.isArray(e.from) ? e.from : [e.from];
+              return eSources.includes(source);
+            });
+
+            /** Skip adding edge if source uses Command routing (has both types) */
+            if (sourceHandoffEdges.length > 0 && sourceDirectEdges.length > 0) {
+              continue;
+            }
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            /** @ts-ignore */
+            builder.addEdge(source, destination);
+          }
+        }
+      }
+    }
+
+    return builder.compile(this.compileOptions as unknown as never);
+  }
+}

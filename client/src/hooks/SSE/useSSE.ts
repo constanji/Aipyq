@@ -17,6 +17,7 @@ import { useGenTitleMutation, useGetStartupConfig, useGetUserBalance } from '~/d
 import { useAuthContext } from '~/hooks/AuthContext';
 import useEventHandlers from './useEventHandlers';
 import store from '~/store';
+import logger from '~/utils/logger';
 
 const clearDraft = (conversationId?: string | null) => {
   if (conversationId) {
@@ -240,9 +241,17 @@ export default function useSSE(
     sse.stream();
 
     return () => {
-      const isCancelled = sse.readyState <= 1;
+      // Only cancel if the connection is still in progress (CONNECTING or OPEN)
+      // Don't cancel if it's already CLOSED or CLOSING
+      const isCancelled = sse.readyState <= 1; // 0 = CONNECTING, 1 = OPEN
       sse.close();
-      if (isCancelled) {
+      // Only trigger cancel event if connection was still active
+      // This prevents accidental cancellation when component re-renders due to unrelated state changes
+      if (isCancelled && submission != null) {
+        logger.log('sse_cleanup', 'SSE connection cancelled during cleanup', {
+          readyState: sse.readyState,
+          messageId: submission.initialResponse?.messageId,
+        });
         const e = new Event('cancel');
         /* @ts-ignore */
         sse.dispatchEvent(e);

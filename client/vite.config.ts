@@ -3,22 +3,29 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 // @ts-ignore
 import type { Plugin } from 'vite';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { compression } from 'vite-plugin-compression2';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vitejs.dev/config/
-const backendPort = process.env.BACKEND_PORT && Number(process.env.BACKEND_PORT) || 3080;
-const backendURL = process.env.HOST ? `http://${process.env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
+export default defineConfig(({ command, mode }) => {
+  // 加载环境变量（从项目根目录）
+  const env = loadEnv(mode, path.resolve(__dirname, '..'), '');
+  
+  // 获取后端端口配置
+  const backendPort = env.BACKEND_PORT ? Number(env.BACKEND_PORT) : 3080;
+  const backendURL = env.HOST ? `http://${env.HOST}:${backendPort}` : `http://localhost:${backendPort}`;
 
-export default defineConfig(({ command }) => ({
+  // 获取前端端口配置（支持 VITE_PORT 和 PORT 环境变量）
+  const frontendPort = env.VITE_PORT ? Number(env.VITE_PORT) : (env.PORT ? Number(env.PORT) : 3090);
+
+  return {
   base: '',
   server: {
-    allowedHosts: process.env.VITE_ALLOWED_HOSTS && process.env.VITE_ALLOWED_HOSTS.split(',') || [],
-    host: process.env.HOST || 'localhost',
-    port: process.env.PORT && Number(process.env.PORT) || 3090,
-    strictPort: false,
+    allowedHosts: env.VITE_ALLOWED_HOSTS && env.VITE_ALLOWED_HOSTS.split(',') || [],
+    host: env.HOST || 'localhost',
+    port: frontendPort,
+    strictPort: true, // 设置为 true，如果端口被占用会报错而不是自动切换
     proxy: {
       '/api': {
         target: backendURL,
@@ -260,7 +267,8 @@ export default defineConfig(({ command }) => ({
       'micromark-extension-math': 'micromark-extension-llm-math',
     },
   },
-}));
+  };
+});
 
 interface SourcemapExclude {
   excludeNodeModules?: boolean;

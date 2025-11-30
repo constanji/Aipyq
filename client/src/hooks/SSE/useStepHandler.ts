@@ -16,6 +16,7 @@ import type {
 import type { SetterOrUpdater } from 'recoil';
 import type { AnnounceOptions } from '~/common';
 import { MESSAGE_UPDATE_INTERVAL } from '~/common';
+import logger from '~/utils/logger';
 
 type TUseStepHandler = {
   announcePolite: (options: AnnounceOptions) => void;
@@ -61,6 +62,26 @@ export default function useStepHandler({
   const messageMap = useRef(new Map<string, TMessage>());
   const stepMap = useRef(new Map<string, Agents.RunStep>());
 
+  // 辅助函数：确保消息的 content 数组是连续的（无 null/undefined 值）
+  const ensureContentIsDense = (message: TMessage): TMessage => {
+    if (!message.content || message.content.length === 0) {
+      return message;
+    }
+    const denseContent = message.content.filter((c) => c != null) as TMessageContentParts[];
+    if (denseContent.length !== message.content.length) {
+      logger.warn(
+        'step_handler',
+        `Filtered out ${message.content.length - denseContent.length} null/undefined values from content array`,
+        {
+          messageId: message.messageId,
+          originalLength: message.content.length,
+          filteredLength: denseContent.length,
+        },
+      );
+    }
+    return { ...message, content: denseContent };
+  };
+
   const calculateContentIndex = (
     baseIndex: number,
     initialContent: TMessageContentParts[],
@@ -93,11 +114,47 @@ export default function useStepHandler({
       return message;
     }
 
-    const updatedContent = [...(message.content || [])] as Array<
+    // 过滤掉 null/undefined 值，确保数组连续
+    const filteredContent = (message.content || []).filter((c) => c != null) as TMessageContentParts[];
+    
+    // 如果索引超出范围，使用实际的内容长度作为索引，避免创建稀疏数组
+    const actualIndex = index >= filteredContent.length ? filteredContent.length : index;
+    
+    if (index !== actualIndex) {
+      logger.warn(
+        'step_handler',
+        `Index ${index} adjusted to ${actualIndex} to avoid sparse arrays. Content length: ${filteredContent.length}`,
+        {
+          messageId: message.messageId,
+          contentType,
+          originalIndex: index,
+          adjustedIndex: actualIndex,
+        },
+      );
+    }
+
+    // 如果 actualIndex 等于数组长度，直接 push 新元素；否则更新现有元素
+    const updatedContent = [...filteredContent] as Array<
       Partial<TMessageContentParts> | undefined
     >;
-    if (!updatedContent[index]) {
-      updatedContent[index] = { type: contentPart.type as AllContentTypes };
+
+    if (actualIndex === updatedContent.length) {
+      // 直接 push，避免创建稀疏数组
+      updatedContent.push({ type: contentPart.type as AllContentTypes });
+    } else if (actualIndex < updatedContent.length) {
+      // 更新现有位置
+      if (!updatedContent[actualIndex]) {
+        updatedContent[actualIndex] = { type: contentPart.type as AllContentTypes };
+      }
+    } else {
+      // 这种情况不应该发生（因为我们已经调整了 actualIndex），但为了安全起见
+      logger.warn(
+        'step_handler',
+        `Unexpected: actualIndex ${actualIndex} > filteredContent.length ${filteredContent.length}. Using filteredContent.length instead.`,
+        { messageId: message.messageId, contentType },
+      );
+      // 直接 push，避免创建稀疏数组
+      updatedContent.push({ type: contentPart.type as AllContentTypes });
     }
 
     if (
@@ -105,7 +162,7 @@ export default function useStepHandler({
       ContentTypes.TEXT in contentPart &&
       typeof contentPart.text === 'string'
     ) {
-      const currentContent = updatedContent[index] as MessageDeltaUpdate;
+      const currentContent = updatedContent[actualIndex] as MessageDeltaUpdate;
       const update: MessageDeltaUpdate = {
         type: ContentTypes.TEXT,
         text: (currentContent.text || '') + contentPart.text,
@@ -114,7 +171,7 @@ export default function useStepHandler({
       if (contentPart.tool_call_ids != null) {
         update.tool_call_ids = contentPart.tool_call_ids;
       }
-      updatedContent[index] = update;
+      updatedContent[actualIndex] = update;
     } else if (
       contentType.startsWith(ContentTypes.AGENT_UPDATE) &&
       ContentTypes.AGENT_UPDATE in contentPart &&
@@ -125,29 +182,29 @@ export default function useStepHandler({
         agent_update: contentPart.agent_update,
       };
 
-      updatedContent[index] = update;
+      updatedContent[actualIndex] = update;
     } else if (
       contentType.startsWith(ContentTypes.THINK) &&
       ContentTypes.THINK in contentPart &&
       typeof contentPart.think === 'string'
     ) {
-      const currentContent = updatedContent[index] as ReasoningDeltaUpdate;
+      const currentContent = updatedContent[actualIndex] as ReasoningDeltaUpdate;
       const update: ReasoningDeltaUpdate = {
         type: ContentTypes.THINK,
         think: (currentContent.think || '') + contentPart.think,
       };
 
-      updatedContent[index] = update;
+      updatedContent[actualIndex] = update;
     } else if (contentType === ContentTypes.IMAGE_URL && 'image_url' in contentPart) {
-      const currentContent = updatedContent[index] as {
+      const currentContent = updatedContent[actualIndex] as {
         type: ContentTypes.IMAGE_URL;
         image_url: string;
       };
-      updatedContent[index] = {
+      updatedContent[actualIndex] = {
         ...currentContent,
       };
     } else if (contentType === ContentTypes.TOOL_CALL && 'tool_call' in contentPart) {
-      const existingContent = updatedContent[index] as Agents.ToolCallContent | undefined;
+      const existingContent = updatedContent[actualIndex] as Agents.ToolCallContent | undefined;
       const existingToolCall = existingContent?.tool_call;
       const toolCallArgs = (contentPart.tool_call as Agents.ToolCall).args;
       /** When args are a valid object, they are likely already invoked */
@@ -175,13 +232,33 @@ export default function useStepHandler({
         newToolCall.output = contentPart.tool_call.output;
       }
 
-      updatedContent[index] = {
+      updatedContent[actualIndex] = {
         type: ContentTypes.TOOL_CALL,
         tool_call: newToolCall,
       };
     }
 
-    return { ...message, content: updatedContent as TMessageContentParts[] };
+    // 过滤掉所有 null/undefined 值，确保返回的数组是连续的
+    const finalContent = updatedContent.filter((item) => item != null) as TMessageContentParts[];
+    
+    // 检查是否还有 null/undefined 值（理论上不应该有了）
+    const remainingNulls = finalContent
+      .map((item, i) => (item == null || item === null ? i : null))
+      .filter((i) => i !== null);
+    if (remainingNulls.length > 0) {
+      logger.warn(
+        'step_handler',
+        `Found null/undefined values in final content array after filtering.`,
+        {
+          messageId: message.messageId,
+          nullIndices: remainingNulls,
+          contentLength: finalContent.length,
+          contentType,
+        },
+      );
+    }
+
+    return { ...message, content: finalContent };
   };
 
   const stepHandler = useCallback(
@@ -228,14 +305,20 @@ export default function useStepHandler({
             content: initialContent,
           };
 
-          messageMap.current.set(responseMessageId, response);
-          setMessages([...messages.slice(0, -1), response]);
+          const cleanedResponse = ensureContentIsDense(response);
+          messageMap.current.set(responseMessageId, cleanedResponse);
+          setMessages([...messages.slice(0, -1), cleanedResponse]);
         }
 
         // Store tool call IDs if present
         if (runStep.stepDetails.type === StepTypes.TOOL_CALLS) {
           let updatedResponse = { ...response };
-          (runStep.stepDetails.tool_calls as Agents.ToolCall[]).forEach((toolCall) => {
+          // Calculate the base index considering existing content
+          // Use the actual content length to ensure tool calls are placed after existing content
+          const existingContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
+          const baseIndex = Math.max(runStep.index + initialContent.length, existingContentLength);
+          
+          (runStep.stepDetails.tool_calls as Agents.ToolCall[]).forEach((toolCall, toolCallIndex) => {
             const toolCallId = toolCall.id ?? '';
             if ('id' in toolCall && toolCallId) {
               toolCallIdMap.current.set(runStep.id, toolCallId);
@@ -250,14 +333,18 @@ export default function useStepHandler({
               },
             };
 
-            /** Tool calls don't need index adjustment */
-            const currentIndex = runStep.index + initialContent.length;
+            // 基于当前实际数组长度计算索引，确保连续
+            // 每次更新后，数组长度会变化，所以需要重新计算
+            const currentContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
+            // 使用当前数组长度作为索引，确保工具调用按顺序添加
+            const currentIndex = currentContentLength;
             updatedResponse = updateContent(updatedResponse, currentIndex, contentPart);
           });
 
-          messageMap.current.set(responseMessageId, updatedResponse);
+          const cleanedResponse = ensureContentIsDense(updatedResponse);
+          messageMap.current.set(responseMessageId, cleanedResponse);
           const updatedMessages = messages.map((msg) =>
-            msg.messageId === responseMessageId ? updatedResponse : msg,
+            msg.messageId === responseMessageId ? cleanedResponse : ensureContentIsDense(msg),
           );
 
           setMessages(updatedMessages);
@@ -279,9 +366,10 @@ export default function useStepHandler({
           // Agent updates don't need index adjustment
           const currentIndex = agent_update.index + initialContent.length;
           const updatedResponse = updateContent(response, currentIndex, data);
-          messageMap.current.set(responseMessageId, updatedResponse);
+          const cleanedResponse = ensureContentIsDense(updatedResponse);
+          messageMap.current.set(responseMessageId, cleanedResponse);
           const currentMessages = getMessages() || [];
-          setMessages([...currentMessages.slice(0, -1), updatedResponse]);
+          setMessages([...currentMessages.slice(0, -1).map(ensureContentIsDense), cleanedResponse]);
         }
       } else if (event === 'on_message_delta') {
         const messageDelta = data as Agents.MessageDeltaEvent;
@@ -311,9 +399,10 @@ export default function useStepHandler({
           );
           const updatedResponse = updateContent(response, currentIndex, contentPart);
 
-          messageMap.current.set(responseMessageId, updatedResponse);
+          const cleanedResponse = ensureContentIsDense(updatedResponse);
+          messageMap.current.set(responseMessageId, cleanedResponse);
           const currentMessages = getMessages() || [];
-          setMessages([...currentMessages.slice(0, -1), updatedResponse]);
+          setMessages([...currentMessages.slice(0, -1).map(ensureContentIsDense), cleanedResponse]);
         }
       } else if (event === 'on_reasoning_delta') {
         const reasoningDelta = data as Agents.ReasoningDeltaEvent;
@@ -343,9 +432,10 @@ export default function useStepHandler({
           );
           const updatedResponse = updateContent(response, currentIndex, contentPart);
 
-          messageMap.current.set(responseMessageId, updatedResponse);
+          const cleanedResponse = ensureContentIsDense(updatedResponse);
+          messageMap.current.set(responseMessageId, cleanedResponse);
           const currentMessages = getMessages() || [];
-          setMessages([...currentMessages.slice(0, -1), updatedResponse]);
+          setMessages([...currentMessages.slice(0, -1).map(ensureContentIsDense), cleanedResponse]);
         }
       } else if (event === 'on_run_step_delta') {
         const runStepDelta = data as Agents.RunStepDeltaEvent;
@@ -368,8 +458,12 @@ export default function useStepHandler({
           runStepDelta.delta.tool_calls
         ) {
           let updatedResponse = { ...response };
+          // Calculate the base index considering existing content
+          // Use the actual content length to ensure tool calls are placed after existing content
+          const existingContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
+          const baseIndex = Math.max(runStep.index + initialContent.length, existingContentLength);
 
-          runStepDelta.delta.tool_calls.forEach((toolCallDelta) => {
+          runStepDelta.delta.tool_calls.forEach((toolCallDelta, toolCallIndex) => {
             const toolCallId = toolCallIdMap.current.get(runStepDelta.id) ?? '';
 
             const contentPart: Agents.MessageContentComplex = {
@@ -386,14 +480,18 @@ export default function useStepHandler({
               contentPart.tool_call.expires_at = runStepDelta.delta.expires_at;
             }
 
-            /** Tool calls don't need index adjustment */
-            const currentIndex = runStep.index + initialContent.length;
+            // 基于当前实际数组长度计算索引，确保连续
+            // 每次更新后，数组长度会变化，所以需要重新计算
+            const currentContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
+            // 使用当前数组长度作为索引，确保工具调用按顺序添加
+            const currentIndex = currentContentLength;
             updatedResponse = updateContent(updatedResponse, currentIndex, contentPart);
           });
 
-          messageMap.current.set(responseMessageId, updatedResponse);
+          const cleanedResponse = ensureContentIsDense(updatedResponse);
+          messageMap.current.set(responseMessageId, cleanedResponse);
           const updatedMessages = messages.map((msg) =>
-            msg.messageId === responseMessageId ? updatedResponse : msg,
+            msg.messageId === responseMessageId ? cleanedResponse : ensureContentIsDense(msg),
           );
 
           setMessages(updatedMessages);
@@ -424,13 +522,14 @@ export default function useStepHandler({
             tool_call: result.tool_call,
           };
 
-          /** Tool calls don't need index adjustment */
-          const currentIndex = runStep.index + initialContent.length;
+          /** Use the index from the ToolEndEvent, which is the content index of the tool call */
+          const currentIndex = result.index ?? runStep.index + initialContent.length;
           updatedResponse = updateContent(updatedResponse, currentIndex, contentPart, true);
 
-          messageMap.current.set(responseMessageId, updatedResponse);
+          const cleanedResponse = ensureContentIsDense(updatedResponse);
+          messageMap.current.set(responseMessageId, cleanedResponse);
           const updatedMessages = messages.map((msg) =>
-            msg.messageId === responseMessageId ? updatedResponse : msg,
+            msg.messageId === responseMessageId ? cleanedResponse : ensureContentIsDense(msg),
           );
 
           setMessages(updatedMessages);

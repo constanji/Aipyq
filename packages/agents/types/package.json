@@ -1,0 +1,12 @@
+{
+  "name": "@aipyq/agents-types",
+  "version": "1.0.0",
+  "description": "Type definitions for @aipyq/agents",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "@aipyq/agents": "^1.0.0"
+  }
+}

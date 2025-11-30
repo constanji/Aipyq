@@ -13,6 +13,7 @@ import type {
   TMessageContentParts,
 } from 'aipyq-data-provider';
 import { addFileToCache } from '~/utils';
+import logger from '~/utils/logger';
 
 type TUseContentHandler = {
   setMessages: (messages: TMessage[]) => void;
@@ -62,19 +63,56 @@ export default function useContentHandler({ setMessages, getMessages }: TUseCont
       }
 
       /* spreading the content array to avoid mutation */
-      response.content = [...(response.content ?? [])];
+      // 过滤掉 null/undefined 值，确保数组连续
+      const filteredContent = (response.content ?? []).filter((c) => c != null) as TMessageContentParts[];
+      
+      // 如果索引超出范围，使用实际的内容长度作为索引，避免创建稀疏数组
+      const actualIndex = index >= filteredContent.length ? filteredContent.length : index;
+      
+      if (index !== actualIndex) {
+        logger.warn(
+          'content_handler',
+          `Index ${index} adjusted to ${actualIndex} to avoid sparse arrays. Content length: ${filteredContent.length}`,
+          {
+            messageId,
+            type,
+            originalIndex: index,
+            adjustedIndex: actualIndex,
+            currentLength: filteredContent.length,
+          },
+        );
+      }
 
-      response.content[index] = { type, [type]: part } as TMessageContentParts;
+      // 如果 actualIndex 等于数组长度，直接 push；否则更新现有位置
+      if (actualIndex === filteredContent.length) {
+        filteredContent.push({ type, [type]: part } as TMessageContentParts);
+      } else if (actualIndex < filteredContent.length) {
+        filteredContent[actualIndex] = { type, [type]: part } as TMessageContentParts;
+      } else {
+        // 这种情况不应该发生（因为我们已经调整了 actualIndex），但为了安全起见，直接 push
+        logger.warn(
+          'content_handler',
+          `Unexpected: actualIndex ${actualIndex} > filteredContent.length ${filteredContent.length}. Pushing instead.`,
+          { messageId, type },
+        );
+        filteredContent.push({ type, [type]: part } as TMessageContentParts);
+      }
+
+      response.content = filteredContent;
 
       if (
         type !== ContentTypes.TEXT &&
         initialResponse.content &&
-        ((response.content[response.content.length - 1].type === ContentTypes.TOOL_CALL &&
+        initialResponse.content[0] != null &&
+        ((response.content[response.content.length - 1]?.type === ContentTypes.TOOL_CALL &&
           response.content[response.content.length - 1][ContentTypes.TOOL_CALL].progress === 1) ||
-          response.content[response.content.length - 1].type === ContentTypes.IMAGE_FILE)
+          response.content[response.content.length - 1]?.type === ContentTypes.IMAGE_FILE)
       ) {
         response.content.push(initialResponse.content[0]);
       }
+
+      // 最后再次过滤，确保没有 null/undefined 值
+      response.content = response.content.filter((c) => c != null) as TMessageContentParts[];
 
       setMessages([...messages, response]);
     },

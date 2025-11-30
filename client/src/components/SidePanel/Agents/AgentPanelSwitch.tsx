@@ -17,14 +17,20 @@ export default function AgentPanelSwitch() {
 
 function AgentPanelSwitchWithContext() {
   const { conversation } = useChatContext();
-  const { activePanel, setCurrentAgentId } = useAgentPanelContext();
+  const { activePanel, setCurrentAgentId, agent_id: contextAgentId } = useAgentPanelContext();
 
+  // 只在conversation有agent_id且context中没有设置时才从conversation获取
   useEffect(() => {
-    const agent_id = conversation?.agent_id ?? '';
-    if (!isEphemeralAgent(agent_id)) {
-      setCurrentAgentId(agent_id);
+    const conversationAgentId = conversation?.agent_id ?? '';
+    // 如果context中已经有agent_id，且与conversation的不同，说明是在管理界面编辑模式，保持context的值
+    if (contextAgentId && contextAgentId !== conversationAgentId) {
+      return; // 保持context中的agent_id（编辑模式）
     }
-  }, [setCurrentAgentId, conversation?.agent_id]);
+    // 否则从conversation获取
+    if (!isEphemeralAgent(conversationAgentId) && conversationAgentId) {
+      setCurrentAgentId(conversationAgentId);
+    }
+  }, [setCurrentAgentId, conversation?.agent_id, contextAgentId]);
 
   // 调试信息
   useEffect(() => {

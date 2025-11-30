@@ -1,0 +1,14 @@
+.git
+node_modules/
+dist/
+.env
+*.log
+*outputs.json
+*_output.txt
+*_*.txt
+*_output.json
+*.txt
+.turbo
+google_auth.json
+credentials/**/*
+.cursor/

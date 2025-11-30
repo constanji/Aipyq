@@ -283,14 +283,17 @@ class RequestExecutor {
     return this;
   }
 
-  async execute() {
+  async execute(signal?: AbortSignal) {
     const url = createURL(this.config.domain, this.path);
     const headers: Record<string, string> = {
       ...this.authHeaders,
       ...(this.config.contentType ? { 'Content-Type': this.config.contentType } : {}),
     };
     const method = this.config.method.toLowerCase();
-    const axios = _axios.create();
+    const axios = _axios.create({
+      timeout: 30000, // 30秒超时
+      signal, // 支持取消信号
+    });
 
     // Initialize separate containers for query and body parameters.
     const queryParams: Record<string, unknown> = {};
@@ -395,9 +398,9 @@ export class ActionRequest {
     return executor.setAuth(metadata);
   }
 
-  async execute() {
+  async execute(signal?: AbortSignal) {
     const executor = this.createExecutor();
-    return executor.execute();
+    return executor.execute(signal);
   }
 }
 

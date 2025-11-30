@@ -38,6 +38,9 @@ export default function ExportAndShareMenu({
     permission: Permissions.CREATE,
   });
 
+  // 智能体构建器已迁移到全局配置管理，隐藏此按钮
+  const showAgentBuilder = false;
+
   const exportable =
     conversation &&
     conversation.conversationId != null &&
@@ -78,12 +81,13 @@ export default function ExportAndShareMenu({
       ref: exportButtonRef,
       render: (props) => <button {...props} />,
     },
-    {
-      label: '智能体构建器',
-      onClick: agentBuilderHandler,
-      icon: <Blocks className="icon-md mr-2 text-text-secondary" />,
-      show: hasAccessToAgents && hasAccessToCreateAgents,
-    },
+    // 智能体构建器已迁移到全局配置管理，完全隐藏此按钮
+    // {
+    //   label: '智能体构建器',
+    //   onClick: agentBuilderHandler,
+    //   icon: <Blocks className="icon-md mr-2 text-text-secondary" />,
+    //   show: false,
+    // },
   ];
 
   return (

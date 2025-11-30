@@ -45,18 +45,22 @@ const extractMessageContent = (message: TMessage): string => {
   if (Array.isArray(message.content)) {
     return message.content
       .map((part) => {
+        // Skip null or undefined parts
+        if (part == null) {
+          return '';
+        }
         if (typeof part === 'string') {
           return part;
         }
-        if ('text' in part) {
+        if (part && 'text' in part) {
           return part.text || '';
         }
-        if ('think' in part) {
+        if (part && 'think' in part) {
           const think = part.think;
           if (typeof think === 'string') {
             return think;
           }
-          return think && 'text' in think ? think.text || '' : '';
+          return think && typeof think === 'object' && 'text' in think ? think.text || '' : '';
         }
         return '';
       })

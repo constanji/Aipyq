@@ -8,6 +8,7 @@ import { useConversationsInfiniteQuery } from '~/data-provider';
 import { Conversations } from '~/components/Conversations';
 import SearchBar from './SearchBar';
 import NewChat from './NewChat';
+import AgentsList from './AgentsList';
 import { cn } from '~/utils';
 import store from '~/store';
 
@@ -178,6 +179,7 @@ const Nav = memo(
                         toggleNav={toggleNavVisible}
                         isSmallScreen={isSmallScreen}
                       />
+                      <AgentsList toggleNav={itemToggleNav} />
                       <Conversations
                         conversations={conversations}
                         moveToTop={moveToTop}
