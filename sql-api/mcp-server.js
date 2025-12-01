@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
  * HSP SQL 查询 MCP 服务器
- * 使用 Model Context Protocol 协议
+ * 使用 Model Context Protocol 协议 (兼容 SDK 1.23.0)
  */
 
 require('dotenv').config();
-const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
+const { McpServer } = require('@modelcontextprotocol/sdk/server/mcp.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
+const { z } = require('zod');
 const mysql = require('mysql2/promise');
 
 // 数据库配置
@@ -31,93 +32,63 @@ async function initPool() {
 }
 
 // 创建 MCP 服务器
-const server = new Server(
-  {
-    name: 'hsp-sql-server',
-    version: '1.0.0',
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
-
-// 列出可用工具
-server.setRequestHandler('tools/list', async () => {
-  return {
-    tools: [
-      {
-        name: 'sql_query',
-        description: '在 HSP 医院预约挂号系统数据库上执行 SQL SELECT 查询',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            sql: {
-              type: 'string',
-              description: '要执行的 MySQL SELECT 查询语句',
-            },
-          },
-          required: ['sql'],
-        },
-      },
-    ],
-  };
+const server = new McpServer({
+  name: 'hsp-sql-server',
+  version: '1.0.0',
 });
 
-// 处理工具调用
-server.setRequestHandler('tools/call', async (request) => {
-  const { name, arguments: args } = request.params;
-
-  if (name !== 'sql_query') {
-    throw new Error(`Unknown tool: ${name}`);
-  }
-
-  const sql = args.sql;
-
-  if (!sql) {
-    return {
-      content: [{ type: 'text', text: '错误: SQL 查询语句不能为空' }],
-      isError: true,
-    };
-  }
-
-  // 安全检查
-  const trimmedSql = sql.trim().toUpperCase();
-  if (!trimmedSql.startsWith('SELECT')) {
-    return {
-      content: [{ type: 'text', text: '错误: 只允许执行 SELECT 查询' }],
-      isError: true,
-    };
-  }
-
-  const dangerousKeywords = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'ALTER', 'TRUNCATE', 'CREATE'];
-  for (const keyword of dangerousKeywords) {
-    if (trimmedSql.includes(keyword)) {
+// 注册 sql_query 工具
+server.tool(
+  'sql_query',
+  '在 HSP 医院预约挂号系统数据库上执行 SQL SELECT 查询',
+  {
+    sql: z.string().describe('要执行的 MySQL SELECT 查询语句'),
+  },
+  async ({ sql }) => {
+    if (!sql) {
       return {
-        content: [{ type: 'text', text: `错误: 检测到危险关键词 "${keyword}"` }],
+        content: [{ type: 'text', text: '错误: SQL 查询语句不能为空' }],
+        isError: true,
+      };
+    }
+
+    // 安全检查
+    const trimmedSql = sql.trim().toUpperCase();
+    if (!trimmedSql.startsWith('SELECT')) {
+      return {
+        content: [{ type: 'text', text: '错误: 只允许执行 SELECT 查询' }],
+        isError: true,
+      };
+    }
+
+    const dangerousKeywords = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'ALTER', 'TRUNCATE', 'CREATE'];
+    for (const keyword of dangerousKeywords) {
+      if (trimmedSql.includes(keyword)) {
+        return {
+          content: [{ type: 'text', text: `错误: 检测到危险关键词 "${keyword}"` }],
+          isError: true,
+        };
+      }
+    }
+
+    try {
+      const [rows] = await pool.execute(sql);
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({ success: true, result: rows, rowCount: rows.length }, null, 2),
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `SQL 执行错误: ${error.message}` }],
         isError: true,
       };
     }
   }
-
-  try {
-    const [rows] = await pool.execute(sql);
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({ success: true, result: rows, rowCount: rows.length }, null, 2),
-        },
-      ],
-    };
-  } catch (error) {
-    return {
-      content: [{ type: 'text', text: `SQL 执行错误: ${error.message}` }],
-      isError: true,
-    };
-  }
-});
+);
 
 // 启动服务器
 async function main() {
@@ -128,4 +99,3 @@ async function main() {
 }
 
 main().catch(console.error);
-

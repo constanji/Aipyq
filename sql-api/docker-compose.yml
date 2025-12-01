@@ -17,7 +17,14 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=hsp
       - SQL_API_PORT=3001
+    # 加入 AIpyq 的网络，使 Agent 可以通过容器名访问
+    networks:
+      - aipyq_default
     # 或者使用 env_file 方式（需要先修改 .env 中的 DB_HOST）
     # env_file:
     #   - .env.docker
 
+# 使用 AIpyq 的外部网络
+networks:
+  aipyq_default:
+    external: true

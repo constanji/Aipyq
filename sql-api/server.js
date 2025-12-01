@@ -39,7 +39,17 @@ const pool = mysql.createPool({
 
 // SQL 查询端点
 app.post('/sql_query', async (req, res) => {
-  const { sql } = req.body;
+  let { sql, input } = req.body;
+  
+  // 处理嵌套的 input 格式（LibreChat Actions 可能发送这种格式）
+  if (!sql && input) {
+    try {
+      const parsedInput = typeof input === 'string' ? JSON.parse(input) : input;
+      sql = parsedInput.sql;
+    } catch (e) {
+      console.error('解析 input 失败:', e.message);
+    }
+  }
   
   console.log('收到查询请求:', sql);
   
