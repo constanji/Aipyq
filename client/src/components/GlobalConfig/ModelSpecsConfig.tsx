@@ -184,18 +184,42 @@ export default function ModelSpecsConfig({ startupConfig }: ModelSpecsConfigProp
 
         {/* 已配置的端点信息 */}
         {configuredEndpoints.length > 0 && (
-          <div className="mb-4 rounded-lg border border-border-light bg-surface-secondary p-3">
-            <h3 className="mb-2 text-sm font-semibold">已配置的端点</h3>
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-4 rounded-lg border border-border-light bg-surface-secondary p-4">
+            <h3 className="mb-3 text-base font-semibold">已配置的端点</h3>
+            <p className="mb-3 text-xs text-text-secondary">
+              按端点查看当前配置的模型规格，便于快速了解每个端点下可用的模型。
+            </p>
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
               {configuredEndpoints.map(({ endpoint, count, models }) => (
                 <div
                   key={endpoint}
-                  className="rounded bg-surface-primary px-2 py-1 text-xs"
+                  className="flex flex-col rounded-lg border border-border-subtle bg-surface-primary p-3"
                 >
-                  <span className="font-medium">{endpoint}</span>
-                  <span className="text-text-secondary ml-1">
-                    ({count} 个规格{models.length > 0 ? `, ${models.length} 个模型` : ''})
-                  </span>
+                  <div className="mb-2 flex items-baseline justify-between">
+                    <div>
+                      <h4 className="text-sm font-semibold text-text-primary">{endpoint}</h4>
+                      <p className="mt-1 text-[11px] text-text-secondary">
+                        以下是该端点内配置的模型列表
+                        {models.length > 0 ? `（共 ${models.length} 个模型）` : '（暂无模型）'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {models.length > 0 ? (
+                      models.map((model) => (
+                        <span
+                          key={model}
+                          className="rounded-full bg-surface-secondary px-2 py-0.5 text-[11px] text-text-primary"
+                        >
+                          {model}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[11px] text-text-tertiary">
+                        暂无模型名称（仅存在规格配置）
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

@@ -154,6 +154,9 @@ const formatAgentMessages = (payload) => {
     let messageReasoningContent = '';
     if (message.role === 'assistant' && Array.isArray(message.content)) {
       for (const part of message.content) {
+        if (!part) {
+          continue;
+        }
         if (part.type === ContentTypes.THINK && part.think) {
           messageHasReasoning = true;
           const thinkContent = typeof part.think === 'string' ? part.think : (part.think?.value ?? '');
@@ -173,6 +176,9 @@ const formatAgentMessages = (payload) => {
     let hasReasoning = false;
     let currentReasoningContent = '';
     for (const part of message.content) {
+      if (!part) {
+        continue;
+      }
       if (part.type === ContentTypes.TEXT && part.tool_call_ids) {
         /*
         If there's pending content, it needs to be aggregated as a single string to prepare for tool calls.
@@ -180,7 +186,7 @@ const formatAgentMessages = (payload) => {
          */
         if (currentContent.length > 0) {
           let content = currentContent.reduce((acc, curr) => {
-            if (curr.type === ContentTypes.TEXT) {
+            if (curr && curr.type === ContentTypes.TEXT) {
               return `${acc}${curr[ContentTypes.TEXT]}\n`;
             }
             return acc;
@@ -292,7 +298,7 @@ const formatAgentMessages = (payload) => {
     if (hasReasoning) {
       currentContent = currentContent
         .reduce((acc, curr) => {
-          if (curr.type === ContentTypes.TEXT) {
+          if (curr && curr.type === ContentTypes.TEXT) {
             return `${acc}${curr[ContentTypes.TEXT]}\n`;
           }
           return acc;

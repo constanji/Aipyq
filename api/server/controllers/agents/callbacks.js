@@ -335,6 +335,9 @@ function createToolEndCallback({ req, res, artifactPromises }) {
         if (part.type !== 'image_url') {
           continue;
         }
+        if (!part.image_url) {
+          continue;
+        }
         const { url } = part.image_url;
         artifactPromises.push(
           (async () => {

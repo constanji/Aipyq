@@ -11,7 +11,7 @@ import { ToolCallsMapProvider } from '~/Providers';
 import ChatView from '~/components/Chat/ChatView';
 import useAuthRedirect from './useAuthRedirect';
 import temporaryStore from '~/store/temporary';
-import { useRecoilCallback } from 'recoil';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import store from '~/store';
 
 export default function ChatRoute() {
@@ -32,6 +32,7 @@ export default function ChatRoute() {
   useIdChangeEffect(conversationId);
   const { hasSetConversation, conversation } = store.useCreateConversationAtom(index);
   const { newConversation } = useNewConvo();
+  const isSubmitting = useRecoilValue(store.isSubmittingFamily(index));
 
   const modelsQuery = useGetModelsQuery({
     enabled: isAuthenticated,
@@ -71,6 +72,15 @@ export default function ChatRoute() {
       (startupConfig && !hasSetConversation.current && !modelsQuery.data?.initial) ?? false;
     /* Early exit if startupConfig is not loaded and conversation is already set and only initial models have loaded */
     if (!shouldSetConvo) {
+      return;
+    }
+
+    // 如果正在提交消息，不要调用 newConversation，避免中断正在进行的请求
+    if (isSubmitting) {
+      logger.log('conversation', 'Skipping newConversation because message is currently being submitted', {
+        isSubmitting,
+        conversationId,
+      });
       return;
     }
 
@@ -151,8 +161,23 @@ export default function ChatRoute() {
     return null;
   }
   
-  // 恢复原来的逻辑：允许 useEffect 加载对话
-  // if conversationId not match
+  // 对于 NEW_CONVO，即使 conversation 还没完全匹配，也允许渲染
+  // 这样可以避免在发送第一条消息时页面刷新
+  if (conversationId === Constants.NEW_CONVO) {
+    // 如果 conversation 存在（即使 conversationId 不匹配），允许渲染
+    // 这样可以支持在发送第一条消息时的状态过渡
+    if (conversation) {
+      return (
+        <ToolCallsMapProvider conversationId={conversation.conversationId ?? Constants.NEW_CONVO}>
+          <ChatView index={index} />
+        </ToolCallsMapProvider>
+      );
+    }
+    // 如果 conversation 不存在，等待 useEffect 初始化
+    return null;
+  }
+  
+  // 对于非 NEW_CONVO 的对话，保持原有的检查逻辑
   if (conversation?.conversationId !== conversationId && !conversation) {
     return null;
   }
@@ -164,11 +189,11 @@ export default function ChatRoute() {
 
   // 如果 conversation 存在且匹配，正常渲染
   if (conversation && conversation.conversationId === conversationId) {
-  return (
-    <ToolCallsMapProvider conversationId={conversation.conversationId ?? ''}>
-      <ChatView index={index} />
-    </ToolCallsMapProvider>
-  );
+    return (
+      <ToolCallsMapProvider conversationId={conversation.conversationId ?? ''}>
+        <ChatView index={index} />
+      </ToolCallsMapProvider>
+    );
   }
 
   // 默认情况：返回 null（允许 useEffect 处理）

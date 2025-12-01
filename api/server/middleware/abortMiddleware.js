@@ -195,13 +195,14 @@ const createAbortController = (req, res, getAbortData, getReqData) => {
   const onStart = (userMessage, responseMessageId, isNewConvo) => {
     sendEvent(res, { message: userMessage, created: true });
 
-    // For new conversations, use userId to ensure unique abortKey
-    // This prevents conflicts when multiple new conversations are created
+    // For new conversations, use userId + responseMessageId to ensure unique abortKey
+    // This prevents conflicts when multiple new conversation requests are created
+    // Each message in a new conversation gets a unique abortKey based on responseMessageId
     const prelimAbortKey = isNewConvo 
       ? req.user.id 
       : (userMessage?.conversationId ?? req.user.id);
     const abortKey = isNewConvo
-      ? `${prelimAbortKey}${Constants.COMMON_DIVIDER}${Constants.NEW_CONVO}`
+      ? `${prelimAbortKey}${Constants.COMMON_DIVIDER}${Constants.NEW_CONVO}${Constants.COMMON_DIVIDER}${responseMessageId}`
       : prelimAbortKey;
     getReqData({ abortKey });
     const prevRequest = abortControllers.get(abortKey);
@@ -227,8 +228,10 @@ const createAbortController = (req, res, getAbortData, getReqData) => {
       return;
     }
 
-    // If there's a previous request with the same abortKey, cancel it first
-    if (prevRequest && prevRequest?.abortController && !prevRequest.abortController.signal.aborted) {
+    // For new conversations, we don't cancel previous requests with different responseMessageId
+    // because each new conversation message should be independent
+    // Only cancel if it's the exact same abortKey (same message)
+    if (!isNewConvo && prevRequest && prevRequest?.abortController && !prevRequest.abortController.signal.aborted) {
       logger.debug(`[abortMiddleware] Cancelling previous request with abortKey: ${abortKey}`);
       prevRequest.abortController.abort();
       cleanupAbortController(abortKey);

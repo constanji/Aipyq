@@ -48,6 +48,7 @@ const useNewConvo = (index = 0) => {
   const saveBadgesState = useRecoilValue<boolean>(store.saveBadgesState);
   const clearAllLatestMessages = store.useClearLatestMessages(`useNewConvo ${index}`);
   const setSubmission = useSetRecoilState<TSubmission | null>(store.submissionByIndex(index));
+  const [isSubmitting] = useRecoilState(store.isSubmittingFamily(index));
   const { data: endpointsConfig = {} as TEndpointsConfig } = useGetEndpointsQuery();
 
   const modelsQuery = useGetModelsQuery();
@@ -202,7 +203,16 @@ const useNewConvo = (index = 0) => {
         }
         // 清空 submission，但使用 null 而不是空对象，这样 useSSE 可以正确识别
         // 空对象 {} 仍然会被认为是有效的 submission，导致清理函数误判
-        setSubmission(null);
+        // 如果正在提交消息，不清空 submission，避免中断正在进行的请求
+        if (!isSubmitting) {
+          setSubmission(null);
+        } else {
+          logger.log(
+            'conversation',
+            'Skipping submission clear because message is currently being submitted',
+            { isSubmitting },
+          );
+        }
         if (!(keepLatestMessage ?? false)) {
           logger.log('latest_message', 'Clearing all latest messages');
           clearAllLatestMessages();

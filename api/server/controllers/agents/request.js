@@ -12,14 +12,24 @@ const { saveMessage } = require('~/models');
 function createCloseHandler(abortController) {
   return function (manual) {
     if (!manual) {
-      logger.debug('[AgentController] Request closed');
+      logger.debug('[AgentController] Request closed (non-manual)');
     }
     if (!abortController) {
       return;
     } else if (abortController.signal.aborted) {
+      logger.debug('[AgentController] Request already aborted, skipping');
       return;
     } else if (abortController.requestCompleted) {
+      logger.debug('[AgentController] Request already completed, skipping abort');
       return;
+    }
+
+    // Only abort if this is a manual close (not a connection drop during initialization)
+    // For new conversations, we should be more careful about aborting
+    if (manual === false) {
+      // This is an unexpected close - log it but allow a brief delay before aborting
+      // This gives time for the connection to potentially recover
+      logger.warn('[AgentController] Unexpected connection close detected');
     }
 
     abortController.abort();

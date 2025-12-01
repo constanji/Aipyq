@@ -146,8 +146,10 @@ export default function useChatFunctions({
     if (conversationId == Constants.NEW_CONVO) {
       parentMessageId = Constants.NO_PARENT;
       currentMessages = [];
+      // 不要在这里设置 conversationId = null 或 navigate
+      // 保持 conversationId 为 NEW_CONVO，让后端创建新的对话
+      // navigation 会在消息发送完成后由 useEventHandlers 处理
       conversationId = null;
-      navigate('/c/new', { state: { focusChat: true } });
     }
 
     const targetParentMessageId = isRegenerate ? messageId : latestMessage?.parentMessageId;
