@@ -11,6 +11,7 @@ import type {
 import type { MentionOption, ConvoGenerator } from '~/common';
 import { getConvoSwitchLogic, getModelSpecIconURL, removeUnavailableTools, logger } from '~/utils';
 import { useDefaultConvo } from '~/hooks';
+import { useAgentsMapContext } from '~/Providers';
 import store from '~/store';
 
 export default function useSelectMention({
@@ -33,6 +34,7 @@ export default function useSelectMention({
   const getDefaultConversation = useDefaultConvo();
   const modularChat = useRecoilValue(store.modularChat);
   const availableTools = useRecoilValue(store.availableTools);
+  const agentsMap = useAgentsMapContext();
 
   const onSelectSpec = useCallback(
     (spec?: TModelSpec) => {
@@ -153,6 +155,10 @@ export default function useSelectMention({
       const agent_id = kwargs.agent_id ?? '';
       if (agent_id) {
         template.agent_id = agent_id;
+        // 当选择 agent 时，如果没有提供 model，从 agentsMap 获取
+        if (isAgentsEndpoint(newEndpoint) && !model && agentsMap?.[agent_id]?.model) {
+          template.model = agentsMap[agent_id].model;
+        }
       }
 
       template.spec = null;
@@ -189,13 +195,24 @@ export default function useSelectMention({
       }
 
       logger.info('conversation', 'Switching conversation to new endpoint/model', template);
+      // 确保 preset 包含正确的 model（特别是对于 agent）
+      const presetModel = isAgentsEndpoint(newEndpoint) && agent_id && !kwargs.model && agentsMap?.[agent_id]?.model
+        ? agentsMap[agent_id].model
+        : kwargs.model || template.model || '';
       newConversation({
         template: { ...(template as Partial<TConversation>) },
-        preset: { ...kwargs, spec: null, iconURL: null, modelLabel: null, endpoint: newEndpoint },
+        preset: { 
+          ...kwargs, 
+          model: presetModel,
+          spec: null, 
+          iconURL: null, 
+          modelLabel: null, 
+          endpoint: newEndpoint 
+        },
         keepAddedConvos: isNewModular,
       });
     },
-    [conversation, getDefaultConversation, modularChat, newConversation, endpointsConfig],
+    [conversation, getDefaultConversation, modularChat, newConversation, endpointsConfig, agentsMap],
   );
 
   const onSelectPreset = useCallback(
@@ -286,12 +303,15 @@ export default function useSelectMention({
           model: assistantsMap?.[option.type]?.[key]?.model ?? '',
         });
       } else if (isAgentsEndpoint(option.type)) {
+        // 当选择 agent 时，从 agentsMap 获取 model
+        const agentModel = agentsMap?.[key]?.model || '';
         onSelectEndpoint(option.type, {
           agent_id: key,
+          model: agentModel,
         });
       }
     },
-    [modelSpecs, onSelectEndpoint, onSelectPreset, onSelectSpec, presets, assistantsMap],
+    [modelSpecs, onSelectEndpoint, onSelectPreset, onSelectSpec, presets, assistantsMap, agentsMap],
   );
 
   if (returnHandlers) {

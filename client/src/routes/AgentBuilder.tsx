@@ -25,7 +25,7 @@ export default function AgentBuilder() {
         navigate('/global-config?tab=agents', { replace: true });
       } else {
         // 非管理员重定向到主页
-        navigate('/c/new', { replace: true });
+      navigate('/c/new', { replace: true });
       }
     }
   }, [isAuthenticated, isAdmin, navigate]);
@@ -38,6 +38,6 @@ export default function AgentBuilder() {
     );
   }
 
-  return null;
+    return null;
 }
 

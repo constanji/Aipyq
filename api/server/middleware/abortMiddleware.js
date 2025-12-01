@@ -195,13 +195,19 @@ const createAbortController = (req, res, getAbortData, getReqData) => {
   const onStart = (userMessage, responseMessageId, isNewConvo) => {
     sendEvent(res, { message: userMessage, created: true });
 
-    const prelimAbortKey = userMessage?.conversationId ?? req.user.id;
+    // For new conversations, use userId to ensure unique abortKey
+    // This prevents conflicts when multiple new conversations are created
+    const prelimAbortKey = isNewConvo 
+      ? req.user.id 
+      : (userMessage?.conversationId ?? req.user.id);
     const abortKey = isNewConvo
       ? `${prelimAbortKey}${Constants.COMMON_DIVIDER}${Constants.NEW_CONVO}`
       : prelimAbortKey;
     getReqData({ abortKey });
     const prevRequest = abortControllers.get(abortKey);
     const { overrideUserMessageId } = req?.body ?? {};
+    
+    logger.debug(`[abortMiddleware] onStart - isNewConvo: ${isNewConvo}, conversationId: ${userMessage?.conversationId}, abortKey: ${abortKey}, hasPrevRequest: ${!!prevRequest}`);
 
     if (overrideUserMessageId != null && prevRequest && prevRequest?.abortController) {
       const data = prevRequest.abortController.getAbortData();
@@ -219,6 +225,13 @@ const createAbortController = (req, res, getAbortData, getReqData) => {
       const cleanupHandler = createCleanUpHandler(addedAbortKey);
       res.on('finish', cleanupHandler);
       return;
+    }
+
+    // If there's a previous request with the same abortKey, cancel it first
+    if (prevRequest && prevRequest?.abortController && !prevRequest.abortController.signal.aborted) {
+      logger.debug(`[abortMiddleware] Cancelling previous request with abortKey: ${abortKey}`);
+      prevRequest.abortController.abort();
+      cleanupAbortController(abortKey);
     }
 
     // Store minimal options

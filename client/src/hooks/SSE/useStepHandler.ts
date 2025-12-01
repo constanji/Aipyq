@@ -108,14 +108,29 @@ export default function useStepHandler({
     contentPart: Agents.MessageContentComplex,
     finalUpdate = false,
   ) => {
-    const contentType = contentPart.type ?? '';
-    if (!contentType) {
-      console.warn('No content type found in content part');
+    // 验证 contentPart 的有效性
+    if (!contentPart) {
+      logger.warn('step_handler', 'Content part is null or undefined', {
+        messageId: message.messageId,
+        index,
+      });
       return message;
     }
 
-    // 过滤掉 null/undefined 值，确保数组连续
-    const filteredContent = (message.content || []).filter((c) => c != null) as TMessageContentParts[];
+    const contentType = contentPart.type ?? '';
+    if (!contentType) {
+      logger.warn('step_handler', 'No content type found in content part', {
+        messageId: message.messageId,
+        index,
+        contentPart,
+      });
+      return message;
+    }
+
+    // 过滤掉 null/undefined 值，确保数组连续，并且所有元素都有 type 属性
+    const filteredContent = (message.content || []).filter(
+      (c) => c != null && c.type != null,
+    ) as TMessageContentParts[];
     
     // 如果索引超出范围，使用实际的内容长度作为索引，避免创建稀疏数组
     const actualIndex = index >= filteredContent.length ? filteredContent.length : index;
@@ -238,24 +253,37 @@ export default function useStepHandler({
       };
     }
 
-    // 过滤掉所有 null/undefined 值，确保返回的数组是连续的
-    const finalContent = updatedContent.filter((item) => item != null) as TMessageContentParts[];
+    // 过滤掉所有 null/undefined 值，并确保所有元素都有 type 属性
+    const finalContent = updatedContent.filter(
+      (item) => item != null && item !== null && item.type != null,
+    ) as TMessageContentParts[];
     
-    // 检查是否还有 null/undefined 值（理论上不应该有了）
-    const remainingNulls = finalContent
-      .map((item, i) => (item == null || item === null ? i : null))
+    // 检查是否还有 null/undefined 值或缺少 type 属性的元素（理论上不应该有了）
+    const invalidItems = finalContent
+      .map((item, i) => {
+        if (item == null || item === null || !item.type) {
+          return i;
+        }
+        return null;
+      })
       .filter((i) => i !== null);
-    if (remainingNulls.length > 0) {
+    
+    if (invalidItems.length > 0) {
       logger.warn(
         'step_handler',
-        `Found null/undefined values in final content array after filtering.`,
+        `Found invalid items (null/undefined or missing type) in final content array after filtering.`,
         {
           messageId: message.messageId,
-          nullIndices: remainingNulls,
+          invalidIndices: invalidItems,
           contentLength: finalContent.length,
           contentType,
         },
       );
+      // 再次过滤以确保清理所有无效项
+      const cleanedContent = finalContent.filter(
+        (item) => item != null && item !== null && item.type != null,
+      ) as TMessageContentParts[];
+      return { ...message, content: cleanedContent };
     }
 
     return { ...message, content: finalContent };
@@ -313,15 +341,35 @@ export default function useStepHandler({
         // Store tool call IDs if present
         if (runStep.stepDetails.type === StepTypes.TOOL_CALLS) {
           let updatedResponse = { ...response };
-          // Calculate the base index considering existing content
-          // Use the actual content length to ensure tool calls are placed after existing content
-          const existingContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
-          const baseIndex = Math.max(runStep.index + initialContent.length, existingContentLength);
           
           (runStep.stepDetails.tool_calls as Agents.ToolCall[]).forEach((toolCall, toolCallIndex) => {
             const toolCallId = toolCall.id ?? '';
             if ('id' in toolCall && toolCallId) {
               toolCallIdMap.current.set(runStep.id, toolCallId);
+            }
+
+            // 每次循环时重新计算过滤后的内容，检查是否已经存在相同的工具调用
+            const currentFilteredContent = (updatedResponse.content || []).filter(
+              (c) => c != null,
+            ) as TMessageContentParts[];
+            
+            let existingIndex = -1;
+            if (toolCallId) {
+              for (let i = 0; i < currentFilteredContent.length; i++) {
+                const part = currentFilteredContent[i];
+                if (
+                  part?.type === ContentTypes.TOOL_CALL &&
+                  (part[ContentTypes.TOOL_CALL] as Agents.ToolCall)?.id === toolCallId
+                ) {
+                  existingIndex = i;
+                  break;
+                }
+              }
+            }
+
+            // 如果已存在，跳过添加（由delta事件负责更新）
+            if (existingIndex >= 0) {
+              return;
             }
 
             const contentPart: Agents.MessageContentComplex = {
@@ -333,11 +381,8 @@ export default function useStepHandler({
               },
             };
 
-            // 基于当前实际数组长度计算索引，确保连续
-            // 每次更新后，数组长度会变化，所以需要重新计算
-            const currentContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
-            // 使用当前数组长度作为索引，确保工具调用按顺序添加
-            const currentIndex = currentContentLength;
+            // 使用当前内容长度作为索引，添加新的工具调用
+            const currentIndex = currentFilteredContent.length;
             updatedResponse = updateContent(updatedResponse, currentIndex, contentPart);
           });
 
@@ -458,10 +503,6 @@ export default function useStepHandler({
           runStepDelta.delta.tool_calls
         ) {
           let updatedResponse = { ...response };
-          // Calculate the base index considering existing content
-          // Use the actual content length to ensure tool calls are placed after existing content
-          const existingContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
-          const baseIndex = Math.max(runStep.index + initialContent.length, existingContentLength);
 
           runStepDelta.delta.tool_calls.forEach((toolCallDelta, toolCallIndex) => {
             const toolCallId = toolCallIdMap.current.get(runStepDelta.id) ?? '';
@@ -480,11 +521,32 @@ export default function useStepHandler({
               contentPart.tool_call.expires_at = runStepDelta.delta.expires_at;
             }
 
-            // 基于当前实际数组长度计算索引，确保连续
-            // 每次更新后，数组长度会变化，所以需要重新计算
-            const currentContentLength = (updatedResponse.content?.filter(c => c != null).length ?? 0);
-            // 使用当前数组长度作为索引，确保工具调用按顺序添加
-            const currentIndex = currentContentLength;
+            // 查找现有工具调用的位置，避免重复添加
+            const filteredContent = (updatedResponse.content || []).filter(
+              (c) => c != null,
+            ) as TMessageContentParts[];
+            
+            let existingIndex = -1;
+            if (toolCallId) {
+              // 直接遍历content数组，找到匹配的工具调用ID
+              for (let i = 0; i < filteredContent.length; i++) {
+                const part = filteredContent[i];
+                if (
+                  part?.type === ContentTypes.TOOL_CALL &&
+                  (part[ContentTypes.TOOL_CALL] as Agents.ToolCall)?.id === toolCallId
+                ) {
+                  existingIndex = i;
+                  break;
+                }
+              }
+            }
+
+            // 如果找到了现有的工具调用，更新它；否则添加到末尾
+            const currentIndex =
+              existingIndex >= 0
+                ? existingIndex
+                : filteredContent.length;
+
             updatedResponse = updateContent(updatedResponse, currentIndex, contentPart);
           });
 

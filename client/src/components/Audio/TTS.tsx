@@ -89,7 +89,6 @@ export function BrowserTTS({
           height: '0px',
           width: '0px',
         }}
-        src={audioRef.current?.src}
         onError={(error) => {
           logger.error('Error fetching audio:', error);
         }}
@@ -187,7 +186,6 @@ export function ExternalTTS({
           height: '0px',
           width: '0px',
         }}
-        src={audioRef.current?.src}
         onError={(error) => {
           logger.error('Error fetching audio:', error);
         }}

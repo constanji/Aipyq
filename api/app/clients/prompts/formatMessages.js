@@ -140,11 +140,28 @@ const formatFromLangChain = (message) => {
  */
 const formatAgentMessages = (payload) => {
   const messages = [];
+  // Track if any previous message had reasoning content (for DeepSeek compatibility)
+  let hasPreviousReasoning = false;
+  let previousReasoningContent = '';
 
   for (const message of payload) {
     if (typeof message.content === 'string') {
       message.content = [{ type: ContentTypes.TEXT, [ContentTypes.TEXT]: message.content }];
     }
+    
+    // Check if this message has reasoning content before processing
+    let messageHasReasoning = false;
+    let messageReasoningContent = '';
+    if (message.role === 'assistant' && Array.isArray(message.content)) {
+      for (const part of message.content) {
+        if (part.type === ContentTypes.THINK && part.think) {
+          messageHasReasoning = true;
+          const thinkContent = typeof part.think === 'string' ? part.think : (part.think?.value ?? '');
+          messageReasoningContent += (messageReasoningContent ? '\n' : '') + thinkContent;
+        }
+      }
+    }
+    
     if (message.role !== 'assistant') {
       messages.push(formatMessage({ message, langChain: true }));
       continue;
@@ -154,6 +171,7 @@ const formatAgentMessages = (payload) => {
     let lastAIMessage = null;
 
     let hasReasoning = false;
+    let currentReasoningContent = '';
     for (const part of message.content) {
       if (part.type === ContentTypes.TEXT && part.tool_call_ids) {
         /*
@@ -168,16 +186,34 @@ const formatAgentMessages = (payload) => {
             return acc;
           }, '');
           content = `${content}\n${part[ContentTypes.TEXT] ?? ''}`.trim();
-          lastAIMessage = new AIMessage({ content });
+          const aimessageContent = content;
+          const aimessageConfig = { content: aimessageContent };
+          
+          // For DeepSeek: if previous messages had reasoning, add reasoning_content field (even if empty)
+          if (hasPreviousReasoning || hasReasoning || messageHasReasoning) {
+            aimessageConfig.additional_kwargs = {
+              reasoning_content: currentReasoningContent || messageReasoningContent || previousReasoningContent || '',
+            };
+          }
+          
+          lastAIMessage = new AIMessage(aimessageConfig);
           messages.push(lastAIMessage);
           currentContent = [];
           continue;
         }
 
         // Create a new AIMessage with this text and prepare for tool calls
-        lastAIMessage = new AIMessage({
-          content: part.text || '',
-        });
+        const aimessageContent = part.text || '';
+        const aimessageConfig = { content: aimessageContent };
+        
+        // For DeepSeek: if previous messages had reasoning, add reasoning_content field (even if empty)
+        if (hasPreviousReasoning || hasReasoning || messageHasReasoning) {
+          aimessageConfig.additional_kwargs = {
+            reasoning_content: currentReasoningContent || messageReasoningContent || previousReasoningContent || '',
+          };
+        }
+        
+        lastAIMessage = new AIMessage(aimessageConfig);
 
         messages.push(lastAIMessage);
       } else if (part.type === ContentTypes.TOOL_CALL) {
@@ -200,16 +236,51 @@ const formatAgentMessages = (payload) => {
         tool_call.args = args;
         lastAIMessage.tool_calls.push(tool_call);
 
+        // Ensure tool output is always a string for ToolMessage
+        // LangChain ToolMessage expects content to be a string, not an array
+        let toolOutput = output || '';
+        if (Array.isArray(toolOutput)) {
+          // If output is an array (e.g., from formatToolContent for content array providers),
+          // convert it to a string representation
+          toolOutput = toolOutput
+            .map((item) => {
+              if (typeof item === 'string') {
+                return item;
+              }
+              if (item && typeof item === 'object') {
+                if (item.type === 'text' && item.text) {
+                  return item.text;
+                }
+                // For other types, stringify them
+                return JSON.stringify(item);
+              }
+              return String(item);
+            })
+            .filter(Boolean)
+            .join('\n\n');
+        } else if (toolOutput && typeof toolOutput === 'object') {
+          // If output is an object but not an array, stringify it
+          toolOutput = JSON.stringify(toolOutput);
+        } else {
+          // Ensure it's a string
+          toolOutput = String(toolOutput || '');
+        }
+
         // Add the corresponding ToolMessage
         messages.push(
           new ToolMessage({
             tool_call_id: tool_call.id,
             name: tool_call.name,
-            content: output || '',
+            content: toolOutput,
           }),
         );
       } else if (part.type === ContentTypes.THINK) {
         hasReasoning = true;
+        // Extract reasoning content for DeepSeek compatibility
+        if (part.think) {
+          const thinkContent = typeof part.think === 'string' ? part.think : (part.think?.value ?? '');
+          currentReasoningContent += (currentReasoningContent ? '\n' : '') + thinkContent;
+        }
         continue;
       } else if (part.type === ContentTypes.ERROR || part.type === ContentTypes.AGENT_UPDATE) {
         continue;
@@ -230,7 +301,24 @@ const formatAgentMessages = (payload) => {
     }
 
     if (currentContent.length > 0) {
-      messages.push(new AIMessage({ content: currentContent }));
+      const aimessageConfig = { content: currentContent };
+      
+      // For DeepSeek: if previous messages had reasoning, add reasoning_content field (even if empty)
+      if (hasPreviousReasoning || hasReasoning || messageHasReasoning) {
+        aimessageConfig.additional_kwargs = {
+          reasoning_content: currentReasoningContent || messageReasoningContent || previousReasoningContent || '',
+        };
+      }
+      
+      messages.push(new AIMessage(aimessageConfig));
+    }
+    
+    // Update hasPreviousReasoning for next iteration if this message had reasoning
+    if (hasReasoning || messageHasReasoning) {
+      hasPreviousReasoning = true;
+      if (messageReasoningContent || currentReasoningContent) {
+        previousReasoningContent = messageReasoningContent || currentReasoningContent;
+      }
     }
   }
 

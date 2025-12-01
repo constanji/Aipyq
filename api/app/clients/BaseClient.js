@@ -276,7 +276,7 @@ class BaseClient {
     }
 
     if (typeof opts?.onStart === 'function') {
-      const isNewConvo = !requestConvoId && parentMessageId === Constants.NO_PARENT;
+      const isNewConvo = (!requestConvoId || requestConvoId === Constants.NEW_CONVO) && parentMessageId === Constants.NO_PARENT;
       opts.onStart(userMessage, responseMessageId, isNewConvo);
     }
 

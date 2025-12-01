@@ -51,17 +51,19 @@ const useNavigateToConvo = (index = 0) => {
       return;
     }
     try {
+      // 先导航到目标 URL，确保 URL 立即更新
+      navigate(`/c/${conversationId}`, { replace: false, state: { focusChat: true } });
+      
       const data = await queryClient.fetchQuery([QueryKeys.conversation, conversationId], () =>
         dataService.getConversationById(conversationId),
       );
       logger.log('conversation', 'Fetched fresh conversation data', data);
       setConversation(data);
-      navigate(`/c/${conversationId ?? Constants.NEW_CONVO}`, { state: { focusChat: true } });
     } catch (error) {
       console.error('Error fetching conversation data on navigation', error);
       if (conversation) {
         setConversation(conversation as TConversation);
-        navigate(`/c/${conversationId}`, { state: { focusChat: true } });
+        navigate(`/c/${conversationId}`, { replace: false, state: { focusChat: true } });
       }
     }
   };

@@ -8,6 +8,7 @@ import {
   isParamEndpoint,
   LocalStorageKeys,
   isAssistantsEndpoint,
+  isAgentsEndpoint,
 } from 'aipyq-data-provider';
 import { useRecoilState, useRecoilValue, useSetRecoilState, useRecoilCallback } from 'recoil';
 import type {
@@ -31,6 +32,7 @@ import useAssistantListMap from './Assistants/useAssistantListMap';
 import { useResetChatBadges } from './useChatBadges';
 import { useApplyModelSpecEffects } from './Agents';
 import { usePauseGlobalAudio } from './Audio';
+import { useAgentsMapContext } from '~/Providers';
 import { logger } from '~/utils';
 import store from '~/store';
 
@@ -50,6 +52,7 @@ const useNewConvo = (index = 0) => {
 
   const modelsQuery = useGetModelsQuery();
   const assistantsListMap = useAssistantListMap();
+  const agentsMap = useAgentsMapContext();
   const { pauseGlobalAudio } = usePauseGlobalAudio(index);
   const saveDrafts = useRecoilValue<boolean>(store.saveDrafts);
   const resetBadges = useResetChatBadges();
@@ -114,8 +117,10 @@ const useNewConvo = (index = 0) => {
           }
 
           const isAssistantEndpoint = isAssistantsEndpoint(defaultEndpoint);
+          const isAgentEndpoint = isAgentsEndpoint(defaultEndpoint);
           const assistants: AssistantListItem[] = assistantsListMap[defaultEndpoint] ?? [];
           const currentAssistantId = conversation.assistant_id ?? '';
+          const currentAgentId = conversation.agent_id ?? '';
           const currentAssistant = assistantsListMap[defaultEndpoint]?.[currentAssistantId] as
             | AssistantListItem
             | undefined;
@@ -146,6 +151,22 @@ const useNewConvo = (index = 0) => {
 
           if (currentAssistantId && !isAssistantEndpoint) {
             conversation.assistant_id = undefined;
+          }
+
+          // 处理 agent 的 model 设置
+          if (
+            currentAgentId &&
+            isAgentEndpoint &&
+            conversation.conversationId === Constants.NEW_CONVO
+          ) {
+            const agent = agentsMap?.[currentAgentId];
+            if (agent?.model) {
+              conversation.model = agent.model;
+              updateLastSelectedModel({
+                endpoint: defaultEndpoint,
+                model: conversation.model,
+              });
+            }
           }
 
           const models = modelsConfig?.[defaultEndpoint] ?? [];
@@ -179,7 +200,9 @@ const useNewConvo = (index = 0) => {
           logger.log('conversation', 'Setting conversation from `useNewConvo`', conversation);
           setConversation(conversation);
         }
-        setSubmission({} as TSubmission);
+        // 清空 submission，但使用 null 而不是空对象，这样 useSSE 可以正确识别
+        // 空对象 {} 仍然会被认为是有效的 submission，导致清理函数误判
+        setSubmission(null);
         if (!(keepLatestMessage ?? false)) {
           logger.log('latest_message', 'Clearing all latest messages');
           clearAllLatestMessages();

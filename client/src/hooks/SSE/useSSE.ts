@@ -92,10 +92,24 @@ export default function useSSE(
   });
 
   useEffect(() => {
+    // 如果 submission 是 null 或空对象，直接返回，不创建 SSE 连接
     if (submission == null || Object.keys(submission).length === 0) {
       return;
     }
 
+    // Store the submission reference to check in cleanup
+    // 确保 submission 有有效的 initialResponse.messageId
+    if (!submission.initialResponse?.messageId) {
+      logger.log('sse', 'Submission missing initialResponse.messageId, skipping SSE connection');
+      return;
+    }
+
+    // 使用 useRef 来跟踪 SSE 连接是否已经建立
+    // 这样可以避免在连接刚建立时就被清理函数取消
+    let sseConnectionEstablished = false;
+    let sseConnectionClosed = false;
+
+    const currentSubmission = submission;
     let { userMessage } = submission;
 
     const payloadData = createPayload(submission);
@@ -170,6 +184,7 @@ export default function useSSE(
     });
 
     sse.addEventListener('open', () => {
+      sseConnectionEstablished = true;
       setAbortScroll(false);
       console.log('connection is opened');
     });
@@ -241,20 +256,55 @@ export default function useSSE(
     sse.stream();
 
     return () => {
+      // 如果连接已经关闭，直接返回，不执行任何操作
+      if (sseConnectionClosed) {
+        return;
+      }
+
       // Only cancel if the connection is still in progress (CONNECTING or OPEN)
       // Don't cancel if it's already CLOSED or CLOSING
       const isCancelled = sse.readyState <= 1; // 0 = CONNECTING, 1 = OPEN
+      
+      // Check if this cleanup is happening because submission was cleared (empty object or null)
+      // This happens when switching conversations via newConversation() which calls setSubmission(null)
+      // In this case, we should NOT trigger cancel event as it's not a user-initiated cancellation
+      const isSubmissionCleared = currentSubmission == null || 
+        Object.keys(currentSubmission).length === 0 ||
+        !currentSubmission.initialResponse?.messageId;
+      
+      // 如果连接还没有建立（还在 CONNECTING 状态），并且 submission 被清空，
+      // 这可能是由于组件重新渲染或对话切换导致的，不应该取消请求
+      // 只有在连接已经建立后，才考虑取消
+      const shouldCancel = isCancelled && 
+        !isSubmissionCleared && 
+        sseConnectionEstablished;
+      
+      sseConnectionClosed = true;
       sse.close();
-      // Only trigger cancel event if connection was still active
-      // This prevents accidental cancellation when component re-renders due to unrelated state changes
-      if (isCancelled && submission != null) {
-        logger.log('sse_cleanup', 'SSE connection cancelled during cleanup', {
+      
+      // Only trigger cancel event if:
+      // 1. Connection was still active (CONNECTING or OPEN)
+      // 2. Current submission exists and has valid data (not empty, has messageId)
+      // 3. Submission was NOT cleared (this is a real cancellation, not a conversation switch)
+      // 4. Connection was already established (not cancelled during initial connection)
+      // This prevents accidental cancellation when switching conversations or clearing submission
+      if (shouldCancel) {
+        logger.log('sse_cleanup', 'SSE connection cancelled during cleanup (user cancellation)', {
           readyState: sse.readyState,
-          messageId: submission.initialResponse?.messageId,
+          messageId: currentSubmission.initialResponse?.messageId,
+          connectionEstablished: sseConnectionEstablished,
         });
         const e = new Event('cancel');
         /* @ts-ignore */
         sse.dispatchEvent(e);
+      } else {
+        logger.log('sse_cleanup', 'SSE connection closed without cancel event', {
+          readyState: sse.readyState,
+          isCancelled,
+          isSubmissionCleared,
+          hasMessageId: !!currentSubmission?.initialResponse?.messageId,
+          connectionEstablished: sseConnectionEstablished,
+        });
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

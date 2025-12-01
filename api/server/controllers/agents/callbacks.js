@@ -14,7 +14,7 @@ const {
 const { processFileCitations } = require('~/server/services/Files/Citations');
 const { processCodeOutput } = require('~/server/services/Files/Code/process');
 const { loadAuthValues } = require('~/server/services/Tools/credentials');
-const { saveBase64Image } = require('~/server/services/Files/process');
+const { saveBase64Image, processFileURL } = require('~/server/services/Files/process');
 
 class ModelEndHandler {
   /**
@@ -340,13 +340,40 @@ function createToolEndCallback({ req, res, artifactPromises }) {
           (async () => {
             const filename = `${output.name}_${output.tool_call_id}_img_${nanoid()}`;
             const file_id = output.artifact.file_ids?.[i];
-            const file = await saveBase64Image(url, {
-              req,
-              file_id,
-              filename,
-              endpoint: metadata.provider,
-              context: FileContext.image_generation,
-            });
+            
+            // 检查URL是否是HTTP/HTTPS URL，还是base64数据URL
+            const isHttpUrl = url && (url.startsWith('http://') || url.startsWith('https://'));
+            let file;
+            
+            if (isHttpUrl) {
+              // 对于HTTP URL，使用processFileURL处理
+              try {
+                file = await processFileURL({
+                  fileStrategy: req.config.fileStrategy,
+                  userId: req.user.id,
+                  URL: url,
+                  fileName: filename,
+                  basePath: 'images',
+                  context: FileContext.image_generation,
+                });
+                if (file_id) {
+                  file.file_id = file_id;
+                }
+              } catch (error) {
+                logger.error('Error processing HTTP image URL:', error);
+                return null;
+              }
+            } else {
+              // 对于base64数据URL，使用saveBase64Image处理
+              file = await saveBase64Image(url, {
+                req,
+                file_id,
+                filename,
+                endpoint: metadata.provider,
+                context: FileContext.image_generation,
+              });
+            }
+            
             const fileMetadata = Object.assign(file, {
               messageId: metadata.run_id,
               toolCallId: output.tool_call_id,

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useMediaQuery } from '@aipyq/client';
 import { useOutletContext } from 'react-router-dom';
-import { getConfigDefaults, PermissionTypes, Permissions, SystemRoles } from 'aipyq-data-provider';
+import { getConfigDefaults, PermissionTypes, Permissions, SystemRoles, isAgentsEndpoint } from 'aipyq-data-provider';
 import type { ContextType } from '~/common';
 import ModelSelector from './Menus/Endpoints/ModelSelector';
 import { PresetsMenu, HeaderNewChat, OpenSidebar } from './Menus';
@@ -9,6 +9,7 @@ import { useGetStartupConfig } from '~/data-provider';
 import ExportAndShareMenu from './ExportAndShareMenu';
 import AddMultiConvo from './AddMultiConvo';
 import { useHasAccess, useAuthContext } from '~/hooks';
+import { useAgentsMapContext } from '~/Providers';
 import { useRecoilValue } from 'recoil';
 import store from '~/store';
 
@@ -31,6 +32,7 @@ export default function Header() {
   });
 
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const agentsMap = useAgentsMapContext();
   
   // 只有管理员才能看到模型选择器
   const isAdmin = user?.role === SystemRoles.ADMIN;
@@ -38,8 +40,30 @@ export default function Header() {
   // 普通用户：如果有智能体，显示当前智能体使用的模型名称
   const currentModel = useMemo(() => {
     if (isAdmin) return null; // 管理员显示完整选择器
-    return conversation?.model || null;
-  }, [conversation?.model, isAdmin]);
+    
+    // 如果是 agents endpoint 且有 agent_id，显示模型名称
+    if (isAgentsEndpoint(conversation?.endpoint) && conversation?.agent_id) {
+      const model = conversation?.model;
+      // 如果 model 存在且不是 agent_id（避免显示 agent_rTvvZodObHCWBx_9lyi1n 这种ID）
+      if (model && !model.startsWith('agent_')) {
+        return model;
+      }
+      // 如果 model 不存在或者是 agent_id，从 agentsMap 中获取 agent 的 model
+      const agent = agentsMap?.[conversation.agent_id];
+      if (agent?.model) {
+        return agent.model;
+      }
+      // 如果 agent 存在但没有 model，显示"当前没有选择Agent"
+      return null;
+    }
+    
+    // 非 agents endpoint，显示模型名称（如果不是 agent_id）
+    const model = conversation?.model;
+    if (model && !model.startsWith('agent_')) {
+      return model;
+    }
+    return null;
+  }, [conversation?.model, conversation?.agent_id, conversation?.endpoint, isAdmin, agentsMap]);
 
   return (
     <div className="sticky top-0 z-10 flex h-14 w-full items-center justify-between bg-white p-2 font-semibold text-text-primary dark:bg-gray-800">
@@ -65,14 +89,16 @@ export default function Header() {
             {/* 管理员：显示完整模型选择器 */}
             {isAdmin && (
               <>
-                <ModelSelector startupConfig={startupConfig} />
-                {interfaceConfig.presets === true && interfaceConfig.modelSelect && <PresetsMenu />}
+            <ModelSelector startupConfig={startupConfig} />
+            {interfaceConfig.presets === true && interfaceConfig.modelSelect && <PresetsMenu />}
               </>
             )}
-            {/* 普通用户：显示当前模型名称或提示 */}
+            {/* 普通用户：显示当前模型名称或提示（类似端点选择器的样式） */}
             {!isAdmin && (
-              <div className="px-3 py-1 text-sm text-text-secondary">
-                {currentModel || '当前没有选择Agent'}
+              <div className="my-1 flex h-10 w-full max-w-[70vw] items-center justify-center gap-2 rounded-xl border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary">
+                <span className="flex-grow truncate text-left">
+                  {currentModel || '当前没有选择Agent'}
+                </span>
               </div>
             )}
             {hasAccessToMultiConvo === true && <AddMultiConvo />}

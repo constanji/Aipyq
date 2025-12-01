@@ -34,6 +34,11 @@ const Part = memo(
       return null;
     }
 
+    // 添加类型检查，防止读取空属性
+    if (!part.type) {
+      return null;
+    }
+
     if (part.type === ContentTypes.ERROR) {
       return (
         <ErrorMessage

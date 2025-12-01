@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { QueryKeys } from 'aipyq-data-provider';
+import { QueryKeys, Constants } from 'aipyq-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import type { TMessage } from 'aipyq-data-provider';
@@ -28,7 +28,7 @@ export default function useChatHelpers(index = 0, paramId?: string) {
   /* Messages: here simply to fetch, don't export and use `getMessages()` instead */
 
   const { data: _messages } = useGetMessagesByConvoId(conversationId ?? '', {
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && conversationId !== Constants.NEW_CONVO && !!conversationId,
   });
 
   const resetLatestMessage = useResetRecoilState(store.latestMessageFamily(index));

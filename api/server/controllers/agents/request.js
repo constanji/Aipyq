@@ -51,7 +51,7 @@ const AgentController = async (req, res, next, initializeClient, addTitle) => {
   let client = null;
   let cleanupHandlers = [];
 
-  const newConvo = !conversationId;
+  const newConvo = !conversationId || conversationId === Constants.NEW_CONVO;
   const userId = req.user.id;
 
   // Create handler to avoid capturing the entire parent scope

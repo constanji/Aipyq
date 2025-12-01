@@ -360,11 +360,30 @@ function createToolInstance({ res, toolName, serverName, toolDefinition, provide
       const customUserVars =
         config?.configurable?.userMCPAuthMap?.[`${Constants.mcp_prefix}${serverName}`];
 
+      // 解析 toolArguments：如果是字符串，尝试解析为 JSON 对象
+      // 这样可以避免工具参数被逐字发送的问题
+      let parsedToolArguments = toolArguments;
+      if (typeof toolArguments === 'string') {
+        try {
+          parsedToolArguments = JSON.parse(toolArguments);
+        } catch (e) {
+          // 如果解析失败，检查是否是单个描述字符串
+          // 对于某些工具（如 text-to-image），可能需要将字符串包装为对象
+          if (toolName.includes('text_to_image') || toolName.includes('text-to-image')) {
+            // 对于图像生成工具，将字符串作为 description 参数
+            parsedToolArguments = { description: toolArguments };
+          } else {
+            // 对于其他工具，使用默认的 input 字段
+            parsedToolArguments = { input: toolArguments };
+          }
+        }
+      }
+
       const result = await mcpManager.callTool({
         serverName,
         toolName,
         provider,
-        toolArguments,
+        toolArguments: parsedToolArguments,
         options: {
           signal: derivedSignal,
         },
@@ -381,27 +400,45 @@ function createToolInstance({ res, toolName, serverName, toolDefinition, provide
         oauthEnd,
       });
 
-      // formatToolContent 返回 [formattedContent, artifacts]
-      // 对于 CONTENT_AND_ARTIFACT 格式，需要返回 { content, artifact } 对象
+      // formatToolContent 总是返回 [formattedContent, artifacts] 两元素元组
+      // 对于 CONTENT_AND_ARTIFACT 格式，LangChain 期望的是两元素元组 [content, artifact]
+      // 而不是 { content, artifact } 对象
       if (Array.isArray(result) && result.length === 2) {
-        const [content, artifacts] = result;
-        
-        // 始终返回 { content, artifact } 格式，即使 artifact 是 undefined
-        // 这样 LangChain 可以正确处理，artifact 为 undefined 时表示没有附件
-        return {
-          content: content,
-          artifact: artifacts,
-        };
+        // 直接返回两元素元组，这是 LangChain 期望的格式
+        return result;
       }
       
-      // 兼容旧格式
+      // 如果 result 不是预期的格式，确保返回有效的两元素元组
+      // formatToolContent 应该总是返回两元素数组，但如果出现意外情况，提供默认值
+      if (!Array.isArray(result)) {
+        logger.warn(
+          `[MCP][${serverName}][${toolName}] Unexpected result format, expected array, got:`,
+          typeof result,
+        );
+        // 返回默认的两元素元组格式
+        return [String(result ?? '(No response)'), undefined];
+      }
+      
+      // 如果数组长度不是2，调整为两元素元组
+      if (result.length !== 2) {
+        logger.warn(
+          `[MCP][${serverName}][${toolName}] Unexpected result array length ${result.length}, expected 2`,
+        );
+        // 取第一个元素作为content，第二个元素（或undefined）作为artifact
+        return [result[0] ?? '(No response)', result[1]];
+      }
+      
+      // 兼容旧格式 - 对于特定的端点，可能需要不同的处理
       if (isAssistantsEndpoint(provider) && Array.isArray(result)) {
-        return result[0];
+        // 对于 Assistants 端点，仍然返回两元素元组格式
+        return result;
       }
       if (isGoogle && Array.isArray(result[0]) && result[0][0]?.type === ContentTypes.TEXT) {
         return [result[0][0].text, result[1]];
       }
-      return result;
+      
+      // 默认情况：确保返回两元素元组
+      return Array.isArray(result) && result.length === 2 ? result : [result, undefined];
     } catch (error) {
       logger.error(
         `[MCP][${serverName}][${toolName}][User: ${userId}] Error calling MCP tool:`,

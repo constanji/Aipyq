@@ -58,6 +58,15 @@ export default function ChatRoute() {
    *  Adjusting this may have unintended consequences on the conversation state.
    */
   useEffect(() => {
+    // 当 conversationId 改变时，重置 hasSetConversation 以允许加载新对话或历史对话
+    // 这确保每次切换对话时都能正确加载
+    // 但需要避免在同一个 conversationId 下重复重置
+    if (conversationId && conversation?.conversationId !== conversationId) {
+      // 只有在 conversationId 真正改变时才重置
+      // 这样可以避免在对话加载过程中重复重置
+      hasSetConversation.current = false;
+    }
+    
     const shouldSetConvo =
       (startupConfig && !hasSetConversation.current && !modelsQuery.data?.initial) ?? false;
     /* Early exit if startupConfig is not loaded and conversation is already set and only initial models have loaded */
@@ -121,6 +130,8 @@ export default function ChatRoute() {
     endpointsQuery.data,
     modelsQuery.data,
     assistantListMap,
+    conversationId,
+    conversation?.conversationId,
   ]);
 
   if (endpointsQuery.isLoading || modelsQuery.isLoading) {
@@ -139,18 +150,27 @@ export default function ChatRoute() {
   if (conversation?.conversationId === Constants.SEARCH) {
     return null;
   }
+  
+  // 恢复原来的逻辑：允许 useEffect 加载对话
   // if conversationId not match
   if (conversation?.conversationId !== conversationId && !conversation) {
     return null;
   }
+  
   // if conversationId is null
   if (!conversationId) {
     return null;
   }
 
+  // 如果 conversation 存在且匹配，正常渲染
+  if (conversation && conversation.conversationId === conversationId) {
   return (
     <ToolCallsMapProvider conversationId={conversation.conversationId ?? ''}>
       <ChatView index={index} />
     </ToolCallsMapProvider>
   );
+  }
+
+  // 默认情况：返回 null（允许 useEffect 处理）
+  return null;
 }

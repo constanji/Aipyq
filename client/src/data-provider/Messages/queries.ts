@@ -35,7 +35,7 @@ export const useGetMessagesByConvoId = <TData = t.TMessage[]>(
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      refetchOnMount: false,
+      refetchOnMount: 'always', // 改为 always，确保切换对话时能重新加载消息
       ...config,
     },
   );

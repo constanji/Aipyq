@@ -45,7 +45,7 @@ function ChatView({ index = 0 }: { index?: number }) {
       },
       [fileMap],
     ),
-    enabled: !!fileMap,
+    enabled: !!fileMap && conversationId !== Constants.NEW_CONVO && !!conversationId,
   });
 
   const chatHelpers = useChatHelpers(index, conversationId);
