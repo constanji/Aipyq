@@ -179,5 +179,12 @@
         "description": "Provide your Flux API key from your user profile."
       }
     ]
+  },
+  {
+    "name": "Speckit",
+    "pluginKey": "speckit",
+    "description": "Spec-Driven Development toolkit for creating specifications, plans, and tasks. Commands: specify, plan, tasks, implement, clarify, analyze, checklist, constitution.",
+    "icon": "https://github.com/github/spec-kit/raw/main/media/logo_small.webp",
+    "authConfig": []
   }
 ]
