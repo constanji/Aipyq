@@ -87,12 +87,17 @@ const createErrorMessage = ({
   let isValidContentPart = false;
   if (latestContent.length > 0) {
     const latestContentPart = latestContent[latestContent.length - 1];
-    const latestPartValue = latestContentPart?.[latestContentPart.type ?? ''];
-    isValidContentPart =
-      latestContentPart.type !== ContentTypes.TEXT ||
-      (latestContentPart.type === ContentTypes.TEXT && typeof latestPartValue === 'string')
-        ? true
-        : latestPartValue?.value !== '';
+    // 验证 latestContentPart 不为 null 且有 type 属性
+    if (!latestContentPart || !latestContentPart.type) {
+      isValidContentPart = false;
+    } else {
+      const latestPartValue = latestContentPart?.[latestContentPart.type ?? ''];
+      isValidContentPart =
+        latestContentPart.type !== ContentTypes.TEXT ||
+        (latestContentPart.type === ContentTypes.TEXT && typeof latestPartValue === 'string')
+          ? true
+          : latestPartValue?.value !== '';
+    }
   }
   if (
     latestMessage?.conversationId &&
@@ -772,15 +777,42 @@ export default function useEventHandlers({
         // Check if the response is JSON
         const contentType = response.headers.get('content-type');
         if (contentType != null && contentType.includes('application/json')) {
-          const data = await response.json();
+          let data: any;
+          try {
+            const text = await response.text();
+            // 处理空响应或null
+            if (!text || text.trim() === '') {
+              logger.warn('event_handlers', 'Empty JSON response in abort', { response });
+              setIsSubmitting(false);
+              return;
+            }
+            data = JSON.parse(text);
+            // 处理 JSON.parse('null')
+            if (data === null) {
+              logger.warn('event_handlers', 'Null JSON response in abort', { response });
+              setIsSubmitting(false);
+              return;
+            }
+          } catch (parseError) {
+            logger.error('event_handlers', 'Failed to parse JSON response in abort', {
+              error: parseError,
+              response,
+            });
+            setIsSubmitting(false);
+            return;
+          }
+
           if (response.status === 404) {
             setIsSubmitting(false);
             return;
           }
-          if (data.final === true) {
+          if (data && typeof data === 'object' && data.final === true) {
             finalHandler(data, submission);
-          } else {
+          } else if (data && typeof data === 'object') {
             cancelHandler(data, submission);
+          } else {
+            logger.warn('event_handlers', 'Invalid data format in abort response', { data });
+            setIsSubmitting(false);
           }
         } else if (response.status === 204 || response.status === 200) {
           setIsSubmitting(false);

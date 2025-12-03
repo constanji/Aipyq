@@ -59,14 +59,14 @@ const ContentParts = memo(
       return (
         <>
           {content.map((part, idx) => {
-            if (!part) {
+            if (!part || !part.type) {
               return null;
             }
             const isTextPart =
-              part?.type === ContentTypes.TEXT ||
+              part.type === ContentTypes.TEXT ||
               typeof (part as unknown as Agents.MessageContentText)?.text !== 'string';
             const isThinkPart =
-              part?.type === ContentTypes.THINK ||
+              part.type === ContentTypes.THINK ||
               typeof (part as unknown as Agents.ReasoningDeltaUpdate)?.think !== 'string';
             if (!isTextPart && !isThinkPart) {
               return null;
@@ -101,7 +101,7 @@ const ContentParts = memo(
           <MemoryArtifacts attachments={attachments} />
           <Sources messageId={messageId} conversationId={conversationId || undefined} />
           {content.map((part, idx) => {
-            if (!part) {
+            if (!part || !part.type) {
               return null;
             }
 
@@ -117,7 +117,7 @@ const ContentParts = memo(
                   isExpanded: true,
                   conversationId,
                   partIndex: idx,
-                  nextType: content[idx + 1]?.type,
+                  nextType: content[idx + 1]?.type ?? undefined,
                   isSubmitting: effectiveIsSubmitting,
                   isLatestMessage,
                 }}

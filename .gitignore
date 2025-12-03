@@ -46,7 +46,7 @@ client/public/images/
 client/public/main.js
 client/public/main.js.map
 client/public/main.js.LICENSE.txt
-
+specs/
 # Azure Blob Storage Emulator (Azurite)
 __azurite**
 __blobstorage__/**/*

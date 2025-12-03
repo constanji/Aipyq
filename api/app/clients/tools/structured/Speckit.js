@@ -88,7 +88,9 @@ class Speckit extends Tool {
    */
   async executeScript(scriptName, args = [], jsonMode = true) {
     const repoRoot = await this.findRepoRoot();
-    const scriptPath = path.join(repoRoot, this.scriptsDir, scriptName);
+    // Recalculate scriptsDir based on repoRoot to avoid path duplication
+    const scriptsDir = path.join(repoRoot, '.specify', 'scripts', 'bash');
+    const scriptPath = path.join(scriptsDir, scriptName);
 
     try {
       await fs.access(scriptPath);
@@ -141,7 +143,7 @@ class Speckit extends Tool {
    */
   async loadTemplate(templateName) {
     const repoRoot = await this.findRepoRoot();
-    const templatePath = path.join(repoRoot, this.specifyDir, 'templates', templateName);
+    const templatePath = path.join(repoRoot, '.specify', 'templates', templateName);
 
     try {
       return await fs.readFile(templatePath, 'utf-8');
@@ -155,7 +157,7 @@ class Speckit extends Tool {
    */
   async loadCommandTemplate(commandName) {
     const repoRoot = await this.findRepoRoot();
-    const templatePath = path.join(repoRoot, this.specifyDir, 'templates', 'commands', `${commandName}.md`);
+    const templatePath = path.join(repoRoot, '.specify', 'templates', 'commands', `${commandName}.md`);
 
     try {
       return await fs.readFile(templatePath, 'utf-8');

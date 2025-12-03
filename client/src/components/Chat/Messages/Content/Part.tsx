@@ -18,6 +18,7 @@ import WebSearch from './WebSearch';
 import ToolCall from './ToolCall';
 import ImageGen from './ImageGen';
 import Image from './Image';
+import logger from '~/utils/logger';
 
 type PartProps = {
   part?: TMessageContentParts;
@@ -90,12 +91,16 @@ const Part = memo(
     } else if (part.type === ContentTypes.TOOL_CALL) {
       const toolCall = part[ContentTypes.TOOL_CALL];
 
-      if (!toolCall) {
+      // 验证 toolCall 不为 null 且是有效对象
+      if (!toolCall || typeof toolCall !== 'object') {
+        logger.warn('Part', 'Invalid or null toolCall in TOOL_CALL part', { part, toolCall });
         return null;
       }
 
+      // 验证 toolCall.type 不为 null（多次工具调用时可能为 null）
+      const toolCallType = toolCall.type;
       const isToolCall =
-        'args' in toolCall && (!toolCall.type || toolCall.type === ToolCallTypes.TOOL_CALL);
+        'args' in toolCall && (!toolCallType || toolCallType === ToolCallTypes.TOOL_CALL);
       if (isToolCall && toolCall.name === Tools.execute_code) {
         return (
           <ExecuteCode
@@ -151,8 +156,12 @@ const Part = memo(
             expires_at={toolCall.expires_at}
           />
         );
-      } else if (toolCall.type === ToolCallTypes.CODE_INTERPRETER) {
+      } else if (toolCallType === ToolCallTypes.CODE_INTERPRETER) {
         const code_interpreter = toolCall[ToolCallTypes.CODE_INTERPRETER];
+        if (!code_interpreter || typeof code_interpreter !== 'object') {
+          logger.warn('Part', 'Invalid code_interpreter in toolCall', { toolCall });
+          return null;
+        }
         return (
           <CodeAnalyze
             initialProgress={toolCall.progress ?? 0.1}
@@ -161,16 +170,16 @@ const Part = memo(
           />
         );
       } else if (
-        toolCall.type === ToolCallTypes.RETRIEVAL ||
-        toolCall.type === ToolCallTypes.FILE_SEARCH
+        toolCallType === ToolCallTypes.RETRIEVAL ||
+        toolCallType === ToolCallTypes.FILE_SEARCH
       ) {
         return (
           <RetrievalCall initialProgress={toolCall.progress ?? 0.1} isSubmitting={isSubmitting} />
         );
       } else if (
-        toolCall.type === ToolCallTypes.FUNCTION &&
+        toolCallType === ToolCallTypes.FUNCTION &&
         ToolCallTypes.FUNCTION in toolCall &&
-        imageGenTools.has(toolCall.function.name)
+        imageGenTools.has(toolCall.function?.name)
       ) {
         return (
           <ImageGen
@@ -178,7 +187,7 @@ const Part = memo(
             args={toolCall.function.arguments as string}
           />
         );
-      } else if (toolCall.type === ToolCallTypes.FUNCTION && ToolCallTypes.FUNCTION in toolCall) {
+      } else if (toolCallType === ToolCallTypes.FUNCTION && ToolCallTypes.FUNCTION in toolCall) {
         if (isImageVisionTool(toolCall)) {
           if (isSubmitting && showCursor) {
             return (

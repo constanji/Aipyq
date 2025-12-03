@@ -146,7 +146,19 @@ class AgentClient extends BaseClient {
    * Returns the aggregated content parts for the current run.
    * @returns {MessageContentComplex[]} */
   getContentParts() {
-    return this.contentParts;
+    // 返回前确保过滤掉所有无效的 parts，防止前端访问 null.type
+    if (!Array.isArray(this.contentParts)) {
+      return [];
+    }
+    return this.contentParts.filter((part) => {
+      if (!part || typeof part !== 'object' || part === null) {
+        return false;
+      }
+      if (!('type' in part) || part.type == null) {
+        return false;
+      }
+      return true;
+    });
   }
 
   setOptions(options) {
@@ -276,8 +288,14 @@ class AgentClient extends BaseClient {
         if (typeof formattedMessage.content === 'string') {
           formattedMessage.content = message.fileContext + '\n' + formattedMessage.content;
         } else if (Array.isArray(formattedMessage.content)) {
+          // 严格验证 part 的有效性，防止访问 null.type
           const textPart = formattedMessage.content.find(
-            (part) => part && typeof part === 'object' && part.type === 'text',
+            (part) =>
+              part &&
+              typeof part === 'object' &&
+              part !== null &&
+              'type' in part &&
+              part.type === 'text',
           );
           textPart
             ? (textPart.text = message.fileContext + '\n' + textPart.text)
@@ -285,6 +303,23 @@ class AgentClient extends BaseClient {
         }
       } else if (message.fileContext && i === orderedMessages.length - 1) {
         systemContent = [systemContent, message.fileContext].join('\n');
+      }
+
+      // 验证并清理 formattedMessage.content，确保所有 parts 都有有效的 type
+      if (Array.isArray(formattedMessage.content)) {
+        formattedMessage.content = formattedMessage.content.filter((part) => {
+          if (!part || typeof part !== 'object' || part === null) {
+            return false;
+          }
+          if (!('type' in part) || part.type == null) {
+            logger.warn(
+              '[api/server/controllers/agents/client.js #buildMessages] Content part missing type field',
+              { part, messageId: message.messageId },
+            );
+            return false;
+          }
+          return true;
+        });
       }
 
       const needsTokenCount =
@@ -543,14 +578,22 @@ class AgentClient extends BaseClient {
     }
 
     if (Array.isArray(message.content)) {
-      const filteredContent = message.content.filter(
-        (part) => part && typeof part === 'object' && part.type !== ContentTypes.IMAGE_URL,
-      );
+      // 严格验证 part 的有效性，防止访问 null.type
+      const filteredContent = message.content.filter((part) => {
+        if (!part || typeof part !== 'object' || part === null) {
+          return false;
+        }
+        if (!('type' in part) || part.type == null) {
+          return false;
+        }
+        return part.type !== ContentTypes.IMAGE_URL;
+      });
 
       if (
         filteredContent.length === 1 &&
         filteredContent[0] &&
         typeof filteredContent[0] === 'object' &&
+        'type' in filteredContent[0] &&
         filteredContent[0].type === ContentTypes.TEXT
       ) {
         const MessageClass = message.constructor;
@@ -889,11 +932,29 @@ class AgentClient extends BaseClient {
       };
 
       await runAgents(initialMessages);
+      
+      // 过滤掉所有 null/undefined 或无效的 content parts，防止访问 null.type 错误
+      this.contentParts = (this.contentParts || []).filter((part) => {
+        // 严格验证 part 的有效性
+        if (!part || typeof part !== 'object' || part === null) {
+          return false;
+        }
+        // 确保 part 有 type 属性且不为 null
+        if (!('type' in part) || part.type == null) {
+          logger.warn(
+            '[api/server/controllers/agents/client.js] Content part missing type field',
+            { part },
+          );
+          return false;
+        }
+        return true;
+      });
+      
       /** @deprecated Agent Chain */
       if (config.configurable.hide_sequential_outputs) {
         this.contentParts = this.contentParts.filter((part, index) => {
-          // Skip null, undefined, or invalid parts
-          if (!part || typeof part !== 'object') {
+          // 再次验证（虽然前面已经过滤过，但为了安全）
+          if (!part || typeof part !== 'object' || !('type' in part)) {
             return false;
           }
           // Include parts that are either:
@@ -940,11 +1001,24 @@ class AgentClient extends BaseClient {
         logger.error(
           '[api/server/controllers/agents/client.js #sendCompletion] Unhandled error type',
           err,
+          { stack: err?.stack },
         );
-        this.contentParts.push({
-          type: ContentTypes.ERROR,
-          [ContentTypes.ERROR]: `An error occurred while processing the request${err?.message ? `: ${err.message}` : ''}`,
-        });
+        // 确保 contentParts 是数组
+        if (!Array.isArray(this.contentParts)) {
+          this.contentParts = [];
+        }
+        // 添加错误内容，确保格式正确
+        try {
+          this.contentParts.push({
+            type: ContentTypes.ERROR,
+            [ContentTypes.ERROR]: `An error occurred while processing the request${err?.message ? `: ${err.message}` : ''}`,
+          });
+        } catch (pushError) {
+          logger.error(
+            '[api/server/controllers/agents/client.js #sendCompletion] Failed to push error content',
+            pushError,
+          );
+        }
       }
     }
   }

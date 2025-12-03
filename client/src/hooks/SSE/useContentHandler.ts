@@ -30,6 +30,12 @@ export default function useContentHandler({ setMessages, getMessages }: TUseCont
   const messageMap = useMemo(() => new Map<string, TMessage>(), []);
   return useCallback(
     ({ data, submission }: TContentHandler) => {
+      // 验证 data 不为 null 或 undefined
+      if (!data || typeof data !== 'object') {
+        logger.warn('content_handler', 'Invalid or null data received', { data, submission });
+        return;
+      }
+
       const { type, messageId, thread_id, conversationId, index } = data;
 
       const _messages = getMessages();

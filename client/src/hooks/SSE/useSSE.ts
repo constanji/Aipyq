@@ -126,60 +126,145 @@ export default function useSSE(
 
     sse.addEventListener('attachment', (e: MessageEvent) => {
       try {
-        const data = JSON.parse(e.data);
+        // 场景1: 处理空字符串或null
+        if (!e.data || e.data.trim() === '') {
+          logger.warn('sse', 'Empty or null data in attachment event', { event: e });
+          return;
+        }
+
+        // 场景3: 处理残缺JSON
+        let data: any;
+        try {
+          data = JSON.parse(e.data);
+        } catch (parseError) {
+          logger.warn('sse', 'Malformed JSON in attachment event (possibly truncated)', {
+            error: parseError,
+            data: e.data,
+            event: e,
+          });
+          return;
+        }
+
+        // 场景1: 处理 JSON.parse('null')
+        if (data === null || (typeof data !== 'object' && !Array.isArray(data))) {
+          logger.warn('sse', 'Parsed data is null or invalid in attachment event', { data, event: e });
+          return;
+        }
+
         attachmentHandler({ data, submission: submission as EventSubmission });
       } catch (error) {
+        logger.error('sse', 'Error processing attachment event', { error, event: e });
         console.error(error);
       }
     });
 
     sse.addEventListener('message', (e: MessageEvent) => {
-      const data = JSON.parse(e.data);
-
-      if (data.final != null) {
-        clearDraft(submission.conversation?.conversationId);
-        const { plugins } = data;
-        finalHandler(data, { ...submission, plugins } as EventSubmission);
-        (startupConfig?.balance?.enabled ?? false) && balanceQuery.refetch();
-        console.log('final', data);
-        return;
-      } else if (data.created != null) {
-        const runId = v4();
-        setActiveRunId(runId);
-        userMessage = {
-          ...userMessage,
-          ...data.message,
-          overrideParentMessageId: userMessage.overrideParentMessageId,
-        };
-
-        createdHandler(data, { ...submission, userMessage } as EventSubmission);
-      } else if (data.event != null) {
-        stepHandler(data, { ...submission, userMessage } as EventSubmission);
-      } else if (data.sync != null) {
-        const runId = v4();
-        setActiveRunId(runId);
-        /* synchronize messages to Assistants API as well as with real DB ID's */
-        syncHandler(data, { ...submission, userMessage } as EventSubmission);
-      } else if (data.type != null) {
-        const { text, index } = data;
-        if (text != null && index !== textIndex) {
-          textIndex = index;
+      try {
+        // 场景1: 处理空字符串或null的e.data
+        // 后端可能发送 data: 或 data: null
+        if (!e.data || e.data.trim() === '') {
+          logger.warn('sse', 'Empty or null data in message event', { event: e });
+          return;
         }
 
-        contentHandler({ data, submission: submission as EventSubmission });
-      } else {
-        const text = data.text ?? data.response;
-        const { plugin, plugins } = data;
-
-        const initialResponse = {
-          ...(submission.initialResponse as TMessage),
-          parentMessageId: data.parentMessageId,
-          messageId: data.messageId,
-        };
-
-        if (data.message != null) {
-          messageHandler(text, { ...submission, plugin, plugins, userMessage, initialResponse });
+        // 场景3: 处理代理层截断导致的残缺JSON（会被catch捕获）
+        let data: any;
+        try {
+          data = JSON.parse(e.data);
+        } catch (parseError) {
+          // 残缺的JSON会被这里捕获
+          logger.warn('sse', 'Malformed JSON in message event (possibly truncated by proxy)', {
+            error: parseError,
+            data: e.data,
+            event: e,
+          });
+          return;
         }
+
+        // 场景1: 处理 JSON.parse('null') 返回 null 的情况
+        // 注意：typeof null === 'object' 是JS的bug，需要显式检查
+        if (data === null) {
+          logger.warn('sse', 'Parsed data is null (backend sent data: null)', { event: e });
+          return;
+        }
+
+        // 场景2: 处理空对象 {} 的情况（流式JSON最后多送的空对象）
+        if (typeof data !== 'object' || Array.isArray(data)) {
+          logger.warn('sse', 'Parsed data is not a valid object in message event', { data, event: e });
+          return;
+        }
+
+        // 检查是否为空对象（没有任何有效字段）
+        const hasValidFields =
+          'final' in data ||
+          'created' in data ||
+          'event' in data ||
+          'sync' in data ||
+          'type' in data ||
+          'text' in data ||
+          'response' in data ||
+          'message' in data;
+        if (!hasValidFields) {
+          logger.warn('sse', 'Empty object received (possibly trailing empty object from stream)', {
+            data,
+            event: e,
+          });
+          return;
+        }
+
+        if (data.final != null) {
+          clearDraft(submission.conversation?.conversationId);
+          const { plugins } = data;
+          finalHandler(data, { ...submission, plugins } as EventSubmission);
+          (startupConfig?.balance?.enabled ?? false) && balanceQuery.refetch();
+          console.log('final', data);
+          return;
+        } else if (data.created != null) {
+          const runId = v4();
+          setActiveRunId(runId);
+          userMessage = {
+            ...userMessage,
+            ...data.message,
+            overrideParentMessageId: userMessage.overrideParentMessageId,
+          };
+
+          createdHandler(data, { ...submission, userMessage } as EventSubmission);
+        } else if (data.event != null) {
+          // 验证 data.data 不为 null（stepHandler 期望 { event, data } 格式）
+          if (data.data === null || data.data === undefined) {
+            logger.warn('sse', 'Event data is null in stepHandler', { event: data.event, data });
+            return;
+          }
+          stepHandler(data, { ...submission, userMessage } as EventSubmission);
+        } else if (data.sync != null) {
+          const runId = v4();
+          setActiveRunId(runId);
+          /* synchronize messages to Assistants API as well as with real DB ID's */
+          syncHandler(data, { ...submission, userMessage } as EventSubmission);
+        } else if (data.type != null) {
+          const { text, index } = data;
+          if (text != null && index !== textIndex) {
+            textIndex = index;
+          }
+
+          contentHandler({ data, submission: submission as EventSubmission });
+        } else {
+          const text = data.text ?? data.response;
+          const { plugin, plugins } = data;
+
+          const initialResponse = {
+            ...(submission.initialResponse as TMessage),
+            parentMessageId: data.parentMessageId,
+            messageId: data.messageId,
+          };
+
+          if (data.message != null) {
+            messageHandler(text, { ...submission, plugin, plugins, userMessage, initialResponse });
+          }
+        }
+      } catch (error) {
+        logger.error('sse', 'Error processing message event', { error, event: e });
+        console.error('Error processing SSE message:', error);
       }
     });
 
@@ -242,11 +327,45 @@ export default function useSSE(
 
       let data: TResData | undefined = undefined;
       try {
-        data = JSON.parse(e.data) as TResData;
+        // 场景1: 处理空字符串或null
+        if (!e.data || e.data.trim() === '') {
+          logger.warn('sse', 'Empty or null data in error event', { event: e });
+          setIsSubmitting(false);
+          return;
+        }
+
+        // 场景3: 处理残缺JSON
+        try {
+          data = JSON.parse(e.data) as TResData;
+        } catch (parseError) {
+          logger.warn('sse', 'Malformed JSON in error event (possibly truncated)', {
+            error: parseError,
+            data: e.data,
+            event: e,
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
+        // 场景1: 处理 JSON.parse('null')
+        if (data === null) {
+          logger.warn('sse', 'Parsed error data is null (backend sent data: null)', { event: e });
+          setIsSubmitting(false);
+          return;
+        }
+
+        // 场景2: 处理空对象
+        if (typeof data !== 'object' || Array.isArray(data)) {
+          logger.warn('sse', 'Parsed error data is not a valid object', { data, event: e });
+          setIsSubmitting(false);
+          return;
+        }
       } catch (error) {
+        logger.error('sse', 'Error processing error event', { error, event: e });
         console.error(error);
         console.log(e);
         setIsSubmitting(false);
+        return;
       }
 
       errorHandler({ data, submission: { ...submission, userMessage } as EventSubmission });

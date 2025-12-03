@@ -609,14 +609,27 @@ export function createContentAggregator(): t.ContentAggregatorResult {
   }): void => {
     if (event === GraphEvents.ON_RUN_STEP) {
       const runStep = data as t.RunStep;
+      
+      // 验证 runStep 的有效性
+      if (!runStep || !runStep.id || !runStep.stepDetails) {
+        console.warn('Invalid runStep in ON_RUN_STEP event', { runStep, event });
+        return;
+      }
+      
       stepMap.set(runStep.id, runStep);
 
       // Store tool call IDs if present
       if (
         runStep.stepDetails.type === StepTypes.TOOL_CALLS &&
-        runStep.stepDetails.tool_calls
+        runStep.stepDetails.tool_calls &&
+        Array.isArray(runStep.stepDetails.tool_calls)
       ) {
         (runStep.stepDetails.tool_calls as ToolCall[]).forEach((toolCall) => {
+          // 验证 toolCall 的有效性
+          if (!toolCall || typeof toolCall !== 'object' || toolCall === null) {
+            console.warn('Invalid toolCall in tool_calls array', { toolCall });
+            return;
+          }
           const toolCallId = toolCall.id ?? '';
           if ('id' in toolCall && toolCallId) {
             toolCallIdMap.set(runStep.id, toolCallId);
@@ -635,6 +648,13 @@ export function createContentAggregator(): t.ContentAggregatorResult {
       }
     } else if (event === GraphEvents.ON_MESSAGE_DELTA) {
       const messageDelta = data as t.MessageDeltaEvent;
+      
+      // 验证 messageDelta 的有效性
+      if (!messageDelta || !messageDelta.id || !messageDelta.delta) {
+        console.warn('Invalid messageDelta in ON_MESSAGE_DELTA event', { messageDelta, event });
+        return;
+      }
+      
       const runStep = stepMap.get(messageDelta.id);
       if (!runStep) {
         console.warn('No run step or runId found for message delta event');
@@ -646,6 +666,12 @@ export function createContentAggregator(): t.ContentAggregatorResult {
           ? messageDelta.delta.content[0]
           : messageDelta.delta.content;
 
+        // 验证 contentPart 的有效性
+        if (!contentPart || typeof contentPart !== 'object' || contentPart === null) {
+          console.warn('Invalid contentPart in ON_MESSAGE_DELTA', { contentPart });
+          return;
+        }
+
         updateContent(runStep.index, contentPart);
       }
     } else if (
@@ -653,12 +679,24 @@ export function createContentAggregator(): t.ContentAggregatorResult {
       (data as t.AgentUpdate | undefined)?.agent_update
     ) {
       const contentPart = data as t.AgentUpdate | undefined;
-      if (!contentPart) {
+      if (!contentPart || !contentPart.agent_update) {
+        return;
+      }
+      // 验证 agent_update 的有效性
+      if (typeof contentPart.agent_update.index !== 'number') {
+        console.warn('Invalid agent_update.index in ON_AGENT_UPDATE', { contentPart });
         return;
       }
       updateContent(contentPart.agent_update.index, contentPart);
     } else if (event === GraphEvents.ON_REASONING_DELTA) {
       const reasoningDelta = data as t.ReasoningDeltaEvent;
+      
+      // 验证 reasoningDelta 的有效性
+      if (!reasoningDelta || !reasoningDelta.id || !reasoningDelta.delta) {
+        console.warn('Invalid reasoningDelta in ON_REASONING_DELTA event', { reasoningDelta, event });
+        return;
+      }
+      
       const runStep = stepMap.get(reasoningDelta.id);
       if (!runStep) {
         console.warn('No run step or runId found for reasoning delta event');
@@ -670,10 +708,23 @@ export function createContentAggregator(): t.ContentAggregatorResult {
           ? reasoningDelta.delta.content[0]
           : reasoningDelta.delta.content;
 
+        // 验证 contentPart 的有效性
+        if (!contentPart || typeof contentPart !== 'object' || contentPart === null) {
+          console.warn('Invalid contentPart in ON_REASONING_DELTA', { contentPart });
+          return;
+        }
+
         updateContent(runStep.index, contentPart);
       }
     } else if (event === GraphEvents.ON_RUN_STEP_DELTA) {
       const runStepDelta = data as t.RunStepDeltaEvent;
+      
+      // 验证 runStepDelta 的有效性
+      if (!runStepDelta || !runStepDelta.id || !runStepDelta.delta) {
+        console.warn('Invalid runStepDelta in ON_RUN_STEP_DELTA event', { runStepDelta, event });
+        return;
+      }
+      
       const runStep = stepMap.get(runStepDelta.id);
       if (!runStep) {
         console.warn('No run step or runId found for run step delta event');
@@ -682,9 +733,15 @@ export function createContentAggregator(): t.ContentAggregatorResult {
 
       if (
         runStepDelta.delta.type === StepTypes.TOOL_CALLS &&
-        runStepDelta.delta.tool_calls
+        runStepDelta.delta.tool_calls &&
+        Array.isArray(runStepDelta.delta.tool_calls)
       ) {
         runStepDelta.delta.tool_calls.forEach((toolCallDelta) => {
+          // 验证 toolCallDelta 的有效性
+          if (!toolCallDelta || typeof toolCallDelta !== 'object' || toolCallDelta === null) {
+            console.warn('Invalid toolCallDelta in tool_calls array', { toolCallDelta });
+            return;
+          }
           // Skip chunks with null args (these are typically final chunks indicating completion)
           // The accumulated args should be preserved in the existing content
           if (toolCallDelta.args === null || toolCallDelta.args === undefined) {
@@ -708,13 +765,30 @@ export function createContentAggregator(): t.ContentAggregatorResult {
     } else if (event === GraphEvents.ON_RUN_STEP_COMPLETED) {
       const { result } = data as unknown as { result: t.ToolEndEvent };
 
+      // 验证 result 的有效性
+      if (!result || typeof result !== 'object' || result === null) {
+        console.warn('Invalid result in ON_RUN_STEP_COMPLETED event', { result, event });
+        return;
+      }
+
       const { id: stepId } = result;
+
+      if (!stepId) {
+        console.warn('Missing stepId in ON_RUN_STEP_COMPLETED result', { result });
+        return;
+      }
 
       const runStep = stepMap.get(stepId);
       if (!runStep) {
         console.warn(
           'No run step or runId found for completed tool call event'
         );
+        return;
+      }
+
+      // 验证 tool_call 的有效性
+      if (!result.tool_call || typeof result.tool_call !== 'object' || result.tool_call === null) {
+        console.warn('Invalid tool_call in ON_RUN_STEP_COMPLETED result', { result });
         return;
       }
 

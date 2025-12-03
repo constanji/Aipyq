@@ -84,7 +84,10 @@ class ModelEndHandler {
             },
           ],
         });
-      } else if (Array.isArray(content) && content.every((c) => c && c.type?.startsWith('text'))) {
+      } else if (
+        Array.isArray(content) &&
+        content.every((c) => c && typeof c === 'object' && c !== null && 'type' in c && c.type?.startsWith('text'))
+      ) {
         graph.dispatchMessageDelta(stepId, {
           content,
         });
@@ -329,7 +332,11 @@ function createToolEndCallback({ req, res, artifactPromises }) {
       const content = output.artifact.content;
       for (let i = 0; i < content.length; i++) {
         const part = content[i];
-        if (!part) {
+        // 严格验证 part 的有效性，防止访问 null.type
+        if (!part || typeof part !== 'object' || part === null) {
+          continue;
+        }
+        if (!('type' in part) || part.type == null) {
           continue;
         }
         if (part.type !== 'image_url') {

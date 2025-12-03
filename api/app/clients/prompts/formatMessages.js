@@ -154,7 +154,12 @@ const formatAgentMessages = (payload) => {
     let messageReasoningContent = '';
     if (message.role === 'assistant' && Array.isArray(message.content)) {
       for (const part of message.content) {
-        if (!part) {
+        // 严格验证 part 的有效性
+        if (!part || typeof part !== 'object' || part === null) {
+          continue;
+        }
+        // 确保 part 有 type 属性
+        if (!('type' in part) || part.type == null) {
           continue;
         }
         if (part.type === ContentTypes.THINK && part.think) {
@@ -176,7 +181,12 @@ const formatAgentMessages = (payload) => {
     let hasReasoning = false;
     let currentReasoningContent = '';
     for (const part of message.content) {
-      if (!part) {
+      // 严格验证 part 的有效性，防止访问 null.type
+      if (!part || typeof part !== 'object' || part === null) {
+        continue;
+      }
+      // 确保 part 有 type 属性
+      if (!('type' in part) || part.type == null) {
         continue;
       }
       if (part.type === ContentTypes.TEXT && part.tool_call_ids) {
@@ -225,6 +235,11 @@ const formatAgentMessages = (payload) => {
       } else if (part.type === ContentTypes.TOOL_CALL) {
         if (!lastAIMessage) {
           throw new Error('Invalid tool call structure: No preceding AIMessage with tool_call_ids');
+        }
+
+        // 验证 tool_call 存在且有效
+        if (!part.tool_call || typeof part.tool_call !== 'object' || part.tool_call === null) {
+          continue;
         }
 
         // Note: `tool_calls` list is defined when constructed by `AIMessage` class, and outputs should be excluded from it
@@ -298,7 +313,11 @@ const formatAgentMessages = (payload) => {
     if (hasReasoning) {
       currentContent = currentContent
         .reduce((acc, curr) => {
-          if (curr && curr.type === ContentTypes.TEXT) {
+          // 严格验证 curr 的有效性
+          if (!curr || typeof curr !== 'object' || curr === null || !('type' in curr)) {
+            return acc;
+          }
+          if (curr.type === ContentTypes.TEXT) {
             return `${acc}${curr[ContentTypes.TEXT]}\n`;
           }
           return acc;

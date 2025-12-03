@@ -219,6 +219,16 @@ export default function useStepHandler({
         ...currentContent,
       };
     } else if (contentType === ContentTypes.TOOL_CALL && 'tool_call' in contentPart) {
+      // 验证 tool_call 不为 null（工具调用完成或清理时可能为 null）
+      if (!contentPart.tool_call || typeof contentPart.tool_call !== 'object') {
+        logger.warn('step_handler', 'Invalid or null tool_call in contentPart', {
+          messageId: message.messageId,
+          index,
+          contentPart,
+        });
+        return message;
+      }
+
       const existingContent = updatedContent[actualIndex] as Agents.ToolCallContent | undefined;
       const existingToolCall = existingContent?.tool_call;
       const toolCallArgs = (contentPart.tool_call as Agents.ToolCall).args;
@@ -358,7 +368,20 @@ export default function useStepHandler({
       }
 
       if (event === 'on_run_step') {
+        // 验证 data 不为 null
+        if (!data || typeof data !== 'object') {
+          logger.warn('step_handler', 'Invalid or null data in on_run_step event', { event, data });
+          return;
+        }
+
         const runStep = data as Agents.RunStep;
+        
+        // 验证 runStep 的必要字段
+        if (!runStep || !runStep.id) {
+          logger.warn('step_handler', 'Invalid runStep in on_run_step event', { runStep });
+          return;
+        }
+
         let responseMessageId = runStep.runId ?? '';
         if (responseMessageId === Constants.USE_PRELIM_RESPONSE_MESSAGE_ID) {
           responseMessageId = submission?.initialResponse?.messageId ?? '';
@@ -389,10 +412,26 @@ export default function useStepHandler({
         }
 
         // Store tool call IDs if present
+        // 验证 stepDetails 不为 null
+        if (!runStep.stepDetails || !runStep.stepDetails.type) {
+          logger.warn('step_handler', 'Invalid stepDetails in runStep', { runStep });
+          return;
+        }
+
         if (runStep.stepDetails.type === StepTypes.TOOL_CALLS) {
           let updatedResponse = { ...response };
           
           (runStep.stepDetails.tool_calls as Agents.ToolCall[]).forEach((toolCall, toolCallIndex) => {
+            // 验证 toolCall 不为 null（多次工具调用时可能为 null）
+            if (!toolCall || typeof toolCall !== 'object') {
+              logger.warn('step_handler', 'Invalid or null toolCall in tool_calls array', {
+                toolCallIndex,
+                runStep,
+                toolCall,
+              });
+              return;
+            }
+
             const toolCallId = toolCall.id ?? '';
             if ('id' in toolCall && toolCallId) {
               toolCallIdMap.current.set(runStep.id, toolCallId);
@@ -445,7 +484,23 @@ export default function useStepHandler({
           setMessages(updatedMessages);
         }
       } else if (event === 'on_agent_update') {
+        // 验证 data 不为 null
+        if (!data || typeof data !== 'object') {
+          logger.warn('step_handler', 'Invalid or null data in on_agent_update event', { event, data });
+          return;
+        }
+
         const { agent_update } = data as Agents.AgentUpdate;
+        
+        // 验证 agent_update 不为 null
+        if (!agent_update || typeof agent_update !== 'object') {
+          logger.warn('step_handler', 'Invalid or null agent_update in on_agent_update event', {
+            agent_update,
+            data,
+          });
+          return;
+        }
+
         let responseMessageId = agent_update.runId || '';
         if (responseMessageId === Constants.USE_PRELIM_RESPONSE_MESSAGE_ID) {
           responseMessageId = submission?.initialResponse?.messageId ?? '';
@@ -486,6 +541,15 @@ export default function useStepHandler({
             ? messageDelta.delta.content[0]
             : messageDelta.delta.content;
 
+          // 验证 contentPart 不为 null
+          if (!contentPart || typeof contentPart !== 'object') {
+            logger.warn('step_handler', 'Invalid contentPart in on_message_delta', {
+              contentPart,
+              messageDelta,
+            });
+            return;
+          }
+
           const currentIndex = calculateContentIndex(
             runStep.index,
             initialContent,
@@ -519,6 +583,15 @@ export default function useStepHandler({
             ? reasoningDelta.delta.content[0]
             : reasoningDelta.delta.content;
 
+          // 验证 contentPart 不为 null
+          if (!contentPart || typeof contentPart !== 'object') {
+            logger.warn('step_handler', 'Invalid contentPart in on_reasoning_delta', {
+              contentPart,
+              reasoningDelta,
+            });
+            return;
+          }
+
           const currentIndex = calculateContentIndex(
             runStep.index,
             initialContent,
@@ -533,7 +606,20 @@ export default function useStepHandler({
           setMessages([...currentMessages.slice(0, -1).map(ensureContentIsDense), cleanedResponse]);
         }
       } else if (event === 'on_run_step_delta') {
+        // 验证 data 不为 null
+        if (!data || typeof data !== 'object') {
+          logger.warn('step_handler', 'Invalid or null data in on_run_step_delta event', { event, data });
+          return;
+        }
+
         const runStepDelta = data as Agents.RunStepDeltaEvent;
+        
+        // 验证 runStepDelta 的必要字段
+        if (!runStepDelta || !runStepDelta.id || !runStepDelta.delta) {
+          logger.warn('step_handler', 'Invalid runStepDelta in on_run_step_delta event', { runStepDelta });
+          return;
+        }
+
         const runStep = stepMap.current.get(runStepDelta.id);
         let responseMessageId = runStep?.runId ?? '';
         if (responseMessageId === Constants.USE_PRELIM_RESPONSE_MESSAGE_ID) {
@@ -547,14 +633,26 @@ export default function useStepHandler({
         }
 
         const response = messageMap.current.get(responseMessageId);
+        // 验证 delta.type 和 delta.tool_calls
         if (
           response &&
           runStepDelta.delta.type === StepTypes.TOOL_CALLS &&
-          runStepDelta.delta.tool_calls
+          runStepDelta.delta.tool_calls &&
+          Array.isArray(runStepDelta.delta.tool_calls)
         ) {
           let updatedResponse = { ...response };
 
           runStepDelta.delta.tool_calls.forEach((toolCallDelta, toolCallIndex) => {
+            // 验证 toolCallDelta 不为 null（多次工具调用时可能为 null）
+            if (!toolCallDelta || typeof toolCallDelta !== 'object') {
+              logger.warn('step_handler', 'Invalid or null toolCallDelta in tool_calls array', {
+                toolCallIndex,
+                runStepDelta,
+                toolCallDelta,
+              });
+              return;
+            }
+
             const toolCallId = toolCallIdMap.current.get(runStepDelta.id) ?? '';
 
             // 查找现有工具调用的位置，避免重复添加
@@ -651,9 +749,26 @@ export default function useStepHandler({
           setMessages(updatedMessages);
         }
       } else if (event === 'on_run_step_completed') {
+        // 验证 data 不为 null
+        if (!data || typeof data !== 'object') {
+          logger.warn('step_handler', 'Invalid or null data in on_run_step_completed event', { event, data });
+          return;
+        }
+
         const { result } = data as unknown as { result: Agents.ToolEndEvent };
 
+        // 验证 result 不为 null
+        if (!result || typeof result !== 'object') {
+          logger.warn('step_handler', 'Invalid or null result in on_run_step_completed event', { result, data });
+          return;
+        }
+
         const { id: stepId } = result;
+
+        if (!stepId) {
+          logger.warn('step_handler', 'Missing stepId in result', { result });
+          return;
+        }
 
         const runStep = stepMap.current.get(stepId);
         let responseMessageId = runStep?.runId ?? '';
@@ -669,6 +784,12 @@ export default function useStepHandler({
 
         const response = messageMap.current.get(responseMessageId);
         if (response) {
+          // 验证 result.tool_call 不为 null
+          if (!result.tool_call || typeof result.tool_call !== 'object') {
+            logger.warn('step_handler', 'Invalid or null tool_call in result', { result });
+            return;
+          }
+
           let updatedResponse = { ...response };
 
           const contentPart: Agents.MessageContentComplex = {
