@@ -37,18 +37,65 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
+/**
+ * 从各种可能的请求体结构中尽可能稳健地提取 SQL 字符串
+ * 兼容以下几种形式：
+ * 1. { sql: "SELECT ..." }
+ * 2. { input: { sql: "SELECT ..." } }
+ * 3. { input: "{\"sql\": \"SELECT ...\"}" }
+ * 4. { args: "{\"sql\": \"SELECT ...\"}" }              // 来自部分工具 / Actions 的约定
+ * 5. { arguments: "{\"sql\": \"SELECT ...\"}" }
+ * 6. 直接传原始 JSON 字符串："{\"sql\": \"SELECT ...\"}"
+ */
+function extractSqlFromBody(body) {
+  if (!body) return null;
+
+  // 已经是 { sql } 形式
+  if (typeof body === 'object' && body.sql) {
+    return body.sql;
+  }
+
+  // 兼容 input / args / arguments 三种键名
+  const wrapper = body.input ?? body.args ?? body.arguments;
+
+  if (wrapper) {
+    try {
+      // wrapper 可能是对象，也可能是字符串化 JSON
+      const parsed =
+        typeof wrapper === 'string'
+          ? JSON.parse(wrapper)
+          : wrapper;
+
+      if (parsed && typeof parsed === 'object' && parsed.sql) {
+        return parsed.sql;
+      }
+    } catch (e) {
+      console.error('解析 input/args 失败:', e.message, '原始值:', wrapper);
+    }
+  }
+
+  // body 本身就是字符串化 JSON 的情况
+  if (typeof body === 'string') {
+    try {
+      const parsed = JSON.parse(body);
+      if (parsed && typeof parsed === 'object' && parsed.sql) {
+        return parsed.sql;
+      }
+    } catch (e) {
+      console.error('解析原始字符串 body 失败:', e.message);
+    }
+  }
+
+  return null;
+}
+
 // SQL 查询端点
 app.post('/sql_query', async (req, res) => {
-  let { sql, input } = req.body;
-  
-  // 处理嵌套的 input 格式（LibreChat Actions 可能发送这种格式）
-  if (!sql && input) {
-    try {
-      const parsedInput = typeof input === 'string' ? JSON.parse(input) : input;
-      sql = parsedInput.sql;
-    } catch (e) {
-      console.error('解析 input 失败:', e.message);
-    }
+  let { sql } = req.body || {};
+
+  // 尝试从各种嵌套 / 字符串形式里解析 SQL
+  if (!sql) {
+    sql = extractSqlFromBody(req.body);
   }
   
   console.log('收到查询请求:', sql);
