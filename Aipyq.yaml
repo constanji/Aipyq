@@ -1,33 +1,23 @@
-# 配置版本（必需）
 version: 1.2.1
-# 缓存设置：设置为 true 启用缓存
 cache: true
-
-# MCP 服务器配置
 mcpServers:
   ModelScope-Image-Generation:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/f39be3cde8434c/mcp
     chatMenu: true
-    startup: false  # 启动时自动连接
+    startup: false
   fetch:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/6423925509fd43/mcp
     chatMenu: true
-    startup: false  # 启动时自动连接
+    startup: false
   howtocook-mcp:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/eb735ba6a6554e/mcp
     chatMenu: true
-    startup: false  # 启动时自动连接
-
-    
-# 自定义界面配置
+    startup: false
 interface:
-  customWelcome: '欢迎使用 AI朋友圈！祝您体验愉快。'
-  # 启用/禁用文件搜索作为聊天区域选项（默认：true）
-  # 注意：此设置不会禁用代理的文件搜索能力。
-  # 要禁用代理能力，请参阅代理端点配置。
+  customWelcome: 欢迎使用 AI朋友圈！祝您体验愉快。
   fileSearch: true
   endpointsMenu: true
   modelSelect: true
@@ -42,109 +32,81 @@ interface:
     groups: true
     roles: true
   marketplace:
-      use: false
+    use: false
   fileCitations: true
-
-# Cloudflare Turnstile 示例（可选）
-#turnstile:
-#  siteKey: "您的站点密钥"
-#  options:
-#    language: "auto"    # "auto" 或 ISO 639-1 语言代码（例如 en）
-#    size: "normal"      # 选项："normal", "compact", "flexible", 或 "invisible"
-
-# 注册对象结构示例（可选）
 registration:
-  socialLogins: ['github', 'google', 'discord', 'openid', 'facebook', 'apple', 'saml']
-  # allowedDomains:
-  # - "gmail.com"
-
-# 操作对象结构示例 添加工具需要在里面添加允许的域名
+  socialLogins:
+    - github
+    - google
+    - discord
+    - openid
+    - facebook
+    - apple
+    - saml
 actions:
   allowedDomains:
-    - 'swapi.dev'
-    - 'google.com'
-    - 'localhost'
-    - 'host.docker.internal'
-    - 'hsp-sql-api'
-
-
-# 自定义端点定义
+    - swapi.dev
+    - google.com
+    - localhost
+    - host.docker.internal
+    - hsp-sql-api
 endpoints:
-  # assistants:
-  #   disableBuilder: false # 通过设置为 `true` 来禁用 Assistants 构建器界面
-  #   pollIntervalMs: 3000  # 检查助手更新的轮询间隔
-  #   timeoutMs: 180000  # 助手操作超时时间
-  #   # 应该只有其中一个，`supportedIds` 或 `excludedIds`
-  #   supportedIds: ["asst_supportedAssistantId1", "asst_supportedAssistantId2"]
-  #   # excludedIds: ["asst_excludedAssistantId"]
-  #   # 仅显示用户创建或外部创建的助手（例如在 Assistants playground 中）。
-  #   # privateAssistants: false # 与 `supportedIds` 或 `excludedIds` 不兼容
-  #   # （可选）支持检索的模型，默认为支持该功能的最新已知 OpenAI 模型
-  #   retrievalModels: ["gpt-4-turbo-preview"]
-  #   # （可选）对所有用户可用的助手能力。省略您希望排除的能力。默认为以下列表。
-  #   capabilities: ["code_interpreter", "retrieval", "actions", "tools", "image_vision"]
   agents:
-    # 代理的默认递归深度
     recursionLimit: 50
-    # 代理的最大递归深度
     maxRecursionLimit: 100
-    # 启用 actions 能力
-    capabilities: ["execute_code", "file_search", "actions", "tools"]
-
+    capabilities:
+      - execute_code
+      - file_search
+      - actions
+      - tools
   custom:
-    # ModelScope 端点配置
-    - name: 'modelscope'
-      apiKey: '${OPENAI_API_KEY}'
-      baseURL: 'https://api-inference.modelscope.cn/v1'
+    - name: modelscope
+      apiKey: ${OPENAI_API_KEY}
+      baseURL: https://api-inference.modelscope.cn/v1
       models:
         default:
-          - 'Qwen/Qwen3-VL-235B-A22B-Instruct'
-          - 'Qwen/Qwen3-0.6B'
-          - 'Qwen/Qwen3-Coder-480B-A35B-Instruct'
-          - 'Qwen/QwQ-32B'
-          - 'Qwen/Qwen3-32B'
-          - 'Qwen/Qwen2.5-72B-Instruct'
-          - 'Qwen/Qwen2.5-VL-72B-Instruct'
-          - 'deepseek-ai/DeepSeek-V3.2-Exp'
-          - 'deepseek-ai/DeepSeek-V3.1'
-          - 'KookYan/Kook_Qwen_zshx_v2'
-        fetch: false
-      titleConvo: true 
-      dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
-      forceStringContent: true    # 标题对话设置
-      modelDisplayLabel: 'ModelScope'   # 模型显示标签
-      #iconURL: '/assets/qwen.svg'
-      titleModel: 'Qwen/Qwen3-Coder-480B-A35B-Instruct' # 标题模型：指定用于标题的模型。
-      
-      # 设置为 true 启用标题对话
-      # 可选配置
-
-      
-      # 如果省略，默认为 "gpt-3.5-turbo"。
-      
-    - name: 'deepseek'
-      apiKey: '${DEEP_SEEK_API_KEY}'
-      baseURL: 'https://api.deepseek.com/v1'
-      models:
-        default:
-          - 'deepseek-chat'
-          - 'deepseek-coder'
-          - 'deepseek-reasoner'
+          - Qwen/Qwen3-VL-235B-A22B-Instruct
+          - Qwen/Qwen3-0.6B
+          - Qwen/Qwen3-Coder-480B-A35B-Instruct
+          - Qwen/QwQ-32B
+          - Qwen/Qwen3-32B
+          - Qwen/Qwen2.5-72B-Instruct
+          - Qwen/Qwen2.5-VL-72B-Instruct
+          - deepseek-ai/DeepSeek-V3.2-Exp
+          - deepseek-ai/DeepSeek-V3.1
         fetch: false
       titleConvo: true
-      titleModel: 'deepseek-chat'
-      modelDisplayLabel: 'Deepseek'
-
-# ----------- 用户记忆配置 -----------
+      dropParams:
+        - stop
+      forceStringContent: true
+      modelDisplayLabel: ModelScope
+      titleModel: Qwen/Qwen3-Coder-480B-A35B-Instruct
+    - name: deepseek
+      apiKey: ${DEEP_SEEK_API_KEY}
+      baseURL: https://api.deepseek.com/v1
+      models:
+        default:
+          - deepseek-chat
+          - deepseek-coder
+          - deepseek-reasoner
+        fetch: false
+      titleConvo: true
+      titleModel: deepseek-chat
+      modelDisplayLabel: Deepseek
 memory:
-  disabled: false                     # 总开关：true = 关闭记忆
-  validKeys: ["preferences", "work_info", "personal_info", "skills", "interests", "context"]     # 会话级上下文（最近话题、临时任务）
-  tokenLimit: 10000                    # 记忆条目的 token 上限（超出自动截断）
+  disabled: false
+  validKeys:
+    - preferences
+    - work_info
+    - personal_info
+    - skills
+    - interests
+    - context
+  tokenLimit: 10000
   personalize: true
-  
   agent:
-    provider: "deepseek"
-    model: "deepseek-chat"
+    provider: deepseek
+    model: deepseek-chat
     instructions: |
       你是一个智能记忆管理助手。分析对话内容，自动提取并存储以下类型的重要信息：
       1. 用户的身份信息（姓名、昵称、职业、角色等）
