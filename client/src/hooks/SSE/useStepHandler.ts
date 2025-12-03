@@ -223,12 +223,62 @@ export default function useStepHandler({
       const existingToolCall = existingContent?.tool_call;
       const toolCallArgs = (contentPart.tool_call as Agents.ToolCall).args;
       /** When args are a valid object, they are likely already invoked */
-      const args =
-        finalUpdate ||
-        typeof existingToolCall?.args === 'object' ||
-        typeof toolCallArgs === 'object'
-          ? contentPart.tool_call.args
-          : (existingToolCall?.args ?? '') + (toolCallArgs ?? '');
+      let args: string | Record<string, any>;
+      if (finalUpdate || typeof toolCallArgs === 'object') {
+        // 如果是最终更新或 args 是对象，直接使用
+        args = contentPart.tool_call.args;
+      } else if (typeof existingToolCall?.args === 'object') {
+        // 如果现有 args 是对象，但新的是字符串，需要特殊处理
+        // 检查是否为空对象，如果是空对象，应该视为空字符串以便累积
+        const isEmptyObject = Object.keys(existingToolCall.args).length === 0;
+        if (isEmptyObject) {
+          // 空对象视为空字符串，累积新的字符串
+          if (toolCallArgs == null) {
+            args = '';
+          } else {
+            args = '' + toolCallArgs;
+          }
+        } else {
+          // 非空对象，转换为字符串后累积
+          if (toolCallArgs == null) {
+            args = existingToolCall.args;
+          } else {
+            args = JSON.stringify(existingToolCall.args) + toolCallArgs;
+          }
+        }
+      } else {
+        // 字符串累积逻辑
+        // 注意：在 on_run_step_delta 中，我们已经计算了 accumulatedArgs（累积后的值）
+        // 所以这里传入的 toolCallArgs 已经是累积后的值，应该直接使用
+        // 但是，为了兼容其他调用场景，我们仍然需要检查是否需要累积
+        if (toolCallArgs == null) {
+          // 如果新的 args 是 null/undefined，保留已累积的值
+          args = existingToolCall?.args ?? '';
+        } else if (typeof existingToolCall?.args === 'string' && typeof toolCallArgs === 'string') {
+          // 如果两者都是字符串，检查 toolCallArgs 是否已经包含了 existingToolCall.args
+          // 如果包含，说明 toolCallArgs 已经是累积后的值（来自 on_run_step_delta），直接使用
+          // 否则，进行累积
+          // 注意：在 on_run_step_delta 中，我们已经计算了 accumulatedArgs（累积后的值）
+          // 所以这里传入的 toolCallArgs 应该已经是累积后的值，应该直接使用
+          // 但是，为了安全起见，我们仍然检查是否需要累积
+          if (existingToolCall.args && 
+              toolCallArgs.length >= existingToolCall.args.length && 
+              toolCallArgs.startsWith(existingToolCall.args)) {
+            // toolCallArgs 已经包含了 existingToolCall.args，说明已经累积过了，直接使用
+            args = toolCallArgs;
+          } else if (existingToolCall.args === '') {
+            // 如果现有值是空字符串，toolCallArgs 应该已经是累积后的值（来自 on_run_step_delta），直接使用
+            args = toolCallArgs;
+          } else {
+            // 需要累积（这种情况不应该发生，因为 on_run_step_delta 已经累积过了）
+            // 但为了安全起见，仍然进行累积
+            args = (existingToolCall?.args ?? '') + toolCallArgs;
+          }
+        } else {
+          // 累积字符串
+          args = (existingToolCall?.args ?? '') + toolCallArgs;
+        }
+      }
 
       const id = getNonEmptyValue([contentPart.tool_call.id, existingToolCall?.id]) ?? '';
       const name = getNonEmptyValue([contentPart.tool_call.name, existingToolCall?.name]) ?? '';
@@ -507,26 +557,13 @@ export default function useStepHandler({
           runStepDelta.delta.tool_calls.forEach((toolCallDelta, toolCallIndex) => {
             const toolCallId = toolCallIdMap.current.get(runStepDelta.id) ?? '';
 
-            const contentPart: Agents.MessageContentComplex = {
-              type: ContentTypes.TOOL_CALL,
-              tool_call: {
-                name: toolCallDelta.name ?? '',
-                args: toolCallDelta.args ?? '',
-                id: toolCallId,
-              },
-            };
-
-            if (runStepDelta.delta.auth != null) {
-              contentPart.tool_call.auth = runStepDelta.delta.auth;
-              contentPart.tool_call.expires_at = runStepDelta.delta.expires_at;
-            }
-
             // 查找现有工具调用的位置，避免重复添加
             const filteredContent = (updatedResponse.content || []).filter(
               (c) => c != null,
             ) as TMessageContentParts[];
             
             let existingIndex = -1;
+            let existingToolCall: Agents.ToolCall | undefined;
             if (toolCallId) {
               // 直接遍历content数组，找到匹配的工具调用ID
               for (let i = 0; i < filteredContent.length; i++) {
@@ -536,9 +573,64 @@ export default function useStepHandler({
                   (part[ContentTypes.TOOL_CALL] as Agents.ToolCall)?.id === toolCallId
                 ) {
                   existingIndex = i;
+                  existingToolCall = part[ContentTypes.TOOL_CALL] as Agents.ToolCall;
                   break;
                 }
               }
+            }
+
+            // 累积 args：如果 args 是字符串，需要累积；如果是 null/undefined，跳过
+            let accumulatedArgs: string | Record<string, any> = '';
+            if (existingToolCall?.args) {
+              // 如果已存在 args，从现有值开始累积
+              if (typeof existingToolCall.args === 'string') {
+                accumulatedArgs = existingToolCall.args;
+              } else if (typeof existingToolCall.args === 'object') {
+                // 如果 args 是对象，检查是否为空对象
+                // 空对象 {} 通常表示初始状态，应该视为空字符串以便累积
+                const isEmptyObject = Object.keys(existingToolCall.args).length === 0;
+                if (isEmptyObject) {
+                  accumulatedArgs = '';
+                } else {
+                  accumulatedArgs = existingToolCall.args;
+                }
+              } else {
+                accumulatedArgs = existingToolCall.args;
+              }
+            }
+
+            // 处理新的 delta args
+            if (toolCallDelta.args != null && typeof toolCallDelta.args === 'string') {
+              // 如果是字符串，累积到现有 args
+              if (typeof accumulatedArgs === 'string') {
+                accumulatedArgs += toolCallDelta.args;
+              } else {
+                // 如果现有 args 是对象，但新的是字符串，转换为字符串累积
+                accumulatedArgs = JSON.stringify(accumulatedArgs) + toolCallDelta.args;
+              }
+            } else if (toolCallDelta.args != null && typeof toolCallDelta.args === 'object') {
+              // 如果是对象，直接使用（通常不会在流式更新中出现）
+              accumulatedArgs = toolCallDelta.args;
+            }
+            // 如果 toolCallDelta.args 是 null 或 undefined，保持现有值不变（accumulatedArgs 已经包含现有值）
+
+            // 累积 name：如果 delta 中有 name，使用它；否则保持现有的 name
+            const accumulatedName = toolCallDelta.name ?? existingToolCall?.name ?? '';
+
+            // 只有当 accumulatedArgs 有值或者是字符串类型时才更新（即使是空字符串也要更新，以保持累积状态）
+            // 如果 toolCallDelta.args 是 null 但 accumulatedArgs 有值，说明这是最后一个 delta，需要保存已累积的值
+            const contentPart: Agents.MessageContentComplex = {
+              type: ContentTypes.TOOL_CALL,
+              tool_call: {
+                name: accumulatedName,
+                args: accumulatedArgs,
+                id: toolCallId,
+              },
+            };
+
+            if (runStepDelta.delta.auth != null) {
+              contentPart.tool_call.auth = runStepDelta.delta.auth;
+              contentPart.tool_call.expires_at = runStepDelta.delta.expires_at;
             }
 
             // 如果找到了现有的工具调用，更新它；否则添加到末尾

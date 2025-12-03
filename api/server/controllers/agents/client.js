@@ -276,7 +276,9 @@ class AgentClient extends BaseClient {
         if (typeof formattedMessage.content === 'string') {
           formattedMessage.content = message.fileContext + '\n' + formattedMessage.content;
         } else if (Array.isArray(formattedMessage.content)) {
-          const textPart = formattedMessage.content.find((part) => part && part.type === 'text');
+          const textPart = formattedMessage.content.find(
+            (part) => part && typeof part === 'object' && part.type === 'text',
+          );
           textPart
             ? (textPart.text = message.fileContext + '\n' + textPart.text)
             : formattedMessage.content.unshift({ type: 'text', text: message.fileContext });
@@ -542,10 +544,15 @@ class AgentClient extends BaseClient {
 
     if (Array.isArray(message.content)) {
       const filteredContent = message.content.filter(
-        (part) => part && part.type !== ContentTypes.IMAGE_URL,
+        (part) => part && typeof part === 'object' && part.type !== ContentTypes.IMAGE_URL,
       );
 
-      if (filteredContent.length === 1 && filteredContent[0]?.type === ContentTypes.TEXT) {
+      if (
+        filteredContent.length === 1 &&
+        filteredContent[0] &&
+        typeof filteredContent[0] === 'object' &&
+        filteredContent[0].type === ContentTypes.TEXT
+      ) {
         const MessageClass = message.constructor;
         return new MessageClass({
           content: filteredContent[0].text,
@@ -885,8 +892,8 @@ class AgentClient extends BaseClient {
       /** @deprecated Agent Chain */
       if (config.configurable.hide_sequential_outputs) {
         this.contentParts = this.contentParts.filter((part, index) => {
-          // Skip null or undefined parts
-          if (!part) {
+          // Skip null, undefined, or invalid parts
+          if (!part || typeof part !== 'object') {
             return false;
           }
           // Include parts that are either:
@@ -895,7 +902,7 @@ class AgentClient extends BaseClient {
           // 3. Have tool_call_ids property
           return (
             index >= this.contentParts.length - 1 ||
-            part.type === ContentTypes.TOOL_CALL ||
+            (part.type && part.type === ContentTypes.TOOL_CALL) ||
             part.tool_call_ids
           );
         });

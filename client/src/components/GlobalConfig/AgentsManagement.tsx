@@ -8,7 +8,7 @@ import { useUpdateResourcePermissionsMutation } from 'aipyq-data-provider/react-
 import { dataService } from 'aipyq-data-provider';
 import { useAuthContext, useLocalize, useAgentDefaultPermissionLevel } from '~/hooks';
 import { AgentPanelProvider, useAgentPanelContext } from '~/Providers/AgentPanelContext';
-import AgentPanelSwitch from '~/components/SidePanel/Agents/AgentPanelSwitch';
+import { AgentPanelSwitchWithContext } from '~/components/SidePanel/Agents/AgentPanelSwitch';
 import { cn } from '~/utils';
 import type { Agent } from 'aipyq-data-provider';
 
@@ -34,37 +34,36 @@ function AgentIdSetter({
   agentId?: string;
   children: React.ReactNode;
 }) {
-  const { setCurrentAgentId, agent_id } = useAgentPanelContext();
-  const previousAgentIdRef = useRef<string | undefined>(undefined);
-  const isInitialMount = useRef(true);
+  const { setCurrentAgentId } = useAgentPanelContext();
+  const previousAgentIdRef = useRef<string | undefined | null>(null);
 
   useEffect(() => {
-    // 首次挂载时，直接设置 agentId（如果存在）
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      if (agentId) {
-        console.log('[AgentIdSetter] Initial mount, setting agent_id:', agentId);
-        previousAgentIdRef.current = agentId;
-        setCurrentAgentId(agentId);
-      }
+    // 如果 agentId 没有变化，不需要更新
+    if (agentId === previousAgentIdRef.current) {
       return;
     }
 
-    // 后续更新时，只在 agentId 变化时更新
-    if (agentId && agentId !== previousAgentIdRef.current) {
-      console.log('[AgentIdSetter] Setting agent_id:', agentId, 'previous:', previousAgentIdRef.current);
-      previousAgentIdRef.current = agentId;
-      // 先清除，再设置，确保触发重新加载
-      setCurrentAgentId(undefined);
-      setTimeout(() => {
+    // 记录当前值
+    const previousValue = previousAgentIdRef.current;
+    previousAgentIdRef.current = agentId ?? null;
+
+    if (agentId) {
+      // 有 agentId：设置它（如果是新值，先清除再设置以确保重新加载）
+      if (previousValue !== null) {
+        // 从另一个值切换过来，先清除再设置
+        setCurrentAgentId(undefined);
+        setTimeout(() => {
+          setCurrentAgentId(agentId);
+        }, 0);
+      } else {
+        // 首次设置
         setCurrentAgentId(agentId);
-      }, 0);
-    } else if (!agentId && agent_id && agent_id !== previousAgentIdRef.current) {
-      console.log('[AgentIdSetter] Clearing agent_id');
-      previousAgentIdRef.current = undefined;
+      }
+    } else {
+      // agentId 为 undefined：清除（用于创建新智能体）
       setCurrentAgentId(undefined);
     }
-  }, [agentId, agent_id, setCurrentAgentId]);
+  }, [agentId, setCurrentAgentId]);
 
   return <>{children}</>;
 }
@@ -196,7 +195,8 @@ export default function AgentsManagement() {
             </Button>
           </div>
           <div className="flex-1 overflow-hidden">
-            <AgentPanelSwitch />
+            {/* 在管理界面禁用自动从 conversation 同步 agent_id，使用内部组件避免嵌套 Provider */}
+            <AgentPanelSwitchWithContext autoSyncFromConversation={false} />
           </div>
         </div>
       </AgentPanelProviderWithAgentId>

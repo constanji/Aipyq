@@ -5,16 +5,21 @@ cache: true
 
 # MCP 服务器配置
 mcpServers:
-  # ModelScope 图像生成 MCP
-  # 注意：如果遇到 404 错误，说明该 MCP 服务器实例可能已失效
-  # 请检查 URL 是否正确，或重新创建 MCP 服务器实例
   ModelScope-Image-Generation:
     type: streamable-http
-    url: https://mcp.api-inference.modelscope.net/befdcc379ba345/mcp
+    url: https://mcp.api-inference.modelscope.net/f39be3cde8434c/mcp
     chatMenu: true
     startup: false  # 设置为 false，避免启动时自动连接失败
-    timeout: 120000  # 增加工具调用超时时间到 120 秒  
-    
+  fetch:
+    type: streamable-http
+    url: https://mcp.api-inference.modelscope.net/6423925509fd43/mcp
+    chatMenu: true
+    startup: false  # 设置为 false，避免启动时自动连接失败
+  howtocook-mcp:
+    type: streamable-http
+    url: https://mcp.api-inference.modelscope.net/eb735ba6a6554e/mcp
+    chatMenu: true
+    startup: false  # 设置为 false，避免启动时自动连接失败
 
     
 # 自定义界面配置
@@ -106,8 +111,6 @@ endpoints:
       forceStringContent: true
       modelDisplayLabel: 'ModelScope'   # 模型显示标签
       #iconURL: '/assets/qwen.svg'
-  # DeepSeek
-  
       # 可选配置
 
       # 标题对话设置
@@ -117,20 +120,6 @@ endpoints:
       # 标题模型：指定用于标题的模型。
       titleModel: 'Qwen/Qwen3-Coder-480B-A35B-Instruct' 
       # 如果省略，默认为 "gpt-3.5-turbo"。
-    - name: 'groq'
-      apiKey: '${GROQ_API_KEY}'
-      baseURL: 'https://api.groq.com/openai/v1/'
-      models:
-        default:
-          - 'llama3-70b-8192'
-          - 'llama3-8b-8192'
-          - 'llama2-70b-4096'
-          - 'mixtral-8x7b-32768'
-          - 'gemma-7b-it'
-        fetch: false
-      titleConvo: true
-      titleModel: 'mixtral-8x7b-32768'
-      modelDisplayLabel: 'groq'
       
     - name: 'deepseek'
       apiKey: '${DEEP_SEEK_API_KEY}'
@@ -144,3 +133,29 @@ endpoints:
       titleConvo: true
       titleModel: 'deepseek-chat'
       modelDisplayLabel: 'Deepseek'
+
+    # ----------- 用户记忆配置 -----------
+memory:
+  disabled: false                     # 总开关：true = 关闭记忆
+  validKeys: ["preferences", "work_info", "personal_info", "skills", "interests", "context"]     # 会话级上下文（最近话题、临时任务）
+  tokenLimit: 10000                    # 记忆条目的 token 上限（超出自动截断）
+  personalize: true
+  
+  agent:
+    provider: "deepseek"
+    model: "deepseek-chat"
+    instructions: |
+      你是一个智能记忆管理助手。分析对话内容，自动提取并存储以下类型的重要信息：
+      1. 用户的身份信息（姓名、昵称、职业、角色等）
+      2. 用户的偏好和习惯（喜欢什么、不喜欢什么、常用方式等）
+      3. 用户的工作和学习信息（工作内容、学习目标、项目等）
+      4. 用户的技能和兴趣（擅长什么、兴趣爱好等）
+      5. 对话中的重要上下文信息（重要事件、关系、背景等）
+
+      使用 set_memory 工具自动存储这些信息，使用合适的 key（如 personal_info, preferences, work_info, skills, interests, context 等）。
+      如果信息已经存在，使用 set_memory 更新它。
+      只有在用户明确要求删除时，才使用 delete_memory。
+
+      主动识别并存储重要信息，不要等待用户明确请求。但要确保存储的信息是有价值的、准确的，避免存储无关的临时对话内容。
+    model_parameters:
+      temperature: 0.1
