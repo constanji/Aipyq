@@ -5,6 +5,7 @@ import type { TStartupConfig } from 'aipyq-data-provider';
 import { useLocalize } from '~/hooks';
 import ModelSpecsConfig from './ModelSpecsConfig';
 import AgentsManagement from './AgentsManagement';
+import MCPManagement from './MCPManagement';
 
 interface GlobalConfigContentProps {
   startupConfig?: TStartupConfig;
@@ -14,12 +15,16 @@ export default function GlobalConfigContent({ startupConfig }: GlobalConfigConte
   const localize = useLocalize();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
-  const [activeTab, setActiveTab] = useState(tabParam === 'agents' ? 'agents' : 'modelspecs');
+  const [activeTab, setActiveTab] = useState(
+    tabParam === 'agents' ? 'agents' : tabParam === 'mcp' ? 'mcp' : 'modelspecs',
+  );
 
   // 同步 URL 参数和标签页状态
   useEffect(() => {
     if (tabParam === 'agents') {
       setActiveTab('agents');
+    } else if (tabParam === 'mcp') {
+      setActiveTab('mcp');
     } else if (tabParam === 'modelspecs') {
       setActiveTab('modelspecs');
     }
@@ -31,6 +36,8 @@ export default function GlobalConfigContent({ startupConfig }: GlobalConfigConte
     const newSearchParams = new URLSearchParams(searchParams);
     if (value === 'agents') {
       newSearchParams.set('tab', 'agents');
+    } else if (value === 'mcp') {
+      newSearchParams.set('tab', 'mcp');
     } else {
       newSearchParams.delete('tab');
     }
@@ -57,6 +64,12 @@ export default function GlobalConfigContent({ startupConfig }: GlobalConfigConte
           >
             智能体管理
           </Tabs.Trigger>
+          <Tabs.Trigger
+            value="mcp"
+            className="px-4 py-2 text-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary"
+          >
+            MCP 管理
+          </Tabs.Trigger>
         </Tabs.List>
         <div className="flex-1 overflow-auto">
           <Tabs.Content value="modelspecs" className="h-full">
@@ -64,6 +77,9 @@ export default function GlobalConfigContent({ startupConfig }: GlobalConfigConte
           </Tabs.Content>
           <Tabs.Content value="agents" className="h-full">
             <AgentsManagement />
+          </Tabs.Content>
+          <Tabs.Content value="mcp" className="h-full">
+            <MCPManagement />
           </Tabs.Content>
         </div>
       </Tabs.Root>
