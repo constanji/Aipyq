@@ -296,17 +296,34 @@ export function toolsCondition<T extends string>(
   toolNode: T,
   invokedToolIds?: Set<string>
 ): T | typeof END {
-  const message: AIMessage = Array.isArray(state)
-    ? state[state.length - 1]
-    : state.messages[state.messages.length - 1];
+  const messages: BaseMessage[] = Array.isArray(state)
+    ? state
+    : state.messages;
+  
+  // Find the last AIMessage (not ToolMessage)
+  let message: AIMessage | undefined;
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const msg = messages[i];
+    if (isAIMessage(msg)) {
+      message = msg;
+      break;
+    }
+  }
 
-  if (
-    'tool_calls' in message &&
-    (message.tool_calls?.length ?? 0) > 0 &&
-    !areToolCallsInvoked(message, invokedToolIds)
-  ) {
+  // If no AIMessage found, end the workflow
+  if (!message) {
+    return END;
+  }
+
+  // Check if there are tool calls that haven't been invoked yet
+  const hasToolCalls = 'tool_calls' in message && (message.tool_calls?.length ?? 0) > 0;
+  
+  if (hasToolCalls && !areToolCallsInvoked(message, invokedToolIds)) {
+    // There are tool calls that haven't been invoked yet, go to toolNode
     return toolNode;
   } else {
+    // No tool calls or all tool calls have been invoked, end the workflow
+    // This allows the agent to generate the final response after tool calls complete
     return END;
   }
 }

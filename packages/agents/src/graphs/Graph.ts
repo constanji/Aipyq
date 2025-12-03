@@ -1018,6 +1018,13 @@ export class StandardGraph extends Graph<t.BaseGraphState, t.GraphNode> {
       progress: 1,
     };
 
+    // Update invokedToolIds to mark this tool call as completed
+    // This ensures toolsCondition can properly detect that all tool calls have been processed
+    if (this.invokedToolIds == null) {
+      this.invokedToolIds = new Set<string>();
+    }
+    this.invokedToolIds.add(tool_call_id);
+
     await this.handlerRegistry
       ?.getHandler(GraphEvents.ON_RUN_STEP_COMPLETED)
       ?.handle(

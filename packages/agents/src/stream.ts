@@ -493,10 +493,15 @@ export function createContentAggregator(): t.ContentAggregatorResult {
       // When we receive a tool call with a name, it's the complete tool call
       // Consolidate with any previously accumulated args from chunks
       const hasValidName = incomingName != null && incomingName !== '';
+      // hasArgs: args is not null/undefined (empty string '' is valid for replacing empty object {})
+      const hasArgs = toolCallArgs != null;
 
-      // Only process if incoming has a valid name (complete tool call)
-      // or if we're doing a final update with complete data
-      if (!hasValidName && !finalUpdate) {
+      // Process if:
+      // 1. Incoming has a valid name (complete tool call)
+      // 2. Incoming has args to accumulate (tool_call_chunk with args, including empty string)
+      // 3. We're doing a final update with complete data
+      // This allows us to accumulate args from tool_call_chunk events even without a name
+      if (!hasValidName && !hasArgs && !finalUpdate) {
         return;
       }
 
@@ -507,12 +512,56 @@ export function createContentAggregator(): t.ContentAggregatorResult {
         | undefined;
 
       /** When args are a valid object, they are likely already invoked */
-      let args =
-        finalUpdate ||
-        typeof existingContent?.tool_call?.args === 'object' ||
-        typeof toolCallArgs === 'object'
-          ? contentPart.tool_call.args
-          : (existingContent?.tool_call?.args ?? '') + (toolCallArgs ?? '');
+      let args: string | Record<string, any>;
+      if (finalUpdate || typeof toolCallArgs === 'object') {
+        // 如果是最终更新或 args 是对象，直接使用
+        args = contentPart.tool_call.args;
+      } else if (typeof existingContent?.tool_call?.args === 'object') {
+        // 如果现有 args 是对象，但新的是字符串，需要特殊处理
+        // 检查是否为空对象，如果是空对象，应该视为空字符串以便累积
+        const isEmptyObject = Object.keys(existingContent.tool_call.args).length === 0;
+        if (isEmptyObject) {
+          // 空对象视为空字符串，累积新的字符串
+          if (toolCallArgs == null) {
+            args = '';
+          } else {
+            args = '' + toolCallArgs;
+          }
+        } else {
+          // 非空对象，转换为字符串后累积
+          if (toolCallArgs == null) {
+            args = existingContent.tool_call.args;
+          } else {
+            args = JSON.stringify(existingContent.tool_call.args) + toolCallArgs;
+          }
+        }
+      } else {
+        // 字符串累积逻辑
+        if (toolCallArgs == null) {
+          // 如果新的 args 是 null/undefined，保留已累积的值
+          args = existingContent?.tool_call?.args ?? '';
+        } else if (typeof existingContent?.tool_call?.args === 'string' && typeof toolCallArgs === 'string') {
+          // 如果两者都是字符串，检查 toolCallArgs 是否已经包含了 existingContent.tool_call.args
+          // 如果包含，说明 toolCallArgs 已经是累积后的值，直接使用
+          // 否则，进行累积
+          if (existingContent.tool_call.args && 
+              toolCallArgs.length >= existingContent.tool_call.args.length && 
+              toolCallArgs.startsWith(existingContent.tool_call.args)) {
+            // toolCallArgs 已经包含了 existingContent.tool_call.args，说明已经累积过了，直接使用
+            args = toolCallArgs;
+          } else if (existingContent.tool_call.args === '') {
+            // 如果现有值是空字符串，toolCallArgs 应该已经是累积后的值，直接使用
+            args = toolCallArgs;
+          } else {
+            // 需要累积
+            args = (existingContent?.tool_call?.args ?? '') + toolCallArgs;
+          }
+        } else {
+          // 累积字符串
+          args = (existingContent?.tool_call?.args ?? '') + toolCallArgs;
+        }
+      }
+      
       if (
         finalUpdate &&
         args == null &&
@@ -636,12 +685,18 @@ export function createContentAggregator(): t.ContentAggregatorResult {
         runStepDelta.delta.tool_calls
       ) {
         runStepDelta.delta.tool_calls.forEach((toolCallDelta) => {
+          // Skip chunks with null args (these are typically final chunks indicating completion)
+          // The accumulated args should be preserved in the existing content
+          if (toolCallDelta.args === null || toolCallDelta.args === undefined) {
+            return;
+          }
+
           const toolCallId = toolCallIdMap.get(runStepDelta.id);
 
           const contentPart: t.MessageContentComplex = {
             type: ContentTypes.TOOL_CALL,
             tool_call: {
-              args: toolCallDelta.args ?? '',
+              args: toolCallDelta.args,
               name: toolCallDelta.name,
               id: toolCallId,
             },

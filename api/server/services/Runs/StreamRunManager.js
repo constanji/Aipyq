@@ -287,13 +287,50 @@ class StreamRunManager {
     /** @type {StepToolCall} */
     const state = toolCall;
     const type = state.type;
-    const data = state[type];
+    let data = state[type];
+
+    // Ensure data object exists, initialize if needed
+    if (!data || typeof data !== 'object') {
+      data = {};
+      state[type] = data;
+    }
 
     /** @param {ToolCallDelta} */
     const deltaHandler = async (delta) => {
+      // Skip if delta is null or undefined
+      if (!delta || typeof delta !== 'object') {
+        logger.warn('Invalid delta object:', delta);
+        return;
+      }
+
+      // Track if any key was updated (to determine if we should send an update even when args is null)
+      let hasUpdates = false;
+      let hasNullArgs = false;
+
       for (const key in delta) {
+        // Initialize the key in data if it doesn't exist
         if (!Object.prototype.hasOwnProperty.call(data, key)) {
-          logger.warn(`Unhandled tool call key "${key}", delta: `, delta);
+          // Initialize based on the type of delta value
+          if (typeof delta[key] === 'string') {
+            data[key] = '';
+          } else if (Array.isArray(delta[key])) {
+            data[key] = [];
+          } else if (typeof delta[key] === 'object' && delta[key] !== null) {
+            data[key] = {};
+          } else {
+            data[key] = delta[key];
+          }
+        }
+
+        // Track if args is null (this might be the final delta indicating completion)
+        if (key === 'args' && (delta[key] === null || delta[key] === undefined)) {
+          hasNullArgs = true;
+          // Don't skip - we still want to send the accumulated value
+          continue;
+        }
+
+        // Skip null values to avoid overwriting accumulated data (except for args which we handle above)
+        if (delta[key] === null || delta[key] === undefined) {
           continue;
         }
 
@@ -322,12 +359,35 @@ class StreamRunManager {
             }
             // Merge the updateData into data[key][index]
             for (const updateKey in updateData) {
-              data[key][index][updateKey] = updateData[updateKey];
+              // Handle string accumulation for args and other string fields
+              if (typeof updateData[updateKey] === 'string') {
+                const currentValue = data[key][index][updateKey];
+                if (typeof currentValue === 'string') {
+                  data[key][index][updateKey] = currentValue + updateData[updateKey];
+                } else {
+                  data[key][index][updateKey] = updateData[updateKey];
+                }
+                hasUpdates = true;
+              } else if (updateData[updateKey] === null && updateKey === 'args') {
+                // When args is null (common with modelscope), preserve accumulated value
+                // Don't overwrite, just mark that we need to send an update
+                hasNullArgs = true;
+                // Keep the existing accumulated value
+              } else if (updateData[updateKey] != null) {
+                // Only update if the value is not null/undefined
+                data[key][index][updateKey] = updateData[updateKey];
+                hasUpdates = true;
+              }
+              // If updateData[updateKey] is null/undefined and not args, skip it
             }
           }
-        } else if (typeof delta[key] === 'string' && typeof data[key] === 'string') {
-          // Concatenate strings
-          // data[key] += delta[key];
+        } else if (typeof delta[key] === 'string') {
+          // Concatenate strings (especially important for args field)
+          // Initialize as empty string if not already a string
+          if (typeof data[key] !== 'string') {
+            data[key] = '';
+          }
+          data[key] += delta[key];
         } else if (
           typeof delta[key] === 'object' &&
           delta[key] !== null &&
@@ -341,7 +401,36 @@ class StreamRunManager {
         }
 
         state[type] = data;
+        hasUpdates = true;
+      }
 
+      // If args was null but we have accumulated data, send an update to preserve the accumulated value
+      // This handles the case where the last delta has args: null (common with modelscope)
+      if (hasNullArgs && !hasUpdates && data && Object.keys(data).length > 0) {
+        // Check if we have accumulated args/arguments data
+        // For function type, args might be stored as 'arguments' field
+        const hasAccumulatedArgs = 
+          (data.args && typeof data.args === 'string' && data.args.length > 0) ||
+          (data.arguments && typeof data.arguments === 'string' && data.arguments.length > 0);
+        // Also check for tool_calls array with accumulated data
+        const hasAccumulatedToolCalls = Array.isArray(data.tool_calls) && data.tool_calls.some(
+          (tc) => tc && (
+            (tc.args && typeof tc.args === 'string' && tc.args.length > 0) ||
+            (tc.arguments && typeof tc.arguments === 'string' && tc.arguments.length > 0)
+          )
+        );
+        
+        if (hasAccumulatedArgs || hasAccumulatedToolCalls) {
+          state[type] = data;
+          this.addContentData({
+            [ContentTypes.TOOL_CALL]: toolCall,
+            type: ContentTypes.TOOL_CALL,
+            index,
+          });
+          await sleep(this.streamRate);
+        }
+      } else if (hasUpdates) {
+        // Normal case: send update when there are actual changes
         this.addContentData({
           [ContentTypes.TOOL_CALL]: toolCall,
           type: ContentTypes.TOOL_CALL,
@@ -420,6 +509,12 @@ class StreamRunManager {
     }
 
     for (const toolCall of tool_calls) {
+      // Skip invalid toolCall objects
+      if (!toolCall || typeof toolCall !== 'object') {
+        logger.warn('Invalid toolCall object in delta:', toolCall);
+        continue;
+      }
+
       const stepKey = this.generateToolCallKey(stepId, toolCall);
 
       if (!this.mappedOrder.has(stepKey)) {
@@ -427,8 +522,34 @@ class StreamRunManager {
         continue;
       }
 
-      const toolCallDelta = toolCall[toolCall.type];
+      // Handle tool_call_chunk type: the chunk itself is the delta
+      let toolCallDelta;
+      if (toolCall.type === 'tool_call_chunk') {
+        // For tool_call_chunk, use the chunk object directly as delta
+        // Remove the type field and index to get the actual delta data
+        const { type, index, ...deltaData } = toolCall;
+        toolCallDelta = deltaData;
+      } else if (toolCall.type && toolCall[toolCall.type]) {
+        // For regular tool calls, extract the delta from the type-specific property
+        toolCallDelta = toolCall[toolCall.type];
+      } else {
+        // Fallback: use the toolCall object itself as delta
+        logger.warn('Unexpected toolCall structure, using toolCall as delta:', toolCall);
+        toolCallDelta = toolCall;
+      }
+
+      // Skip if toolCallDelta is null or undefined
+      if (toolCallDelta == null) {
+        logger.warn('toolCallDelta is null/undefined, skipping:', { toolCall, stepKey });
+        continue;
+      }
+
       const progressCallback = this.progressCallbacks.get(stepKey);
+      if (!progressCallback) {
+        logger.warn('No progress callback found for stepKey:', stepKey);
+        continue;
+      }
+
       progressCallback(toolCallDelta);
     }
   }

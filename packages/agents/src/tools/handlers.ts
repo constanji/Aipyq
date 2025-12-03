@@ -117,10 +117,35 @@ export async function handleToolCallChunks({
       metadata
     );
   }
+  // Filter out tool_call_chunks with null/undefined args to prevent sending null args
+  // Some LLM providers (e.g., modelscope) send null args in the final chunk to indicate completion
+  // We filter these out to maintain consistency with normal model endpoints
+  const filteredToolCallChunks = toolCallChunks
+    .map((chunk) => {
+      // If args is null or undefined, omit it from the chunk (don't send null)
+      // This allows the frontend to preserve accumulated args values
+      if (chunk.args == null) {
+        const { args, ...chunkWithoutArgs } = chunk;
+        return chunkWithoutArgs;
+      }
+      return chunk;
+    })
+    .filter((chunk) => {
+      // Only keep chunks that have meaningful content (args, name, or id)
+      // If a chunk only has index and type but no actual content, skip it
+      // This prevents sending empty chunks that would overwrite accumulated values
+      return chunk.args != null || chunk.name != null || chunk.id != null;
+    });
+
+  // Only send the delta if there are meaningful chunks to send
+  // If all chunks were filtered out (e.g., all had null args), skip sending the event
+  // This allows the frontend to preserve accumulated args values
+  if (filteredToolCallChunks.length > 0) {
   await graph.dispatchRunStepDelta(stepId, {
     type: StepTypes.TOOL_CALLS,
-    tool_calls: toolCallChunks,
+      tool_calls: filteredToolCallChunks,
   });
+  }
 }
 
 export const handleToolCalls = async (
