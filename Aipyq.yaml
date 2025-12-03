@@ -9,17 +9,17 @@ mcpServers:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/f39be3cde8434c/mcp
     chatMenu: true
-    startup: false  # 设置为 false，避免启动时自动连接失败
+    startup: false  # 启动时自动连接
   fetch:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/6423925509fd43/mcp
     chatMenu: true
-    startup: false  # 设置为 false，避免启动时自动连接失败
+    startup: false  # 启动时自动连接
   howtocook-mcp:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/eb735ba6a6554e/mcp
     chatMenu: true
-    startup: false  # 设置为 false，避免启动时自动连接失败
+    startup: false  # 启动时自动连接
 
     
 # 自定义界面配置
@@ -57,6 +57,7 @@ registration:
   socialLogins: ['github', 'google', 'discord', 'openid', 'facebook', 'apple', 'saml']
   # allowedDomains:
   # - "gmail.com"
+
 # 操作对象结构示例 添加工具需要在里面添加允许的域名
 actions:
   allowedDomains:
@@ -89,6 +90,7 @@ endpoints:
     maxRecursionLimit: 100
     # 启用 actions 能力
     capabilities: ["execute_code", "file_search", "actions", "tools"]
+
   custom:
     # ModelScope 端点配置
     - name: 'modelscope'
@@ -107,34 +109,33 @@ endpoints:
           - 'deepseek-ai/DeepSeek-V3.1'
           - 'KookYan/Kook_Qwen_zshx_v2'
         fetch: false
+      titleConvo: true 
       dropParams: ['stop']  # ModelScope 接口不接受 stop 参数
-      forceStringContent: true
+      forceStringContent: true    # 标题对话设置
       modelDisplayLabel: 'ModelScope'   # 模型显示标签
       #iconURL: '/assets/qwen.svg'
+      titleModel: 'Qwen/Qwen3-Coder-480B-A35B-Instruct' # 标题模型：指定用于标题的模型。
+      
+      # 设置为 true 启用标题对话
       # 可选配置
 
-      # 标题对话设置
-      titleConvo: true # 设置为 true 启用标题对话
-
-
-      # 标题模型：指定用于标题的模型。
-      titleModel: 'Qwen/Qwen3-Coder-480B-A35B-Instruct' 
+      
       # 如果省略，默认为 "gpt-3.5-turbo"。
       
     - name: 'deepseek'
       apiKey: '${DEEP_SEEK_API_KEY}'
       baseURL: 'https://api.deepseek.com/v1'
       models:
-        default: 
-        - 'deepseek-chat'
-        - 'deepseek-coder'
-        - 'deepseek-reasoner'
+        default:
+          - 'deepseek-chat'
+          - 'deepseek-coder'
+          - 'deepseek-reasoner'
         fetch: false
       titleConvo: true
       titleModel: 'deepseek-chat'
       modelDisplayLabel: 'Deepseek'
 
-    # ----------- 用户记忆配置 -----------
+# ----------- 用户记忆配置 -----------
 memory:
   disabled: false                     # 总开关：true = 关闭记忆
   validKeys: ["preferences", "work_info", "personal_info", "skills", "interests", "context"]     # 会话级上下文（最近话题、临时任务）

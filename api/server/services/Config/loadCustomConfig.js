@@ -113,15 +113,15 @@ https://www.aipyq.ai/docs/configuration/stt_tts`);
     }
   }
 
-  (customConfig.endpoints?.custom ?? [])
+  // Use validated data from result.data, but merge with customConfig to preserve any additional fields
+  const validatedConfig = result.data;
+  
+  // Process custom params for endpoints that have them
+  (validatedConfig.endpoints?.custom ?? [])
     .filter((endpoint) => endpoint.customParams)
     .forEach((endpoint) => parseCustomParams(endpoint.name, endpoint.customParams));
 
-  if (result.data.modelSpecs) {
-    customConfig.modelSpecs = result.data.modelSpecs;
-  }
-
-  return customConfig;
+  return validatedConfig;
 }
 
 // Validate and fill out missing values for custom parameters
