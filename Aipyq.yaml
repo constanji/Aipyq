@@ -18,6 +18,18 @@ mcpServers:
     url: https://mcp.api-inference.modelscope.net/eb735ba6a6554e/mcp
     chatMenu: true
     startup: false
+  tupianshipin:
+    type: streamable-http
+    url: https://mcp.api-inference.modelscope.net/b33cbea71ad446/mcp
+    chatMenu: true
+    startup: true
+    customUserVars: {}
+  tupianshipin2:
+    type: sse
+    url: https://mcp.api-inference.modelscope.net/5a6e01d6c35e44/sse
+    chatMenu: true
+    startup: false
+    customUserVars: {}
 interface:
   customWelcome: 欢迎使用 AI朋友圈！祝您体验愉快。
   fileSearch: true
