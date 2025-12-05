@@ -45,10 +45,10 @@ const localStorageAtoms = {
   centerFormOnLanding: atomWithLocalStorage('centerFormOnLanding', true),
   showFooter: atomWithLocalStorage('showFooter', true),
 
-  // Commands settings
-  atCommand: atomWithLocalStorage('atCommand', true),
-  plusCommand: atomWithLocalStorage('plusCommand', true),
-  slashCommand: atomWithLocalStorage('slashCommand', true),
+  // Commands settings - 默认关闭
+  atCommand: atomWithLocalStorage('atCommand', false),
+  plusCommand: atomWithLocalStorage('plusCommand', false),
+  slashCommand: atomWithLocalStorage('slashCommand', false),
 
   // Speech settings
   conversationMode: atomWithLocalStorage('conversationMode', false),

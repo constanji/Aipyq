@@ -50,7 +50,7 @@ export const useMCPConnectionStatusQuery = (
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      refetchOnMount: false,
+      refetchOnMount: config?.enabled !== false, // 如果启用，则在挂载时获取
       staleTime: 10000, // 10 seconds
       ...config,
     },

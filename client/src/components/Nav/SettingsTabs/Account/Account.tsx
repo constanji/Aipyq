@@ -29,9 +29,10 @@ function Account() {
           )}
         </>
       )}
-      <div className="pb-3">
+      {/* 隐藏删除账户功能 */}
+      {/* <div className="pb-3">
         <DeleteAccount />
-      </div>
+      </div> */}
     </div>
   );
 }

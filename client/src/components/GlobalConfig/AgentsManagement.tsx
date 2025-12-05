@@ -10,6 +10,7 @@ import { useAuthContext, useLocalize, useAgentDefaultPermissionLevel } from '~/h
 import { AgentPanelProvider, useAgentPanelContext } from '~/Providers/AgentPanelContext';
 import { AgentPanelSwitchWithContext } from '~/components/SidePanel/Agents/AgentPanelSwitch';
 import { cn } from '~/utils';
+import { getAgentAvatarUrl } from '~/utils/agents';
 import type { Agent } from 'aipyq-data-provider';
 
 // 包装组件，用于在编辑模式下设置agent_id
@@ -208,7 +209,7 @@ export default function AgentsManagement() {
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">智能体列表</h3>
+          <h3 className="text-lg font-semibold text-text-primary">智能体列表</h3>
           <p className="mt-1 text-sm text-text-secondary">
             管理所有智能体，设置是否展示给用户
           </p>
@@ -296,15 +297,17 @@ interface AgentListItemProps {
 }
 
 function AgentListItem({ agent, viewMode, onEdit, onDelete, onTogglePublic, isUpdating }: AgentListItemProps) {
+  const avatarUrl = getAgentAvatarUrl(agent);
+  
   if (viewMode === 'compact') {
     return (
       <div className="relative rounded-lg border border-border-light bg-surface-primary p-3 pr-10 pt-4">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
-            {agent.icon ? (
+            {avatarUrl ? (
               <img
-                src={agent.icon}
-                alt={agent.name}
+                src={avatarUrl}
+                alt={agent.name || '智能体'}
                 className="h-12 w-12 rounded-full object-cover"
               />
             ) : (
@@ -376,10 +379,10 @@ function AgentListItem({ agent, viewMode, onEdit, onDelete, onTogglePublic, isUp
         <div className="flex-1">
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
-              {agent.icon ? (
+              {avatarUrl ? (
                 <img
-                  src={agent.icon}
-                  alt={agent.name}
+                  src={avatarUrl}
+                  alt={agent.name || '智能体'}
                   className="h-10 w-10 rounded-full object-cover"
                 />
               ) : (

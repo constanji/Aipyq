@@ -8,6 +8,7 @@ import { useListAgentsQuery } from '~/data-provider';
 import { useLocalize, useAgentDefaultPermissionLevel, useNewConvo, useAuthContext } from '~/hooks';
 import { clearMessagesCache } from '~/utils';
 import { cn } from '~/utils';
+import { getAgentAvatarUrl } from '~/utils/agents';
 import type { Agent } from 'aipyq-data-provider';
 import store from '~/store';
 
@@ -160,7 +161,7 @@ export default function AgentsList({ toggleNav }: AgentsListProps) {
   return (
     <div className="mb-4 border-t border-border-light pt-4">
       <div className="mb-2 px-2">
-        <h2 className="text-sm font-semibold text-text-secondary">智能体</h2>
+        <h2 className="text-sm font-semibold text-text-secondary">智能体应用推荐</h2>
       </div>
       <div className="rounded-lg border border-border-light bg-surface-secondary p-2">
         {agents.length === 0 ? (
@@ -207,6 +208,7 @@ interface AgentListItemProps {
 
 function AgentListItem({ agent, index, isActive, onClick, moveAgent, canDrag }: AgentListItemProps) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const avatarUrl = getAgentAvatarUrl(agent);
 
   const [{ isDragging }, drag] = useDrag({
     type: AGENT_ITEM_TYPE,
@@ -291,8 +293,8 @@ function AgentListItem({ agent, index, isActive, onClick, moveAgent, canDrag }: 
         aria-label={agent.name}
       >
         <div className="flex-shrink-0">
-          {agent.icon ? (
-            <img src={agent.icon} alt={agent.name} className="h-5 w-5 rounded" />
+          {avatarUrl ? (
+            <img src={avatarUrl} alt={agent.name || '智能体'} className="h-5 w-5 rounded-full object-cover" />
           ) : (
             <Bot className="h-5 w-5" />
           )}

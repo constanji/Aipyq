@@ -24,6 +24,8 @@ const { verifyEmail, resendVerificationEmail } = require('~/server/services/Auth
 const { needsRefresh, getNewS3URL } = require('~/server/services/Files/S3/crud');
 const { processDeleteRequest } = require('~/server/services/Files/process');
 const { Transaction, Balance, User, Token } = require('~/db/models');
+const { SystemRoles } = require('aipyq-data-provider');
+const { getAllUserMemories } = require('~/models');
 const { getMCPManager, getFlowStateManager } = require('~/config');
 const { getAppConfig } = require('~/server/services/Config');
 const { deleteToolCalls } = require('~/models/ToolCall');
@@ -388,6 +390,201 @@ const maybeUninstallOAuthMCP = async (userId, pluginKey, appConfig) => {
   await flowManager.deleteFlow(flowId, 'mcp_oauth');
 };
 
+const listUsersController = async (req, res) => {
+  try {
+    // 只有管理员可以查看所有用户
+    if (req.user.role !== SystemRoles.ADMIN) {
+      return res.status(403).json({ error: '只有管理员可以查看用户列表' });
+    }
+
+    const users = await User.find({})
+      .select('email username name avatar provider role createdAt updatedAt')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // 清理敏感信息
+    const sanitizedUsers = users.map((user) => ({
+      _id: user._id.toString(),
+      email: user.email,
+      username: user.username || null,
+      name: user.name || null,
+      avatar: user.avatar || null,
+      provider: user.provider || 'email',
+      role: user.role || 'USER',
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    }));
+
+    res.status(200).json({
+      success: true,
+      users: sanitizedUsers,
+      total: sanitizedUsers.length,
+    });
+  } catch (error) {
+    logger.error('[listUsersController] Error listing users:', error);
+    res.status(500).json({ error: '获取用户列表失败' });
+  }
+};
+
+const getUserMemoriesController = async (req, res) => {
+  try {
+    // 只有管理员可以查看其他用户的记忆
+    if (req.user.role !== SystemRoles.ADMIN) {
+      return res.status(403).json({ error: '只有管理员可以查看用户记忆' });
+    }
+
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ error: '用户ID不能为空' });
+    }
+
+    // 验证用户是否存在
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: '用户不存在' });
+    }
+
+    // 获取用户记忆
+    const memories = await getAllUserMemories(userId);
+
+    // 按更新时间排序（最新的在前）
+    const sortedMemories = memories.sort(
+      (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+    );
+
+    // 计算总token数
+    const totalTokens = memories.reduce((sum, memory) => {
+      return sum + (memory.tokenCount || 0);
+    }, 0);
+
+    res.status(200).json({
+      success: true,
+      userId: userId,
+      userEmail: user.email,
+      userName: user.name || user.username || '未设置名称',
+      memories: sortedMemories,
+      totalTokens,
+      count: sortedMemories.length,
+    });
+  } catch (error) {
+    logger.error('[getUserMemoriesController] Error getting user memories:', error);
+    res.status(500).json({ error: '获取用户记忆失败' });
+  }
+};
+
+const updateUserRoleController = async (req, res) => {
+  try {
+    // 只有管理员可以更新用户角色
+    if (req.user.role !== SystemRoles.ADMIN) {
+      return res.status(403).json({ error: '只有管理员可以更新用户角色' });
+    }
+
+    const { userId } = req.params;
+    const { role } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: '用户ID不能为空' });
+    }
+
+    if (!role || (role !== SystemRoles.ADMIN && role !== SystemRoles.USER)) {
+      return res.status(400).json({ error: '角色必须是 ADMIN 或 USER' });
+    }
+
+    // 验证用户是否存在
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: '用户不存在' });
+    }
+
+    // 管理员不能将自己设置为普通用户
+    if (user._id.toString() === req.user.id && role === SystemRoles.USER) {
+      return res.status(400).json({ error: '不能将自己设置为普通用户' });
+    }
+
+    // 更新用户角色
+    const updatedUser = await updateUser(userId, { role });
+
+    res.status(200).json({
+      success: true,
+      user: {
+        _id: updatedUser._id.toString(),
+        email: updatedUser.email,
+        username: updatedUser.username || null,
+        name: updatedUser.name || null,
+        role: updatedUser.role,
+      },
+    });
+  } catch (error) {
+    logger.error('[updateUserRoleController] Error updating user role:', error);
+    res.status(500).json({ error: '更新用户角色失败' });
+  }
+};
+
+const deleteUserByIdController = async (req, res) => {
+  try {
+    // 只有管理员可以删除其他用户
+    if (req.user.role !== SystemRoles.ADMIN) {
+      return res.status(403).json({ error: '只有管理员可以删除用户' });
+    }
+
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ error: '用户ID不能为空' });
+    }
+
+    // 不能删除自己
+    if (userId === req.user.id) {
+      return res.status(400).json({ error: '不能删除自己的账户' });
+    }
+
+    // 验证用户是否存在
+    const userToDelete = await User.findById(userId);
+    if (!userToDelete) {
+      return res.status(404).json({ error: '用户不存在' });
+    }
+
+    // 删除用户及其所有相关数据
+    await deleteMessages({ user: userId });
+    await deleteAllUserSessions({ userId });
+    await Transaction.deleteMany({ user: userId });
+    await deleteUserKey({ userId, all: true });
+    await Balance.deleteMany({ user: userId });
+    await deletePresets(userId);
+    try {
+      await deleteConvos(userId);
+    } catch (error) {
+      logger.error('[deleteUserByIdController] Error deleting user convos, likely no convos', error);
+    }
+    await deleteUserPluginAuth(userId, null, true);
+    await deleteAllSharedLinks(userId);
+    // 删除用户文件
+    try {
+      const userFiles = await getFiles({ user: userId });
+      await processDeleteRequest({
+        req,
+        files: userFiles,
+      });
+    } catch (error) {
+      logger.error('[deleteUserByIdController] Error deleting user files', error);
+    }
+    await deleteFiles(null, userId);
+    await deleteToolCalls(userId);
+    await deleteUserById(userId);
+
+    logger.info(`[deleteUserByIdController] Admin ${req.user.email} deleted user ${userToDelete.email} (ID: ${userId})`);
+    
+    res.status(200).json({
+      success: true,
+      message: '用户已成功删除',
+    });
+  } catch (error) {
+    logger.error('[deleteUserByIdController] Error deleting user:', error);
+    res.status(500).json({ error: '删除用户失败' });
+  }
+};
+
 module.exports = {
   getUserController,
   getTermsStatusController,
@@ -396,4 +593,8 @@ module.exports = {
   verifyEmailController,
   updateUserPluginsController,
   resendVerificationController,
+  listUsersController,
+  getUserMemoriesController,
+  updateUserRoleController,
+  deleteUserByIdController,
 };

@@ -6,12 +6,13 @@ import ModelSpecsConfig from './ModelSpecsConfig';
 import AgentsManagement from './AgentsManagement';
 import MCPManagement from './MCPManagement';
 import EndpointsConfig from './EndpointsConfig';
+import UsersManagement from './UsersManagement';
 
 interface GlobalConfigContentProps {
   startupConfig?: TStartupConfig;
 }
 
-type TabType = 'modelSpecs' | 'agents' | 'mcp';
+type TabType = 'modelSpecs' | 'agents' | 'mcp' | 'users';
 
 export default function GlobalConfigContent({ startupConfig: propStartupConfig }: GlobalConfigContentProps) {
   const { data: startupConfigFromQuery } = useGetStartupConfig();
@@ -33,6 +34,11 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       id: 'mcp',
       label: 'MCP管理',
       description: '查看和管理MCP服务器的连接状态',
+    },
+    {
+      id: 'users',
+      label: '用户管理',
+      description: '查看和管理所有注册用户',
     },
   ];
 
@@ -66,6 +72,7 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
         {activeTab === 'modelSpecs' && <EndpointsConfig startupConfig={startupConfig} />}
         {activeTab === 'agents' && <AgentsManagement />}
         {activeTab === 'mcp' && <MCPManagement startupConfig={startupConfig} />}
+        {activeTab === 'users' && <UsersManagement />}
       </div>
     </div>
   );

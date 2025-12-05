@@ -11,5 +11,5 @@ module.exports = {
   imageOutput: path.resolve(__dirname, '..', '..', 'client', 'public', 'images'),
   structuredTools: path.resolve(__dirname, '..', 'app', 'clients', 'tools', 'structured'),
   pluginManifest: path.resolve(__dirname, '..', 'app', 'clients', 'tools', 'manifest.json'),
-  memory: path.resolve(__dirname, '..', '..', 'Memory'),
+  memory: path.resolve(__dirname, '..', '..', 'memoryentries'),
 };

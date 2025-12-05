@@ -18,6 +18,7 @@ export function createMemoryMethods(
 ) {
   // Use file system storage - always enabled now
   const memoryPath = options?.memoryPath || getMemoryPath();
+  logger.info(`Memory file storage initialized with path: ${memoryPath}`);
   const fileStorage = new MemoryFileStorage(memoryPath);
   /**
    * Creates a new memory entry for a user
@@ -52,8 +53,13 @@ export function createMemoryMethods(
       // Also save to file system
       try {
         await fileStorage.createMemory({ userId, key, value, tokenCount });
+        logger.debug(`Memory saved to file system: ${key} for user ${userId}`);
       } catch (fileError) {
-        logger.error('Failed to save memory to file system:', fileError);
+        logger.error(`Failed to save memory to file system (key: ${key}, userId: ${userId}):`, fileError);
+        logger.error('File system error details:', {
+          error: fileError instanceof Error ? fileError.message : String(fileError),
+          stack: fileError instanceof Error ? fileError.stack : undefined,
+        });
         // Continue even if file save fails, database is primary
       }
 
@@ -97,8 +103,13 @@ export function createMemoryMethods(
       // Also save to file system
       try {
         await fileStorage.setMemory({ userId, key, value, tokenCount });
+        logger.debug(`Memory updated in file system: ${key} for user ${userId}`);
       } catch (fileError) {
-        logger.error('Failed to save memory to file system:', fileError);
+        logger.error(`Failed to update memory in file system (key: ${key}, userId: ${userId}):`, fileError);
+        logger.error('File system error details:', {
+          error: fileError instanceof Error ? fileError.message : String(fileError),
+          stack: fileError instanceof Error ? fileError.stack : undefined,
+        });
         // Continue even if file save fails, database is primary
       }
 

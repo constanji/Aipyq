@@ -23,5 +23,5 @@ export function getMemoryPath(): string {
     return globalMemoryPath;
   }
   // Default fallback
-  return path.join(process.cwd(), 'Memory');
+  return path.join(process.cwd(), 'memoryentries');
 }

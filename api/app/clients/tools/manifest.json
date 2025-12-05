@@ -186,5 +186,12 @@
     "description": "Spec-Driven Development toolkit for creating specifications, plans, and tasks. Commands: specify, plan, tasks, implement, clarify, analyze, checklist, constitution.",
     "icon": "https://github.com/github/spec-kit/raw/main/media/logo_small.webp",
     "authConfig": []
+  },
+  {
+    "name": "spec朋友圈生成",
+    "pluginKey": "social",
+    "description": "朋友圈内容生成工具，根据用户输入使用模板系统生成规范的朋友圈内容。Commands: generate (生成朋友圈内容), templates (列出可用模板), format (格式化内容).",
+    "icon": "📱",
+    "authConfig": []
   }
 ]

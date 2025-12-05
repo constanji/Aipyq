@@ -35,7 +35,7 @@ export class MemoryFileStorage {
       return this.memoryDir;
     }
     // Fallback to default path
-    const defaultPath = path.join(process.cwd(), 'Memory');
+    const defaultPath = path.join(process.cwd(), 'memoryentries');
     if (!fs.existsSync(defaultPath)) {
       fs.mkdirSync(defaultPath, { recursive: true });
     }
@@ -104,9 +104,17 @@ export class MemoryFileStorage {
         updated_at: new Date(),
       };
 
+      const fileDir = path.dirname(filePath);
+      if (!fs.existsSync(fileDir)) {
+        fs.mkdirSync(fileDir, { recursive: true });
+        logger.debug(`Created memory directory: ${fileDir}`);
+      }
+      
       fs.writeFileSync(filePath, JSON.stringify(memoryEntry, null, 2), 'utf8');
+      logger.debug(`Memory file created: ${filePath}`);
       return { ok: true };
     } catch (error) {
+      logger.error(`Failed to create memory file at ${filePath}:`, error);
       throw new Error(
         `Failed to create memory: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );
@@ -152,9 +160,17 @@ export class MemoryFileStorage {
         };
       }
 
+      const fileDir = path.dirname(filePath);
+      if (!fs.existsSync(fileDir)) {
+        fs.mkdirSync(fileDir, { recursive: true });
+        logger.debug(`Created memory directory: ${fileDir}`);
+      }
+      
       fs.writeFileSync(filePath, JSON.stringify(memoryEntry, null, 2), 'utf8');
+      logger.debug(`Memory file updated: ${filePath}`);
       return { ok: true };
     } catch (error) {
+      logger.error(`Failed to set memory file at ${filePath}:`, error);
       throw new Error(
         `Failed to set memory: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );

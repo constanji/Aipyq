@@ -3,7 +3,7 @@ import { Button, useToastContext } from '@aipyq/client';
 import { useGetStartupConfig } from '~/data-provider';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { cn } from '~/utils';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Settings, ChevronDown } from 'lucide-react';
 import EndpointConfigEditor from './EndpointConfigEditor';
 
 interface EndpointConfig {
@@ -36,6 +36,9 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
   const [showEditor, setShowEditor] = useState(false);
   const [editingEndpoint, setEditingEndpoint] = useState<EndpointConfig | undefined>(undefined);
   const [isSaving, setIsSaving] = useState(false);
+  const [expandedEndpoints, setExpandedEndpoints] = useState<Set<string>>(new Set());
+  const [addingModelToEndpoint, setAddingModelToEndpoint] = useState<string | null>(null);
+  const [newModelName, setNewModelName] = useState('');
 
   const [customEndpoints, setCustomEndpoints] = useState<EndpointConfig[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -240,6 +243,50 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
     }
   };
 
+  const handleQuickAddModel = async (endpoint: EndpointConfig, modelName: string) => {
+    if (!modelName.trim()) {
+      showToast({
+        message: '模型名称不能为空',
+        status: 'error',
+      });
+      return;
+    }
+
+    // 检查模型是否已存在
+    if (endpoint.models?.default?.includes(modelName.trim())) {
+      showToast({
+        message: '该模型已存在',
+        status: 'error',
+      });
+      setNewModelName('');
+      setAddingModelToEndpoint(null);
+      return;
+    }
+
+    try {
+      const updatedEndpoint: EndpointConfig = {
+        ...endpoint,
+        models: {
+          ...endpoint.models,
+          default: [...(endpoint.models?.default || []), modelName.trim()],
+        },
+      };
+
+      await handleSave(updatedEndpoint);
+      setNewModelName('');
+      setAddingModelToEndpoint(null);
+      showToast({
+        message: '模型添加成功',
+        status: 'success',
+      });
+    } catch (error) {
+      showToast({
+        message: `添加失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        status: 'error',
+      });
+    }
+  };
+
   // 如果显示编辑器，渲染编辑器
   if (showEditor) {
     return (
@@ -256,7 +303,7 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold">端点配置</h2>
+          <h2 className="text-lg font-semibold text-text-primary">端点配置</h2>
           <p className="mt-1 text-sm text-text-secondary">
             管理自定义端点配置，这些配置将添加到 Aipyq.yaml 文件中
           </p>
@@ -284,84 +331,203 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
             </p>
           </div>
         ) : (
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {customEndpoints.map((endpoint) => (
-              <div
-                key={endpoint.name}
-                className="relative flex flex-col rounded-lg border border-border-subtle bg-surface-primary p-4"
-              >
-                {/* 编辑按钮 */}
-                <div className="absolute right-2 top-2 flex gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(endpoint)}
-                    className="rounded p-1.5 text-text-secondary hover:bg-surface-hover"
-                    title="编辑端点配置"
-                    aria-label="编辑"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(endpoint.name)}
-                    className="rounded p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                    title="删除端点配置"
-                    aria-label="删除"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
+          <div className="space-y-1">
+            {customEndpoints.map((endpoint) => {
+              const models = endpoint.models?.default || [];
+              const hasModels = models.length > 0 || endpoint.models?.fetch;
+              const isExpanded = expandedEndpoints.has(endpoint.name);
 
-                <div className="mb-2 pr-16">
-                  <h4 className="text-base font-semibold text-text-primary">{endpoint.name}</h4>
-                  {endpoint.modelDisplayLabel && (
-                    <p className="mt-1 text-xs text-text-secondary">
-                      显示标签: {endpoint.modelDisplayLabel}
-                    </p>
-                  )}
-                </div>
+              const toggleExpand = () => {
+                setExpandedEndpoints((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(endpoint.name)) {
+                    next.delete(endpoint.name);
+                  } else {
+                    next.add(endpoint.name);
+                  }
+                  return next;
+                });
+              };
 
-                <div className="mt-2 space-y-2 text-sm">
-                  <div className="flex items-center gap-2 text-text-secondary">
-                    <span className="font-medium">Base URL:</span>
-                    <span className="truncate text-xs">{endpoint.baseURL}</span>
-                  </div>
-
-                  {endpoint.models?.default && endpoint.models.default.length > 0 && (
-                    <div>
-                      <span className="font-medium text-text-secondary">模型列表:</span>
-                      <div className="mt-1 flex flex-wrap gap-1.5">
-                        {endpoint.models.default.slice(0, 3).map((model) => (
-                          <span
-                            key={model}
-                            className="rounded-full bg-surface-secondary px-2 py-0.5 text-[11px] text-text-primary"
-                          >
-                            {model}
-                          </span>
-                        ))}
-                        {endpoint.models.default.length > 3 && (
-                          <span className="text-[11px] text-text-tertiary">
-                            +{endpoint.models.default.length - 3} 更多
-                          </span>
+              return (
+                <div
+                  key={endpoint.name}
+                  className="rounded-lg border border-border-light bg-surface-secondary"
+                >
+                  <div className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm hover:bg-surface-hover">
+                    <button
+                      type="button"
+                      onClick={toggleExpand}
+                      className="flex flex-1 items-center gap-2 text-left"
+                    >
+                      <ChevronDown
+                        className={cn(
+                          'h-4 w-4 transition-transform duration-200',
+                          isExpanded && 'rotate-180',
                         )}
-                      </div>
-                    </div>
-                  )}
-
-                  {endpoint.models?.fetch && (
-                    <div className="text-xs text-text-secondary">
-                      <span className="font-medium">自动获取模型列表</span>
-                    </div>
-                  )}
-
-                  {endpoint.titleConvo && (
-                    <div className="text-xs text-text-secondary">
-                      <span className="font-medium">启用标题对话</span>
+                      />
+                      <span className="truncate font-medium text-text-primary">{endpoint.name}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(endpoint);
+                      }}
+                      className="ml-2 flex items-center gap-1 rounded p-1 text-text-secondary opacity-0 transition-opacity hover:bg-surface-active group-hover:opacity-100"
+                      title="设置端点配置"
+                      aria-label="设置"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </button>
+                  </div>
+                  {isExpanded && (
+                    <div className="border-t border-border-light bg-surface-primary px-4 py-3">
+                      {hasModels ? (
+                        <div className="space-y-3">
+                          {models.length > 0 && (
+                            <div>
+                              <div className="mb-2 text-xs font-medium text-text-secondary">
+                                已配置模型 ({models.length})
+                              </div>
+                              <div className="flex flex-wrap gap-2">
+                                {models.map((model) => (
+                                  <div
+                                    key={model}
+                                    className="inline-flex items-center rounded-md border border-border-subtle bg-surface-secondary px-2.5 py-1 text-xs font-medium text-text-primary shadow-sm transition-colors hover:bg-surface-hover"
+                                  >
+                                    <span className="truncate text-text-primary">{model}</span>
+                                  </div>
+                                ))}
+                                {addingModelToEndpoint === endpoint.name ? (
+                                  <div className="inline-flex items-center gap-1.5 rounded-md border border-primary bg-primary/10 px-2.5 py-1">
+                                    <input
+                                      type="text"
+                                      value={newModelName}
+                                      onChange={(e) => setNewModelName(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                          e.preventDefault();
+                                          handleQuickAddModel(endpoint, newModelName);
+                                        } else if (e.key === 'Escape') {
+                                          setNewModelName('');
+                                          setAddingModelToEndpoint(null);
+                                        }
+                                      }}
+                                      placeholder="输入模型名称"
+                                      className="h-5 w-24 border-none bg-transparent text-xs font-medium text-text-primary outline-none placeholder:text-text-tertiary"
+                                      autoFocus
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => handleQuickAddModel(endpoint, newModelName)}
+                                      className="flex h-4 w-4 items-center justify-center rounded text-primary hover:bg-primary/20"
+                                      title="确认添加"
+                                    >
+                                      <Plus className="h-3 w-3" />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setNewModelName('');
+                                        setAddingModelToEndpoint(null);
+                                      }}
+                                      className="flex h-4 w-4 items-center justify-center rounded text-text-secondary hover:bg-surface-hover"
+                                      title="取消"
+                                    >
+                                      <span className="text-xs">×</span>
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setAddingModelToEndpoint(endpoint.name);
+                                      setNewModelName('');
+                                    }}
+                                    className="inline-flex items-center gap-1 rounded-md border border-dashed border-border-subtle bg-surface-secondary px-2.5 py-1 text-xs font-medium text-text-secondary transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
+                                    title="添加模型"
+                                  >
+                                    <Plus className="h-3 w-3" />
+                                    <span>添加模型</span>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          {endpoint.models?.fetch && (
+                            <div className="flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50/50 px-2.5 py-1.5 dark:border-blue-800 dark:bg-blue-900/20">
+                              <div className="flex h-1.5 w-1.5 rounded-full bg-blue-500"></div>
+                              <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
+                                自动获取模型列表
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface-secondary py-4">
+                            <span className="text-xs text-text-tertiary">暂无模型配置</span>
+                          </div>
+                          {addingModelToEndpoint === endpoint.name ? (
+                            <div className="flex items-center gap-2 rounded-md border border-primary bg-primary/10 px-3 py-2">
+                              <input
+                                type="text"
+                                value={newModelName}
+                                onChange={(e) => setNewModelName(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    handleQuickAddModel(endpoint, newModelName);
+                                  } else if (e.key === 'Escape') {
+                                    setNewModelName('');
+                                    setAddingModelToEndpoint(null);
+                                  }
+                                }}
+                                placeholder="输入模型名称"
+                                className="flex-1 border-none bg-transparent text-sm font-medium text-text-primary outline-none placeholder:text-text-tertiary"
+                                autoFocus
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleQuickAddModel(endpoint, newModelName)}
+                                className="flex h-6 w-6 items-center justify-center rounded text-primary hover:bg-primary/20"
+                                title="确认添加"
+                              >
+                                <Plus className="h-4 w-4" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setNewModelName('');
+                                  setAddingModelToEndpoint(null);
+                                }}
+                                className="flex h-6 w-6 items-center justify-center rounded text-text-secondary hover:bg-surface-hover"
+                                title="取消"
+                              >
+                                <span className="text-sm">×</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setAddingModelToEndpoint(endpoint.name);
+                                setNewModelName('');
+                              }}
+                              className="w-full rounded-md border border-dashed border-border-subtle bg-surface-secondary px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary"
+                            >
+                              <Plus className="mr-1.5 inline h-3 w-3" />
+                              添加模型
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

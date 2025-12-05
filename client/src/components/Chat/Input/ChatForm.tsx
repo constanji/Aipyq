@@ -1,6 +1,6 @@
 import { memo, useRef, useMemo, useEffect, useState, useCallback } from 'react';
 import { useWatch } from 'react-hook-form';
-import { TextareaAutosize } from '@aipyq/client';
+import { TextareaAutosize, useToastContext } from '@aipyq/client';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Constants, isAssistantsEndpoint, isAgentsEndpoint } from 'aipyq-data-provider';
 import {
@@ -131,7 +131,47 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     isSubmitting: isSubmitting || isSubmittingAdded,
   });
 
-  const { submitMessage, submitPrompt } = useSubmitMessage();
+  const { submitMessage: originalSubmitMessage, submitPrompt } = useSubmitMessage();
+  const { showToast } = useToastContext();
+
+  // 包装 submitMessage 以检查是否选择了端点/智能体
+  const submitMessage = useCallback(
+    (data?: { text: string }) => {
+      // 检查是否选择了端点
+      if (!endpoint) {
+        showToast({
+          message: localize('com_ui_please_select_agent'),
+          status: 'error',
+          duration: 3000,
+        });
+        return;
+      }
+
+      // 检查是否选择了智能体（如果是智能体端点）
+      if (isAgentsEndpoint(endpoint) && !conversation?.agent_id) {
+        showToast({
+          message: localize('com_ui_please_select_agent'),
+          status: 'error',
+          duration: 3000,
+        });
+        return;
+      }
+
+      // 检查是否选择了助手（如果是助手端点）
+      if (isAssistantsEndpoint(endpoint) && !conversation?.assistant_id) {
+        showToast({
+          message: localize('com_ui_please_select_agent'),
+          status: 'error',
+          duration: 3000,
+        });
+        return;
+      }
+
+      // 如果都检查通过，调用原始的 submitMessage
+      originalSubmitMessage(data);
+    },
+    [endpoint, conversation?.agent_id, conversation?.assistant_id, originalSubmitMessage, showToast, localize],
+  );
 
   const handleKeyUp = useHandleKeyUp({
     index,

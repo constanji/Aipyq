@@ -34,12 +34,16 @@ export default function EndpointConfigEditor({
 }: EndpointConfigEditorProps) {
   const localize = useLocalize();
   const { showToast } = useToastContext();
+  const [editingModelIndex, setEditingModelIndex] = useState<number | null>(null);
+  const [editingModelValue, setEditingModelValue] = useState<string>('');
 
   const {
     control,
     handleSubmit,
     formState: { isSubmitting, isDirty },
     reset,
+    watch,
+    setValue,
   } = useForm<EndpointConfig>({
     defaultValues: endpoint || {
       name: '',
@@ -49,9 +53,11 @@ export default function EndpointConfigEditor({
         default: [],
         fetch: false,
       },
-      titleConvo: false,
+      titleConvo: true, // 默认启用
+      modelDisplayLabel: '', // 默认与端点名相同
     },
   });
+
 
   const {
     fields: modelFields,
@@ -64,13 +70,23 @@ export default function EndpointConfigEditor({
 
   useEffect(() => {
     if (endpoint) {
-      reset(endpoint);
+      reset({
+        ...endpoint,
+        titleConvo: endpoint.titleConvo ?? true, // 默认启用
+        modelDisplayLabel: endpoint.modelDisplayLabel || endpoint.name, // 默认与端点名相同
+      });
     }
   }, [endpoint, reset]);
 
   const onSubmit = async (data: EndpointConfig) => {
     try {
-      await onSave(data);
+      // 确保 titleConvo 默认启用，modelDisplayLabel 与端点名相同
+      const submitData: EndpointConfig = {
+        ...data,
+        titleConvo: true,
+        modelDisplayLabel: data.name, // 显示标签与端点名相同
+      };
+      await onSave(submitData);
       showToast({
         message: endpoint ? '端点配置更新成功' : '端点配置创建成功',
         status: 'success',
@@ -110,13 +126,15 @@ export default function EndpointConfigEditor({
         </div>
 
         <div className="flex-1 overflow-auto">
-          <div className="space-y-4">
-            {/* 基本信息 */}
-            <div className="rounded-lg border border-border-light bg-surface-primary p-4">
-              <h4 className="mb-4 text-base font-semibold">基本信息</h4>
-              <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-6">
+            {/* 必要信息 */}
+            <div className="rounded-lg border border-border-light bg-surface-primary p-6">
+              <h4 className="mb-6 text-base font-semibold text-text-primary">必要信息</h4>
+              <div className="space-y-5">
                 <div>
-                  <label className="mb-2 block text-sm font-medium">名称 (name) *</label>
+                  <label className="mb-2 block text-sm font-medium text-text-primary">
+                    端点名称 <span className="text-red-500">*</span>
+                  </label>
                   <Controller
                     name="name"
                     control={control}
@@ -125,14 +143,19 @@ export default function EndpointConfigEditor({
                       <input
                         {...field}
                         className={cn(defaultTextProps, 'w-full')}
-                        placeholder="端点名称，如 deepseek"
+                        placeholder="例如：deepseek"
                       />
                     )}
                   />
+                  <p className="mt-1.5 text-xs text-text-secondary">
+                    用于标识此端点配置的唯一名称
+                  </p>
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium">API Key *</label>
+                  <label className="mb-2 block text-sm font-medium text-text-primary">
+                    API Key <span className="text-red-500">*</span>
+                  </label>
                   <Controller
                     name="apiKey"
                     control={control}
@@ -140,19 +163,21 @@ export default function EndpointConfigEditor({
                     render={({ field }) => (
                       <input
                         {...field}
-                        type="password"
+                        type="text"
                         className={cn(defaultTextProps, 'w-full')}
                         placeholder="${DEEP_SEEK_API_KEY}"
                       />
                     )}
                   />
-                  <p className="mt-1 text-xs text-text-secondary">
-                    支持环境变量，如 ${'{'}DEEP_SEEK_API_KEY{'}'}
+                  <p className="mt-1.5 text-xs text-text-secondary">
+                    支持环境变量格式，如 <code className="rounded bg-surface-secondary px-1 py-0.5 text-[11px]">${'{'}DEEP_SEEK_API_KEY{'}'}</code>
                   </p>
                 </div>
 
-                <div className="col-span-2">
-                  <label className="mb-2 block text-sm font-medium">Base URL *</label>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-text-primary">
+                    Base URL <span className="text-red-500">*</span>
+                  </label>
                   <Controller
                     name="baseURL"
                     control={control}
@@ -165,26 +190,29 @@ export default function EndpointConfigEditor({
                       />
                     )}
                   />
+                  <p className="mt-1.5 text-xs text-text-secondary">
+                    API 服务的基础地址，通常以 <code className="rounded bg-surface-secondary px-1 py-0.5 text-[11px]">/v1</code> 结尾
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* 模型配置 */}
-            <div className="rounded-lg border border-border-light bg-surface-primary p-4">
-              <div className="mb-4 flex items-center justify-between">
-                <h4 className="text-base font-semibold">模型配置</h4>
+            <div className="rounded-lg border border-border-light bg-surface-primary p-6">
+              <div className="mb-6 flex items-center justify-between">
+                <h4 className="text-base font-semibold text-text-primary">模型配置</h4>
                 <Button
                   type="button"
                   onClick={() => appendModel('')}
-                  className="btn btn-neutral border-token-border-light relative flex items-center gap-2 rounded-lg px-2 py-1 text-sm"
+                  className="btn btn-neutral border-token-border-light relative flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm"
                 >
-                  <Plus className="h-3 w-3" />
+                  <Plus className="h-4 w-4" />
                   添加模型
                 </Button>
               </div>
 
-              <div className="mb-4">
-                <label className="mb-2 flex items-center gap-2 text-sm font-medium">
+              <div className="mb-5 rounded-lg border border-border-subtle bg-surface-secondary p-3">
+                <label className="flex items-center gap-2 text-sm font-medium text-text-primary">
                   <Controller
                     name="models.fetch"
                     control={control}
@@ -193,146 +221,106 @@ export default function EndpointConfigEditor({
                         type="checkbox"
                         checked={field.value || false}
                         onChange={field.onChange}
-                        className="h-4 w-4"
+                        className="h-4 w-4 rounded border-border-light text-primary focus:ring-2 focus:ring-primary"
                       />
                     )}
                   />
-                  自动获取模型列表 (fetch)
+                  自动获取模型列表
                 </label>
+                <p className="mt-1.5 ml-6 text-xs text-text-secondary">
+                  启用后将从 API 自动获取可用模型列表
+                </p>
               </div>
 
-              <div className="space-y-2">
-                {modelFields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-2">
-                    <Controller
-                      name={`models.default.${index}`}
-                      control={control}
-                      render={({ field }) => (
-                        <input
-                          {...field}
-                          className={cn(defaultTextProps, 'flex-1')}
-                          placeholder="模型名称，如 deepseek-chat"
-                        />
-                      )}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeModel(index)}
-                      className="rounded p-1 text-red-500 hover:bg-surface-secondary"
-                      aria-label="删除模型"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+              <div className="space-y-3">
+                {modelFields.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {modelFields.map((field, index) => {
+                      const isEditing = editingModelIndex === index;
+                      return (
+                        <div
+                          key={field.id}
+                          className="group relative inline-flex items-center gap-1 rounded-md border border-border-subtle bg-surface-secondary px-2.5 py-1 text-xs font-medium text-text-primary shadow-sm transition-colors hover:bg-surface-hover"
+                        >
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={editingModelValue}
+                              onChange={(e) => setEditingModelValue(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  if (editingModelValue.trim()) {
+                                    // 更新模型名称
+                                    const currentValues = watch('models.default');
+                                    const updated = [...currentValues];
+                                    updated[index] = editingModelValue.trim();
+                                    setValue('models.default', updated, { shouldDirty: true });
+                                  }
+                                  setEditingModelIndex(null);
+                                  setEditingModelValue('');
+                                } else if (e.key === 'Escape') {
+                                  setEditingModelIndex(null);
+                                  setEditingModelValue('');
+                                }
+                              }}
+                              onBlur={() => {
+                                if (editingModelValue.trim()) {
+                                  const currentValues = watch('models.default');
+                                  const updated = [...currentValues];
+                                  updated[index] = editingModelValue.trim();
+                                  setValue('models.default', updated, { shouldDirty: true });
+                                }
+                                setEditingModelIndex(null);
+                                setEditingModelValue('');
+                              }}
+                              className="h-5 w-24 border-none bg-transparent p-0 text-xs font-medium text-text-primary outline-none"
+                              autoFocus
+                            />
+                          ) : (
+                            <>
+                              <Controller
+                                name={`models.default.${index}`}
+                                control={control}
+                                render={({ field }) => (
+                                  <span
+                                    onClick={() => {
+                                      setEditingModelIndex(index);
+                                      setEditingModelValue(field.value || '');
+                                    }}
+                                    className="cursor-text truncate"
+                                    title="点击编辑"
+                                  >
+                                    {field.value || '未命名模型'}
+                                  </span>
+                                )}
+                              />
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeModel(index);
+                                }}
+                                className="ml-1 flex h-3.5 w-3.5 items-center justify-center rounded text-text-secondary opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                                aria-label="删除模型"
+                                title="删除此模型"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-                {modelFields.length === 0 && (
-                  <p className="text-sm text-text-secondary">暂无模型，点击"添加模型"添加</p>
+                ) : (
+                  <div className="rounded-lg border border-dashed border-border-subtle bg-surface-secondary p-4 text-center">
+                    <p className="text-sm text-text-secondary">暂无模型配置</p>
+                    <p className="mt-1 text-xs text-text-tertiary">
+                      点击上方"添加模型"按钮开始添加
+                    </p>
+                  </div>
                 )}
-              </div>
-            </div>
-
-            {/* 可选配置 */}
-            <div className="rounded-lg border border-border-light bg-surface-primary p-4">
-              <h4 className="mb-4 text-base font-semibold">可选配置</h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="mb-2 block text-sm font-medium">模型显示标签</label>
-                  <Controller
-                    name="modelDisplayLabel"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className={cn(defaultTextProps, 'w-full')}
-                        placeholder="Deepseek"
-                      />
-                    )}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium">标题模型</label>
-                  <Controller
-                    name="titleModel"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className={cn(defaultTextProps, 'w-full')}
-                        placeholder="deepseek-chat"
-                      />
-                    )}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium">图标 URL</label>
-                  <Controller
-                    name="iconURL"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className={cn(defaultTextProps, 'w-full')}
-                        placeholder="/assets/icon.svg"
-                      />
-                    )}
-                  />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Controller
-                    name="titleConvo"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        type="checkbox"
-                        checked={field.value || false}
-                        onChange={field.onChange}
-                        className="h-4 w-4"
-                      />
-                    )}
-                  />
-                  <label className="text-sm font-medium">启用标题对话 (titleConvo)</label>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Controller
-                    name="forceStringContent"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        type="checkbox"
-                        checked={field.value || false}
-                        onChange={field.onChange}
-                        className="h-4 w-4"
-                      />
-                    )}
-                  />
-                  <label className="text-sm font-medium">强制字符串内容 (forceStringContent)</label>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <label className="mb-2 block text-sm font-medium">需要删除的参数 (dropParams)</label>
-                <Controller
-                  name="dropParams"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      value={field.value?.join(', ') || ''}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(
-                          value ? value.split(',').map((s) => s.trim()).filter(Boolean) : [],
-                        );
-                      }}
-                      className={cn(defaultTextProps, 'w-full')}
-                      placeholder="stop, temperature (用逗号分隔)"
-                    />
-                  )}
-                />
               </div>
             </div>
           </div>

@@ -551,6 +551,199 @@ router.delete('/endpoints/custom/:name', requireJwtAuth, requireAdmin, async fun
   }
 });
 
+/**
+ * GET /config/mcp/custom
+ * Gets the MCP servers configuration from Aipyq.yaml file
+ * Requires admin role
+ */
+router.get('/mcp/custom', requireJwtAuth, requireAdmin, async function (req, res) {
+  try {
+    const projectRoot = path.resolve(__dirname, '..', '..', '..');
+    const configPath = process.env.CONFIG_PATH || path.resolve(projectRoot, 'Aipyq.yaml');
+
+    if (/^https?:\/\//.test(configPath)) {
+      return res.status(400).json({
+        error: 'Cannot read remote config file. Please use a local Aipyq.yaml file.',
+      });
+    }
+
+    let configContent;
+    try {
+      configContent = await fs.readFile(configPath, 'utf8');
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return res.status(404).json({ error: 'Config file not found' });
+      }
+      throw error;
+    }
+
+    let config;
+    try {
+      config = yaml.load(configContent);
+    } catch (error) {
+      return res.status(400).json({ 
+        error: 'Invalid YAML format in config file',
+        details: error.message 
+      });
+    }
+
+    const mcpServers = config.mcpServers || {};
+    const servers = Object.entries(mcpServers).map(([serverName, config]) => ({
+      serverName,
+      config,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      servers,
+    });
+  } catch (err) {
+    logger.error('[GET /config/mcp/custom] Unexpected error:', err);
+    return res.status(500).json({ 
+      error: err.message || 'Internal server error',
+    });
+  }
+});
+
+/**
+ * POST /config/mcp/custom
+ * Updates the MCP servers configuration in Aipyq.yaml file
+ * Requires admin role
+ */
+router.post('/mcp/custom', requireJwtAuth, requireAdmin, async function (req, res) {
+  try {
+    const { server } = req.body;
+
+    if (!server || typeof server !== 'object' || !server.serverName) {
+      return res.status(400).json({ error: 'server must be an object with serverName' });
+    }
+
+    const projectRoot = path.resolve(__dirname, '..', '..', '..');
+    const configPath = process.env.CONFIG_PATH || path.resolve(projectRoot, 'Aipyq.yaml');
+
+    if (/^https?:\/\//.test(configPath)) {
+      return res.status(400).json({
+        error: 'Cannot update remote config file. Please use a local Aipyq.yaml file.',
+      });
+    }
+
+    let configContent;
+    try {
+      configContent = await fs.readFile(configPath, 'utf8');
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return res.status(404).json({ error: 'Config file not found' });
+      }
+      throw error;
+    }
+
+    let config;
+    try {
+      config = yaml.load(configContent);
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid YAML format in config file' });
+    }
+
+    if (!config.mcpServers) {
+      config.mcpServers = {};
+    }
+
+    const { serverName, config: serverConfig } = server;
+    config.mcpServers[serverName] = serverConfig;
+
+    const updatedYaml = yaml.dump(config, {
+      indent: 2,
+      lineWidth: -1,
+      noRefs: true,
+      sortKeys: false,
+    });
+
+    await fs.writeFile(configPath, updatedYaml, 'utf8');
+
+    const cache = getLogStores(CacheKeys.CONFIG_STORE);
+    await cache.delete(CacheKeys.STARTUP_CONFIG);
+
+    logger.info(`MCP server "${serverName}" ${config.mcpServers[serverName] ? 'updated' : 'added'} successfully`);
+
+    return res.status(200).json({
+      success: true,
+      message: `MCP server "${serverName}" ${config.mcpServers[serverName] ? 'updated' : 'added'} successfully`,
+    });
+  } catch (err) {
+    logger.error('Error updating MCP server config', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * DELETE /config/mcp/custom/:serverName
+ * Deletes a MCP server from Aipyq.yaml file
+ * Requires admin role
+ */
+router.delete('/mcp/custom/:serverName', requireJwtAuth, requireAdmin, async function (req, res) {
+  try {
+    const { serverName } = req.params;
+
+    if (!serverName) {
+      return res.status(400).json({ error: 'Server name is required' });
+    }
+
+    const projectRoot = path.resolve(__dirname, '..', '..', '..');
+    const configPath = process.env.CONFIG_PATH || path.resolve(projectRoot, 'Aipyq.yaml');
+
+    if (/^https?:\/\//.test(configPath)) {
+      return res.status(400).json({
+        error: 'Cannot update remote config file. Please use a local Aipyq.yaml file.',
+      });
+    }
+
+    let configContent;
+    try {
+      configContent = await fs.readFile(configPath, 'utf8');
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return res.status(404).json({ error: 'Config file not found' });
+      }
+      throw error;
+    }
+
+    let config;
+    try {
+      config = yaml.load(configContent);
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid YAML format in config file' });
+    }
+
+    if (!config.mcpServers || !config.mcpServers[serverName]) {
+      return res.status(404).json({ error: `MCP server "${serverName}" not found` });
+    }
+
+    delete config.mcpServers[serverName];
+
+    const updatedYaml = yaml.dump(config, {
+      indent: 2,
+      lineWidth: -1,
+      noRefs: true,
+      sortKeys: false,
+    });
+
+    await fs.writeFile(configPath, updatedYaml, 'utf8');
+
+    const cache = getLogStores(CacheKeys.CONFIG_STORE);
+    await cache.delete(CacheKeys.STARTUP_CONFIG);
+
+    logger.info(`MCP server "${serverName}" deleted successfully`);
+
+    return res.status(200).json({
+      success: true,
+      message: `MCP server "${serverName}" deleted successfully`,
+    });
+  } catch (err) {
+    logger.error('Error deleting MCP server config', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 // 404 handler for this router - ensures JSON response for unmatched routes
 router.use((req, res) => {
   logger.warn(`[Config Router] 404 - Route not found: ${req.method} ${req.path}`);

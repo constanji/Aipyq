@@ -39,7 +39,8 @@ export default function Settings({ open, onOpenChange }: TDialogProps) {
     const tabs: SettingsTabValues[] = [
       SettingsTabValues.GENERAL,
       SettingsTabValues.CHAT,
-      SettingsTabValues.COMMANDS,
+      // 隐藏命令标签页
+      // SettingsTabValues.COMMANDS,
       SettingsTabValues.SPEECH,
       ...(hasAnyPersonalizationFeature ? [SettingsTabValues.PERSONALIZATION] : []),
       SettingsTabValues.DATA,
@@ -83,11 +84,12 @@ export default function Settings({ open, onOpenChange }: TDialogProps) {
       icon: <MessageSquare className="icon-sm" />,
       label: 'com_nav_setting_chat',
     },
-    {
-      value: SettingsTabValues.COMMANDS,
-      icon: <Command className="icon-sm" />,
-      label: 'com_nav_commands',
-    },
+    // 隐藏命令标签页
+    // {
+    //   value: SettingsTabValues.COMMANDS,
+    //   icon: <Command className="icon-sm" />,
+    //   label: 'com_nav_commands',
+    // },
     {
       value: SettingsTabValues.SPEECH,
       icon: <SpeechIcon className="icon-sm" />,
@@ -226,9 +228,10 @@ export default function Settings({ open, onOpenChange }: TDialogProps) {
                     <Tabs.Content value={SettingsTabValues.CHAT} tabIndex={-1}>
                       <Chat />
                     </Tabs.Content>
-                    <Tabs.Content value={SettingsTabValues.COMMANDS} tabIndex={-1}>
+                    {/* 隐藏命令标签页 */}
+                    {/* <Tabs.Content value={SettingsTabValues.COMMANDS} tabIndex={-1}>
                       <Commands />
-                    </Tabs.Content>
+                    </Tabs.Content> */}
                     <Tabs.Content value={SettingsTabValues.SPEECH} tabIndex={-1}>
                       <Speech />
                     </Tabs.Content>
