@@ -5,12 +5,14 @@ mcpServers:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/f39be3cde8434c/mcp
     chatMenu: true
-    startup: false
+    startup: true
+    customUserVars: {}
   fetch:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/6423925509fd43/mcp
     chatMenu: true
-    startup: false
+    startup: true
+    customUserVars: {}
   howtocook-mcp:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/eb735ba6a6554e/mcp
@@ -89,10 +91,11 @@ endpoints:
           - deepseek-chat
           - deepseek-coder
           - deepseek-reasoner
+          - deepseek
         fetch: false
       titleConvo: true
       titleModel: deepseek-chat
-      modelDisplayLabel: Deepseek
+      modelDisplayLabel: deepseek
 memory:
   disabled: false
   validKeys:
