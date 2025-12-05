@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const { createMethods } = require('@aipyq/data-schemas');
-const methods = createMethods(mongoose);
+const paths = require('~/config/paths');
+const methods = createMethods(mongoose, {
+  memoryPath: paths.memory,
+});
 const { comparePassword } = require('./userMethods');
 const {
   findFileById,

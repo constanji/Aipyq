@@ -21,6 +21,7 @@ export type Paths = {
   imageOutput: string;
   structuredTools: string;
   pluginManifest: string;
+  memory?: string;
 };
 
 /**

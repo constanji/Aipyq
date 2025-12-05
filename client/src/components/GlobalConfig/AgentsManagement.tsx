@@ -298,7 +298,7 @@ interface AgentListItemProps {
 function AgentListItem({ agent, viewMode, onEdit, onDelete, onTogglePublic, isUpdating }: AgentListItemProps) {
   if (viewMode === 'compact') {
     return (
-      <div className="rounded-lg border border-border-light bg-surface-primary p-3">
+      <div className="relative rounded-lg border border-border-light bg-surface-primary p-3 pr-10 pt-4">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
             {agent.icon ? (
@@ -322,7 +322,7 @@ function AgentListItem({ agent, viewMode, onEdit, onDelete, onTogglePublic, isUp
             )}
           </div>
         </div>
-        <div className="mt-3 flex items-center justify-end gap-2 border-t border-border-light pt-3">
+        <div className="absolute right-2 top-2 flex items-center gap-1">
           {/* 是否展示给用户 */}
           <button
             type="button"

@@ -37,9 +37,7 @@ export default function Footer({ className }: { className?: string }) {
   const mainContentParts = (
     typeof config?.customFooter === 'string'
       ? config.customFooter
-      : '[Aipyq ' +
-        Constants.VERSION +
-        '](https://github.com/constanji/Aipyq) - ' 
+      : 'AI 每日朋友圈  \n浙ICP备2021031999号-3  Copyright © 2025-2026 by [www.aipyq.com](https://www.aipyq.com). all rights reserved'
   ).split('|');
 
   useEffect(() => {

@@ -29,13 +29,16 @@ export type AllMethods = UserMethods &
 /**
  * Creates all database methods for all collections
  */
-export function createMethods(mongoose: typeof import('mongoose')): AllMethods {
+export function createMethods(
+  mongoose: typeof import('mongoose'),
+  options?: { memoryPath?: string | (() => string) },
+): AllMethods {
   return {
     ...createUserMethods(mongoose),
     ...createSessionMethods(mongoose),
     ...createTokenMethods(mongoose),
     ...createRoleMethods(mongoose),
-    ...createMemoryMethods(mongoose),
+    ...createMemoryMethods(mongoose, options),
     ...createAgentCategoryMethods(mongoose),
     ...createAccessRoleMethods(mongoose),
     ...createUserGroupMethods(mongoose),

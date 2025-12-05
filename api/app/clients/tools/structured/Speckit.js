@@ -20,6 +20,9 @@ const execAsync = promisify(exec);
  * - /speckit.analyze - Analyze consistency
  * - /speckit.checklist - Generate checklists
  * - /speckit.constitution - Manage project constitution
+ * - /speckit.write_file - Write content to files in specs or memory directory
+ * - /speckit.read_file - Read content from files in specs or memory directory
+ * - /speckit.generate_templates - Generate a complete template system based on user requirements
  */
 class Speckit extends Tool {
   name = 'speckit';
@@ -27,7 +30,10 @@ class Speckit extends Tool {
     'Spec-Driven Development toolkit for creating specifications, plans, and tasks. ' +
     'Commands: specify (create feature spec), plan (create implementation plan), ' +
     'tasks (generate task list), implement (execute implementation), clarify (clarify requirements), ' +
-    'analyze (consistency analysis), checklist (generate checklist), constitution (manage project principles). ' +
+    'analyze (consistency analysis), checklist (generate checklist), constitution (manage project principles), ' +
+    'write_file (write content to a file in specs directory), ' +
+    'read_file (read content from a file in specs or memory directory), ' +
+    'generate_templates (generate a complete template system in .specoutput directory). ' +
     'Use command name and provide arguments as needed.';
 
   schema = z.object({
@@ -40,10 +46,15 @@ class Speckit extends Tool {
       'analyze',
       'checklist',
       'constitution',
+      'write_file',
+      'read_file',
+      'generate_templates',
     ]),
-    arguments: z.string().optional().describe('Command arguments (e.g., feature description for specify)'),
+    arguments: z.string().optional().describe('Command arguments (e.g., feature description for specify, or file path and content for write_file)'),
     short_name: z.string().optional().describe('Short name for branch (for specify command)'),
     number: z.number().optional().describe('Branch number (for specify command, auto-detected if not provided)'),
+    file_path: z.string().optional().describe('File path relative to project root (for write_file and read_file commands)'),
+    content: z.string().optional().describe('File content to write (for write_file command)'),
   });
 
   constructor(fields = {}) {
@@ -88,7 +99,8 @@ class Speckit extends Tool {
    */
   async executeScript(scriptName, args = [], jsonMode = true) {
     const repoRoot = await this.findRepoRoot();
-    const scriptPath = path.join(repoRoot, this.scriptsDir, scriptName);
+    // 使用repoRoot重新构建路径，避免路径重复
+    const scriptPath = path.join(repoRoot, '.specify', 'scripts', 'bash', scriptName);
 
     try {
       await fs.access(scriptPath);
@@ -122,8 +134,19 @@ class Speckit extends Tool {
 
       if (jsonMode) {
         try {
+          // 尝试直接解析
           return JSON.parse(stdout.trim());
         } catch (parseErr) {
+          // 如果直接解析失败，尝试提取JSON部分（可能脚本输出包含其他文本）
+          const jsonMatch = stdout.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            try {
+              return JSON.parse(jsonMatch[0]);
+            } catch (secondParseErr) {
+              logger.error(`Failed to parse JSON from script output: ${stdout}`);
+              return { output: stdout, error: secondParseErr.message };
+            }
+          }
           logger.error(`Failed to parse JSON from script output: ${stdout}`);
           return { output: stdout, error: parseErr.message };
         }
@@ -139,9 +162,12 @@ class Speckit extends Tool {
   /**
    * Load a template file
    */
-  async loadTemplate(templateName) {
+  async loadTemplate(templateName, fromSpec4Spec = false) {
     const repoRoot = await this.findRepoRoot();
-    const templatePath = path.join(repoRoot, this.specifyDir, 'templates', templateName);
+    // 使用repoRoot重新构建路径，避免路径重复
+    const templatePath = fromSpec4Spec
+      ? path.join(repoRoot, '.specify', 'spec4spec', 'templates', templateName)
+      : path.join(repoRoot, '.specify', 'templates', templateName);
 
     try {
       return await fs.readFile(templatePath, 'utf-8');
@@ -155,12 +181,27 @@ class Speckit extends Tool {
    */
   async loadCommandTemplate(commandName) {
     const repoRoot = await this.findRepoRoot();
-    const templatePath = path.join(repoRoot, this.specifyDir, 'templates', 'commands', `${commandName}.md`);
+    // 使用repoRoot重新构建路径，避免路径重复
+    const templatePath = path.join(repoRoot, '.specify', 'templates', 'commands', `${commandName}.md`);
 
     try {
       return await fs.readFile(templatePath, 'utf-8');
     } catch (err) {
       throw new Error(`Command template not found: ${templatePath}`);
+    }
+  }
+
+  /**
+   * Load spec4spec command template
+   */
+  async loadSpec4SpecCommandTemplate(commandName) {
+    const repoRoot = await this.findRepoRoot();
+    const templatePath = path.join(repoRoot, '.specify', 'spec4spec', 'cmds', `${commandName}.md`);
+
+    try {
+      return await fs.readFile(templatePath, 'utf-8');
+    } catch (err) {
+      throw new Error(`Spec4Spec command template not found: ${templatePath}`);
     }
   }
 
@@ -186,24 +227,48 @@ class Speckit extends Tool {
     try {
       const result = await this.executeScript('create-new-feature.sh', scriptArgs);
       
-      // Load templates for LLM context
+      // Load templates for LLM context - FULL CONTENT, not just preview
       const specTemplate = await this.loadTemplate('spec-template.md');
       const commandTemplate = await this.loadCommandTemplate('specify');
 
+      // Read the current spec file to see if it's still a template
+      let currentSpecContent = '';
+      try {
+        currentSpecContent = await fs.readFile(result.SPEC_FILE, 'utf-8');
+      } catch (err) {
+        // File might not exist yet, that's okay
+      }
+
+      // Check if the file is still a template (contains placeholder markers)
+      const isTemplate = currentSpecContent.includes('[功能名称]') || 
+                         currentSpecContent.includes('[###-feature-name]') ||
+                         currentSpecContent.includes('[日期]') ||
+                         currentSpecContent.includes('[FEATURE NAME]');
+
       return JSON.stringify({
         success: true,
-        message: 'Feature specification created successfully',
+        message: isTemplate 
+          ? 'Template file created. You MUST now fill in the template with actual content based on the user description.'
+          : 'Feature specification file created',
         branch: result.BRANCH_NAME,
         spec_file: result.SPEC_FILE,
         feature_num: result.FEATURE_NUM,
-        next_steps: [
-          'Review and fill in the spec.md file',
+        user_description: description,
+        action_required: isTemplate ? 'FILL_TEMPLATE' : 'REVIEW',
+        instructions: isTemplate ? [
+          'The spec.md file has been created but contains only template placeholders.',
+          'You MUST read the spec.md file, load the command template instructions,',
+          'and fill in the template with actual content based on the user description: "' + description + '"',
+          'Replace all placeholders like [功能名称], [###-feature-name], [日期] with real values.',
+          'Follow the instructions in the command template to create a complete specification.',
+          'After filling, use /speckit.write_file command to write the complete content back to the spec_file path.',
+          'Example: /speckit.write_file with file_path="' + result.SPEC_FILE + '" and content="[filled content]"',
+        ] : [
+          'Review the spec.md file',
           'Run /speckit.plan to create an implementation plan',
         ],
-        templates_loaded: {
-          spec_template: specTemplate.substring(0, 200) + '...',
-          command_template: commandTemplate.substring(0, 200) + '...',
-        },
+        command_template: commandTemplate, // Full template, not preview
+        spec_template_structure: specTemplate.substring(0, 500) + '...', // Structure preview
       }, null, 2);
     } catch (err) {
       return `Error executing specify command: ${err.message}`;
@@ -271,6 +336,229 @@ class Speckit extends Tool {
   }
 
   /**
+   * Handle read_file command - Read content from a file in specs or memory directory
+   */
+  async handleReadFile(args) {
+    const { file_path, arguments: filePathFromArgs } = args;
+
+    // Support both file_path parameter and arguments (for backward compatibility)
+    const targetPath = file_path || filePathFromArgs;
+
+    if (!targetPath) {
+      return JSON.stringify({
+        success: false,
+        error: 'File path is required. Provide file_path parameter.',
+      }, null, 2);
+    }
+
+    try {
+      const repoRoot = await this.findRepoRoot();
+      
+      // Resolve the file path
+      let resolvedPath;
+      if (path.isAbsolute(targetPath)) {
+        resolvedPath = targetPath;
+      } else {
+        resolvedPath = path.join(repoRoot, targetPath);
+      }
+
+      // Normalize the path to prevent directory traversal
+      resolvedPath = path.normalize(resolvedPath);
+      const normalizedRepoRoot = path.normalize(repoRoot);
+
+      // Security check: Only allow reading from specs directory or memory directory
+      const specsDir = path.join(normalizedRepoRoot, 'specs');
+      const memoryDir = path.join(normalizedRepoRoot, 'memory');
+      
+      const isInSpecsDir = resolvedPath.startsWith(specsDir + path.sep) || resolvedPath === specsDir;
+      const isInMemoryDir = resolvedPath.startsWith(memoryDir + path.sep) || resolvedPath === memoryDir;
+      
+      if (!isInSpecsDir && !isInMemoryDir) {
+        return JSON.stringify({
+          success: false,
+          error: `Security: File path must be within 'specs' or 'memory' directory. Attempted path: ${targetPath}`,
+        }, null, 2);
+      }
+
+      // Check if file exists
+      try {
+        await fs.access(resolvedPath);
+      } catch (accessErr) {
+        return JSON.stringify({
+          success: false,
+          error: `File not found: ${targetPath}`,
+          file_path: targetPath,
+        }, null, 2);
+      }
+
+      // Read the file
+      const fileContent = await fs.readFile(resolvedPath, 'utf-8');
+
+      logger.info(`[Speckit工具调用] 文件读取成功: ${resolvedPath}`);
+
+      return JSON.stringify({
+        success: true,
+        message: `File read successfully: ${targetPath}`,
+        file_path: targetPath,
+        absolute_path: resolvedPath,
+        content: fileContent,
+        content_length: fileContent.length,
+      }, null, 2);
+    } catch (err) {
+      logger.error(`[Speckit工具调用] 文件读取失败: ${err.message}`);
+      return JSON.stringify({
+        success: false,
+        error: `Failed to read file: ${err.message}`,
+        file_path: targetPath,
+      }, null, 2);
+    }
+  }
+
+  /**
+   * Handle write_file command - Write content to a file in specs directory
+   */
+  async handleWriteFile(args) {
+    const { file_path, content, arguments: filePathFromArgs } = args;
+
+    // Support both file_path parameter and arguments (for backward compatibility)
+    const targetPath = file_path || filePathFromArgs;
+    const fileContent = content;
+
+    if (!targetPath) {
+      return JSON.stringify({
+        success: false,
+        error: 'File path is required. Provide file_path parameter.',
+      }, null, 2);
+    }
+
+    if (!fileContent) {
+      return JSON.stringify({
+        success: false,
+        error: 'File content is required. Provide content parameter.',
+      }, null, 2);
+    }
+
+    try {
+      const repoRoot = await this.findRepoRoot();
+      
+      // Resolve the file path
+      let resolvedPath;
+      if (path.isAbsolute(targetPath)) {
+        resolvedPath = targetPath;
+      } else {
+        resolvedPath = path.join(repoRoot, targetPath);
+      }
+
+      // Normalize the path to prevent directory traversal
+      resolvedPath = path.normalize(resolvedPath);
+      const normalizedRepoRoot = path.normalize(repoRoot);
+
+      // Security check: Only allow writing to specs directory or memory directory
+      const specsDir = path.join(normalizedRepoRoot, 'specs');
+      const memoryDir = path.join(normalizedRepoRoot, 'memory');
+      
+      const isInSpecsDir = resolvedPath.startsWith(specsDir + path.sep) || resolvedPath === specsDir;
+      const isInMemoryDir = resolvedPath.startsWith(memoryDir + path.sep) || resolvedPath === memoryDir;
+      
+      if (!isInSpecsDir && !isInMemoryDir) {
+        return JSON.stringify({
+          success: false,
+          error: `Security: File path must be within 'specs' or 'memory' directory. Attempted path: ${targetPath}`,
+        }, null, 2);
+      }
+
+      // Ensure directory exists
+      const dir = path.dirname(resolvedPath);
+      await fs.mkdir(dir, { recursive: true });
+
+      // Write the file
+      await fs.writeFile(resolvedPath, fileContent, 'utf-8');
+
+      logger.info(`[Speckit工具调用] 文件写入成功: ${resolvedPath}`);
+
+      return JSON.stringify({
+        success: true,
+        message: `File written successfully: ${targetPath}`,
+        file_path: targetPath,
+        absolute_path: resolvedPath,
+        content_length: fileContent.length,
+      }, null, 2);
+    } catch (err) {
+      logger.error(`[Speckit工具调用] 文件写入失败: ${err.message}`);
+      return JSON.stringify({
+        success: false,
+        error: `Failed to write file: ${err.message}`,
+        file_path: targetPath,
+      }, null, 2);
+    }
+  }
+
+  /**
+   * Handle generate_templates command
+   */
+  async handleGenerateTemplates(args) {
+    const { arguments: userRequirements } = args;
+
+    if (!userRequirements || !userRequirements.trim()) {
+      return JSON.stringify({
+        success: false,
+        error: 'User requirements are required for generate_templates command. ' +
+               'Please provide a description of the template system you want to create.',
+      }, null, 2);
+    }
+
+    try {
+      // Load the meta-template-generator command template
+      const commandTemplate = await this.loadSpec4SpecCommandTemplate('meta-template-generator');
+      
+      // Load reference templates
+      const documentTemplateTemplate = await this.loadTemplate('spec-template.md').catch(() => null);
+      const commandTemplateTemplate = await this.loadTemplate('command-template-template.md', true).catch(() => null);
+      const checklistTemplateTemplate = await this.loadTemplate('checklist-template-template.md', true).catch(() => null);
+      const documentTemplateTemplateTemplate = await this.loadTemplate('document-template-template.md', true).catch(() => null);
+
+      const repoRoot = await this.findRepoRoot();
+      const specOutputDir = path.join(repoRoot, '.specoutput');
+
+      // Ensure .specoutput directory exists
+      try {
+        await fs.mkdir(specOutputDir, { recursive: true });
+      } catch (err) {
+        // Directory might already exist, that's fine
+      }
+
+      return JSON.stringify({
+        success: true,
+        message: 'Template generation command recognized. The LLM should now follow the command template instructions to generate the template system.',
+        user_requirements: userRequirements,
+        output_directory: specOutputDir,
+        note: 'This command requires LLM-based execution following the meta-template-generator command template. ' +
+              'The LLM should read the command template and generate a complete template system in .specoutput directory.',
+        command_template: commandTemplate, // Full template for LLM context
+        reference_templates: {
+          document_template_preview: documentTemplateTemplate ? documentTemplateTemplate.substring(0, 500) + '...' : null,
+          document_template_template_preview: documentTemplateTemplateTemplate ? documentTemplateTemplateTemplate.substring(0, 500) + '...' : null,
+          command_template_template_preview: commandTemplateTemplate ? commandTemplateTemplate.substring(0, 500) + '...' : null,
+          checklist_template_template_preview: checklistTemplateTemplate ? checklistTemplateTemplate.substring(0, 500) + '...' : null,
+        },
+        instructions: [
+          '1. Read and understand the meta-template-generator command template',
+          '2. Analyze the user requirements: "' + userRequirements + '"',
+          '3. Create a task folder in .specoutput directory',
+          '4. Generate all necessary template files based on the requirements',
+          '5. Follow the structure and patterns defined in the command template',
+          '6. Use /speckit.write_file to create all generated template files',
+        ],
+      }, null, 2);
+    } catch (err) {
+      return JSON.stringify({
+        success: false,
+        error: `Error loading generate_templates command: ${err.message}`,
+      }, null, 2);
+    }
+  }
+
+  /**
    * Handle other commands (placeholder implementations)
    */
   async handleOtherCommand(command, args) {
@@ -292,28 +580,80 @@ class Speckit extends Tool {
   }
 
   async _call(args) {
+    const startTime = Date.now();
     try {
       const { command, arguments: commandArgs, ...restArgs } = args;
 
+      // 详细记录工具调用输入
+      logger.info('[Speckit工具调用] ========== 开始调用 ==========');
+      const inputParams = {
+        command,
+        arguments: commandArgs,
+        restArgs,
+        fullArgs: { arguments: commandArgs, ...restArgs },
+        timestamp: new Date().toISOString(),
+      };
+      logger.info(`[Speckit工具调用] 输入参数: ${JSON.stringify(inputParams, null, 2)}`);
+
       const fullArgs = { arguments: commandArgs, ...restArgs };
 
+      let result;
       switch (command) {
         case 'specify':
-          return await this.handleSpecify(fullArgs);
+          result = await this.handleSpecify(fullArgs);
+          break;
         case 'plan':
-          return await this.handlePlan(fullArgs);
+          result = await this.handlePlan(fullArgs);
+          break;
         case 'tasks':
-          return await this.handleTasks(fullArgs);
+          result = await this.handleTasks(fullArgs);
+          break;
+        case 'write_file':
+          result = await this.handleWriteFile(fullArgs);
+          break;
+        case 'read_file':
+          result = await this.handleReadFile(fullArgs);
+          break;
+        case 'generate_templates':
+          result = await this.handleGenerateTemplates(fullArgs);
+          break;
         case 'implement':
         case 'clarify':
         case 'analyze':
         case 'checklist':
         case 'constitution':
-          return await this.handleOtherCommand(command, fullArgs);
+          result = await this.handleOtherCommand(command, fullArgs);
+          break;
         default:
-          return `Error: Unknown command: ${command}`;
+          result = `Error: Unknown command: ${command}`;
       }
+
+      const duration = Date.now() - startTime;
+      
+      // 详细记录工具调用输出
+      const resultPreview = typeof result === 'string' 
+        ? (result.length > 1000 ? result.substring(0, 1000) + '...' : result)
+        : JSON.stringify(result).substring(0, 1000);
+      const resultInfo = {
+        command,
+        resultPreview,
+        resultLength: typeof result === 'string' ? result.length : JSON.stringify(result).length,
+        duration: `${duration}ms`,
+        timestamp: new Date().toISOString(),
+      };
+      logger.info(`[Speckit工具调用] 执行结果: ${JSON.stringify(resultInfo, null, 2)}`);
+      logger.info('[Speckit工具调用] ========== 调用完成 ==========');
+
+      return result;
     } catch (err) {
+      const duration = Date.now() - startTime;
+      const errorInfo = {
+        error: err.message,
+        stack: err.stack,
+        duration: `${duration}ms`,
+        timestamp: new Date().toISOString(),
+      };
+      logger.error(`[Speckit工具调用] 执行错误: ${JSON.stringify(errorInfo, null, 2)}`);
       logger.error('Speckit tool error:', err);
       return `Error: ${err.message}`;
     }
