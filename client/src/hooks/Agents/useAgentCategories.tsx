@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import useLocalize from '~/hooks/useLocalize';
 import { EMPTY_AGENT_CATEGORY } from '~/constants/agentCategories';
+import { useGetAgentCategoriesQuery } from '~/data-provider/Agents/queries';
 
 // This interface matches the structure used by the ControlCombobox component
 export interface ProcessedAgentCategory {
@@ -13,17 +14,41 @@ export interface ProcessedAgentCategory {
 
 /**
  * Custom hook that provides processed and translated agent categories
- * Note: Marketplace functionality has been removed, this now returns empty categories
  *
  * @returns Object containing categories, emptyCategory, and loading state
  */
 const useAgentCategories = () => {
   const localize = useLocalize();
+  const { data: categoriesData = [], isLoading, error } = useGetAgentCategoriesQuery();
 
   const categories = useMemo((): ProcessedAgentCategory[] => {
-    // Return empty array since marketplace is removed
-    return [];
-  }, []);
+    // Filter out 'all' and 'promoted' categories as they are for filtering, not for assignment
+    const filteredCategories = categoriesData.filter(
+      (cat) => cat.value !== 'all' && cat.value !== 'promoted',
+    );
+
+    // Map to ProcessedAgentCategory format
+    return filteredCategories.map((category) => ({
+      label: category.label || category.value,
+      value: category.value,
+      className: 'w-full',
+    }));
+  }, [categoriesData]);
+
+  // If no categories from API, provide default categories
+  const defaultCategories = useMemo((): ProcessedAgentCategory[] => {
+    if (categories.length > 0) {
+      return categories;
+    }
+    // Return default categories if API returns empty
+    return [
+      {
+        label: localize('com_ui_agent_category_general'),
+        value: 'general',
+        className: 'w-full',
+      },
+    ];
+  }, [categories, localize]);
 
   const emptyCategory = useMemo(
     (): ProcessedAgentCategory => ({
@@ -35,10 +60,10 @@ const useAgentCategories = () => {
   );
 
   return {
-    categories,
+    categories: defaultCategories,
     emptyCategory,
-    isLoading: false,
-    error: null,
+    isLoading,
+    error,
   };
 };
 

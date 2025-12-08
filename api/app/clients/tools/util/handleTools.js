@@ -37,6 +37,7 @@ const {
   createOpenAIImageTools,
   Speckit,
   SocialMedia,
+  BaziAstrology,
 } = require('../');
 const { primeFiles: primeCodeFiles } = require('~/server/services/Files/Code/process');
 const { createFileSearchTool, primeFiles: primeSearchFiles } = require('./fileSearch');
@@ -183,6 +184,7 @@ const loadTools = async ({
     tavily_search_results_json: TavilySearchResults,
     speckit: Speckit,
     social: SocialMedia,
+    bazi_astrology: BaziAstrology,
   };
 
   const customConstructors = {

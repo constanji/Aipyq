@@ -110,3 +110,28 @@ export const useGetExpandedAgentByIdQuery = (
   );
 };
 
+/**
+ * Hook for getting agent categories
+ */
+export const useGetAgentCategoriesQuery = (
+  config?: UseQueryOptions<t.TMarketplaceCategory[]>,
+): QueryObserverResult<t.TMarketplaceCategory[]> => {
+  const queryClient = useQueryClient();
+  const endpointsConfig = queryClient.getQueryData<t.TEndpointsConfig>([QueryKeys.endpoints]);
+
+  const enabled = !!endpointsConfig?.[EModelEndpoint.agents];
+  return useQuery<t.TMarketplaceCategory[]>(
+    [QueryKeys.agents, 'categories'],
+    () => dataService.getAgentCategories(),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+      retry: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      ...config,
+      enabled: config?.enabled !== undefined ? config.enabled && enabled : enabled,
+    },
+  );
+};
+

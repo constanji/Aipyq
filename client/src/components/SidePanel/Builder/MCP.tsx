@@ -39,7 +39,7 @@ export default function MCP({ mcp, onClick }: MCPProps) {
           </div>
         )}
         <div
-          className="grow overflow-hidden text-ellipsis whitespace-nowrap"
+          className="grow overflow-hidden text-ellipsis whitespace-nowrap text-text-primary"
           style={{ wordBreak: 'break-all' }}
         >
           {mcp.metadata.name}

@@ -31,8 +31,8 @@ class Speckit extends Tool {
     'Commands: specify (create feature spec), plan (create implementation plan), ' +
     'tasks (generate task list), implement (execute implementation), clarify (clarify requirements), ' +
     'analyze (consistency analysis), checklist (generate checklist), constitution (manage project principles), ' +
-    'write_file (write content to a file in specs directory), ' +
-    'read_file (read content from a file in specs or memory directory), ' +
+    'write_file (write content to a file in specs, memory, or .specoutput directory), ' +
+    'read_file (read content from a file in specs, memory, or .specoutput directory), ' +
     'generate_templates (generate a complete template system in .specoutput directory). ' +
     'Use command name and provide arguments as needed.';
 
@@ -336,7 +336,7 @@ class Speckit extends Tool {
   }
 
   /**
-   * Handle read_file command - Read content from a file in specs or memory directory
+   * Handle read_file command - Read content from a file in specs, memory, or .specoutput directory
    */
   async handleReadFile(args) {
     const { file_path, arguments: filePathFromArgs } = args;
@@ -366,17 +366,19 @@ class Speckit extends Tool {
       resolvedPath = path.normalize(resolvedPath);
       const normalizedRepoRoot = path.normalize(repoRoot);
 
-      // Security check: Only allow reading from specs directory or memory directory
+      // Security check: Only allow reading from specs, memory, or .specoutput directory
       const specsDir = path.join(normalizedRepoRoot, 'specs');
       const memoryDir = path.join(normalizedRepoRoot, 'memory');
+      const specOutputDir = path.join(normalizedRepoRoot, '.specoutput');
       
       const isInSpecsDir = resolvedPath.startsWith(specsDir + path.sep) || resolvedPath === specsDir;
       const isInMemoryDir = resolvedPath.startsWith(memoryDir + path.sep) || resolvedPath === memoryDir;
+      const isInSpecOutputDir = resolvedPath.startsWith(specOutputDir + path.sep) || resolvedPath === specOutputDir;
       
-      if (!isInSpecsDir && !isInMemoryDir) {
+      if (!isInSpecsDir && !isInMemoryDir && !isInSpecOutputDir) {
         return JSON.stringify({
           success: false,
-          error: `Security: File path must be within 'specs' or 'memory' directory. Attempted path: ${targetPath}`,
+          error: `Security: File path must be within 'specs', 'memory', or '.specoutput' directory. Attempted path: ${targetPath}`,
         }, null, 2);
       }
 
@@ -415,7 +417,7 @@ class Speckit extends Tool {
   }
 
   /**
-   * Handle write_file command - Write content to a file in specs directory
+   * Handle write_file command - Write content to a file in specs, memory, or .specoutput directory
    */
   async handleWriteFile(args) {
     const { file_path, content, arguments: filePathFromArgs } = args;
@@ -453,17 +455,19 @@ class Speckit extends Tool {
       resolvedPath = path.normalize(resolvedPath);
       const normalizedRepoRoot = path.normalize(repoRoot);
 
-      // Security check: Only allow writing to specs directory or memory directory
+      // Security check: Only allow writing to specs, memory, or .specoutput directory
       const specsDir = path.join(normalizedRepoRoot, 'specs');
       const memoryDir = path.join(normalizedRepoRoot, 'memory');
+      const specOutputDir = path.join(normalizedRepoRoot, '.specoutput');
       
       const isInSpecsDir = resolvedPath.startsWith(specsDir + path.sep) || resolvedPath === specsDir;
       const isInMemoryDir = resolvedPath.startsWith(memoryDir + path.sep) || resolvedPath === memoryDir;
+      const isInSpecOutputDir = resolvedPath.startsWith(specOutputDir + path.sep) || resolvedPath === specOutputDir;
       
-      if (!isInSpecsDir && !isInMemoryDir) {
+      if (!isInSpecsDir && !isInMemoryDir && !isInSpecOutputDir) {
         return JSON.stringify({
           success: false,
-          error: `Security: File path must be within 'specs' or 'memory' directory. Attempted path: ${targetPath}`,
+          error: `Security: File path must be within 'specs', 'memory', or '.specoutput' directory. Attempted path: ${targetPath}`,
         }, null, 2);
       }
 

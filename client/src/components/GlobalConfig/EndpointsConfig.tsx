@@ -350,13 +350,13 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
               };
 
               return (
-                <div
-                  key={endpoint.name}
+              <div
+                key={endpoint.name}
                   className="rounded-lg border border-border-light bg-surface-secondary"
-                >
+              >
                   <div className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm hover:bg-surface-hover">
-                    <button
-                      type="button"
+                  <button
+                    type="button"
                       onClick={toggleExpand}
                       className="flex flex-1 items-center gap-2 text-left"
                     >
@@ -367,9 +367,9 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
                         )}
                       />
                       <span className="truncate font-medium text-text-primary">{endpoint.name}</span>
-                    </button>
-                    <button
-                      type="button"
+                  </button>
+                  <button
+                    type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleEdit(endpoint);
@@ -377,28 +377,28 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
                       className="ml-2 flex items-center gap-1 rounded p-1 text-text-secondary opacity-0 transition-opacity hover:bg-surface-active group-hover:opacity-100"
                       title="设置端点配置"
                       aria-label="设置"
-                    >
+                  >
                       <Settings className="h-4 w-4" />
-                    </button>
+                  </button>
                   </div>
                   {isExpanded && (
                     <div className="border-t border-border-light bg-surface-primary px-4 py-3">
                       {hasModels ? (
                         <div className="space-y-3">
                           {models.length > 0 && (
-                            <div>
+                    <div>
                               <div className="mb-2 text-xs font-medium text-text-secondary">
                                 已配置模型 ({models.length})
                               </div>
                               <div className="flex flex-wrap gap-2">
                                 {models.map((model) => (
                                   <div
-                                    key={model}
+                            key={model}
                                     className="inline-flex items-center rounded-md border border-border-subtle bg-surface-secondary px-2.5 py-1 text-xs font-medium text-text-primary shadow-sm transition-colors hover:bg-surface-hover"
-                                  >
+                          >
                                     <span className="truncate text-text-primary">{model}</span>
                                   </div>
-                                ))}
+                        ))}
                                 {addingModelToEndpoint === endpoint.name ? (
                                   <div className="inline-flex items-center gap-1.5 rounded-md border border-primary bg-primary/10 px-2.5 py-1">
                                     <input
@@ -451,11 +451,11 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
                                     <Plus className="h-3 w-3" />
                                     <span>添加模型</span>
                                   </button>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                          {endpoint.models?.fetch && (
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {endpoint.models?.fetch && (
                             <div className="flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50/50 px-2.5 py-1.5 dark:border-blue-800 dark:bg-blue-900/20">
                               <div className="flex h-1.5 w-1.5 rounded-full bg-blue-500"></div>
                               <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
@@ -521,8 +521,8 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
                               添加模型
                             </button>
                           )}
-                        </div>
-                      )}
+                    </div>
+                  )}
                     </div>
                   )}
                 </div>

@@ -279,10 +279,10 @@ export default function EndpointConfigEditor({
                             />
                           ) : (
                             <>
-                              <Controller
-                                name={`models.default.${index}`}
-                                control={control}
-                                render={({ field }) => (
+                    <Controller
+                      name={`models.default.${index}`}
+                      control={control}
+                      render={({ field }) => (
                                   <span
                                     onClick={() => {
                                       setEditingModelIndex(index);
@@ -293,20 +293,20 @@ export default function EndpointConfigEditor({
                                   >
                                     {field.value || '未命名模型'}
                                   </span>
-                                )}
-                              />
-                              <button
-                                type="button"
+                      )}
+                    />
+                    <button
+                      type="button"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   removeModel(index);
                                 }}
                                 className="ml-1 flex h-3.5 w-3.5 items-center justify-center rounded text-text-secondary opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
-                                aria-label="删除模型"
+                      aria-label="删除模型"
                                 title="删除此模型"
-                              >
+                    >
                                 <X className="h-3 w-3" />
-                              </button>
+                    </button>
                             </>
                           )}
                         </div>

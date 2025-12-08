@@ -14,6 +14,7 @@ const createOpenAIImageTools = require('./structured/OpenAIImageTools');
 const TavilySearchResults = require('./structured/TavilySearchResults');
 const Speckit = require('./structured/Speckit');
 const SocialMedia = require('./structured/SocialMedia');
+const BaziAstrology = require('./structured/BaziAstrology');
 
 module.exports = {
   ...manifest,
@@ -31,4 +32,5 @@ module.exports = {
   createOpenAIImageTools,
   Speckit,
   SocialMedia,
+  BaziAstrology,
 };

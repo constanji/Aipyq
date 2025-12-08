@@ -589,7 +589,14 @@ export default function useEventHandlers({
         }
       }
 
-      setIsSubmitting(false);
+      // 确保在最后重置提交状态，即使前面的代码有提前返回
+      try {
+        setIsSubmitting(false);
+      } catch (error) {
+        console.error('Error resetting isSubmitting state:', error);
+        // 即使出错也尝试重置
+        setTimeout(() => setIsSubmitting(false), 0);
+      }
     },
     [
       navigate,

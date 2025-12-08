@@ -108,6 +108,8 @@ export default function useSSE(
     // 这样可以避免在连接刚建立时就被清理函数取消
     let sseConnectionEstablished = false;
     let sseConnectionClosed = false;
+    let finalReceived = false;
+    let timeoutId: NodeJS.Timeout | null = null;
 
     const currentSubmission = submission;
     let { userMessage } = submission;
@@ -118,6 +120,21 @@ export default function useSSE(
 
     let textIndex = null;
     clearStepMaps();
+
+    // 设置超时保护：如果 5 分钟内没有收到 final 事件，自动重置状态
+    const MAX_WAIT_TIME = 5 * 60 * 1000; // 5 分钟
+    timeoutId = setTimeout(() => {
+      if (!finalReceived && !sseConnectionClosed) {
+        logger.warn('sse_timeout', 'SSE connection timeout - no final event received', {
+          messageId: currentSubmission.initialResponse?.messageId,
+          readyState: sse.readyState,
+        });
+        setIsSubmitting(false);
+        setShowStopButton(false);
+        sse.close();
+        sseConnectionClosed = true;
+      }
+    }, MAX_WAIT_TIME);
 
     const sse = new SSE(payloadData.server, {
       payload: JSON.stringify(payload),
@@ -137,11 +154,19 @@ export default function useSSE(
       const data = JSON.parse(e.data);
 
       if (data.final != null) {
+        finalReceived = true;
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
         clearDraft(submission.conversation?.conversationId);
         const { plugins } = data;
         finalHandler(data, { ...submission, plugins } as EventSubmission);
         (startupConfig?.balance?.enabled ?? false) && balanceQuery.refetch();
         console.log('final', data);
+        // 确保 SSE 连接关闭
+        sse.close();
+        sseConnectionClosed = true;
         return;
       } else if (data.created != null) {
         const runId = v4();
@@ -214,6 +239,12 @@ export default function useSSE(
     });
 
     sse.addEventListener('error', async (e: MessageEvent) => {
+      // 清除超时定时器
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      
       /* @ts-ignore */
       if (e.responseCode === 401) {
         /* token expired, refresh and retry */
@@ -247,15 +278,23 @@ export default function useSSE(
         console.error(error);
         console.log(e);
         setIsSubmitting(false);
+        setShowStopButton(false);
       }
 
       errorHandler({ data, submission: { ...submission, userMessage } as EventSubmission });
+      sseConnectionClosed = true;
     });
 
     setIsSubmitting(true);
     sse.stream();
 
     return () => {
+      // 清除超时定时器
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      
       // 如果连接已经关闭，直接返回，不执行任何操作
       if (sseConnectionClosed) {
         return;
@@ -281,6 +320,12 @@ export default function useSSE(
       
       sseConnectionClosed = true;
       sse.close();
+      
+      // 如果 final 事件还没有收到，确保重置状态
+      if (!finalReceived) {
+        setIsSubmitting(false);
+        setShowStopButton(false);
+      }
       
       // Only trigger cancel event if:
       // 1. Connection was still active (CONNECTING or OPEN)

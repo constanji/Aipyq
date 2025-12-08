@@ -193,5 +193,12 @@
     "description": "朋友圈内容生成工具，根据用户输入使用模板系统生成规范的朋友圈内容。Commands: generate (生成朋友圈内容), templates (列出可用模板), format (格式化内容).",
     "icon": "📱",
     "authConfig": []
+  },
+  {
+    "name": "SPEC生辰八字星座分析",
+    "pluginKey": "bazi_astrology",
+    "description": "生辰八字/星座分析工具，根据用户输入使用模板系统生成规范的八字命盘、命理分析和星座分析报告。Commands: generate (生成八字命盘或星座分析报告), analyze (进行八字分析或运势预测), templates (列出可用模板).",
+    "icon": "🔮",
+    "authConfig": []
   }
 ]

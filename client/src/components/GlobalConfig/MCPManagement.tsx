@@ -400,15 +400,15 @@ export default function MCPManagement({ startupConfig: propStartupConfig }: MCPM
             >
               <Grid className="h-4 w-4" />
             </button>
-          </div>
-          <Button
-            type="button"
+        </div>
+        <Button
+          type="button"
             onClick={handleCreateNew}
             className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
-          >
+        >
             <Plus className="h-4 w-4" />
             添加MCP服务器
-          </Button>
+        </Button>
         </div>
       </div>
 
@@ -426,20 +426,20 @@ export default function MCPManagement({ startupConfig: propStartupConfig }: MCPM
           </div>
         ) : (
           <div className={cn('space-y-2', viewMode === 'compact' && 'grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3')}>
-            {mcpServerDefinitions.map((server) => {
-              const serverStatus = connectionStatus?.[server.serverName];
+          {mcpServerDefinitions.map((server) => {
+            const serverStatus = connectionStatus?.[server.serverName];
               // 如果没有连接状态，默认显示为 disconnected（未连接）
               const connectionState = serverStatus?.connectionState ?? 'disconnected';
-              const isTesting = testingServers[server.serverName] || false;
-              const requiresOAuth = serverStatus?.requiresOAuth || false;
+            const isTesting = testingServers[server.serverName] || false;
+            const requiresOAuth = serverStatus?.requiresOAuth || false;
 
               if (viewMode === 'compact') {
                 // 表格视图：只显示服务器名称和连接状态
-                return (
-                  <div
-                    key={server.serverName}
+            return (
+              <div
+                key={server.serverName}
                     className="relative rounded-lg border border-border-light bg-surface-primary p-3 pr-10 pt-4"
-                  >
+              >
                     <div className="flex items-center gap-2">
                       {getStatusIcon(connectionState)}
                       <div className="flex-1 min-w-0">
@@ -514,55 +514,55 @@ export default function MCPManagement({ startupConfig: propStartupConfig }: MCPM
                     </button>
                   </div>
                   <div className="mb-3 flex items-center justify-between pr-20">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2">
-                        {getStatusIcon(connectionState)}
-                        <h3 className="text-base font-semibold text-text-primary">
-                          {server.serverName}
-                        </h3>
-                      </div>
-                      <span
-                        className={cn(
-                          'rounded-xl px-2 py-0.5 text-xs font-medium',
-                          getStatusColor(connectionState),
-                        )}
-                      >
-                        {getStatusText(connectionState)}
-                      </span>
-                      {requiresOAuth && (
-                        <span className="rounded-xl bg-blue-100 px-2 py-0.5 text-xs text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                          OAuth
-                        </span>
-                      )}
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(connectionState)}
+                      <h3 className="text-base font-semibold text-text-primary">
+                        {server.serverName}
+                      </h3>
                     </div>
-                    <Button
-                      type="button"
-                      onClick={() => handleTestConnection(server.serverName)}
-                      disabled={isTesting || reinitializeMutation.isLoading}
-                      className="btn btn-neutral border-token-border-light relative flex items-center gap-2 rounded-lg px-3 py-2"
-                      aria-label={`测试连接 ${server.serverName}`}
+                    <span
+                      className={cn(
+                        'rounded-xl px-2 py-0.5 text-xs font-medium',
+                        getStatusColor(connectionState),
+                      )}
                     >
-                      <RefreshCw
-                        className={cn('h-4 w-4', (isTesting || reinitializeMutation.isLoading) && 'animate-spin')}
-                      />
-                      {isTesting || reinitializeMutation.isLoading ? '测试中...' : '测试连接'}
-                    </Button>
+                      {getStatusText(connectionState)}
+                    </span>
+                    {requiresOAuth && (
+                      <span className="rounded-xl bg-blue-100 px-2 py-0.5 text-xs text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                        OAuth
+                      </span>
+                    )}
                   </div>
+                  <Button
+                    type="button"
+                    onClick={() => handleTestConnection(server.serverName)}
+                    disabled={isTesting || reinitializeMutation.isLoading}
+                    className="btn btn-neutral border-token-border-light relative flex items-center gap-2 rounded-lg px-3 py-2"
+                    aria-label={`测试连接 ${server.serverName}`}
+                  >
+                    <RefreshCw
+                      className={cn('h-4 w-4', (isTesting || reinitializeMutation.isLoading) && 'animate-spin')}
+                    />
+                    {isTesting || reinitializeMutation.isLoading ? '测试中...' : '测试连接'}
+                  </Button>
+                </div>
 
-                  <div className="space-y-2 text-sm">
-                    {serverStatus && (
+                <div className="space-y-2 text-sm">
+                  {serverStatus && (
+                    <div className="flex items-center gap-2 text-text-secondary">
+                      <span className="font-medium">连接状态:</span>
+                      <span>{getStatusText(connectionState)}</span>
+                    </div>
+                  )}
+                  {server.config.customUserVars &&
+                    Object.keys(server.config.customUserVars).length > 0 && (
                       <div className="flex items-center gap-2 text-text-secondary">
-                        <span className="font-medium">连接状态:</span>
-                        <span>{getStatusText(connectionState)}</span>
+                        <span className="font-medium">自定义变量:</span>
+                        <span>{Object.keys(server.config.customUserVars).length} 个</span>
                       </div>
                     )}
-                    {server.config.customUserVars &&
-                      Object.keys(server.config.customUserVars).length > 0 && (
-                        <div className="flex items-center gap-2 text-text-secondary">
-                          <span className="font-medium">自定义变量:</span>
-                          <span>{Object.keys(server.config.customUserVars).length} 个</span>
-                        </div>
-                      )}
                     {server.config.type && (
                       <div className="flex items-center gap-2 text-text-secondary">
                         <span className="font-medium">类型:</span>
@@ -570,16 +570,16 @@ export default function MCPManagement({ startupConfig: propStartupConfig }: MCPM
                       </div>
                     )}
                     {server.config.url && (
-                      <div className="flex items-center gap-2 text-text-secondary">
+                    <div className="flex items-center gap-2 text-text-secondary">
                         <span className="font-medium">URL:</span>
                         <span className="truncate text-xs">{server.config.url}</span>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
+        </div>
         )}
       </div>
     </div>

@@ -22,13 +22,14 @@ const toggleSwitchConfigs = [
     hoverCardText: undefined,
     key: 'autoScroll',
   },
-  {
-    stateAtom: store.hideSidePanel,
-    localizationKey: 'com_nav_hide_panel',
-    switchId: 'hideSidePanel',
-    hoverCardText: undefined,
-    key: 'hideSidePanel',
-  },
+  // 隐藏"隐藏最右侧面板"选项
+  // {
+  //   stateAtom: store.hideSidePanel,
+  //   localizationKey: 'com_nav_hide_panel',
+  //   switchId: 'hideSidePanel',
+  //   hoverCardText: undefined,
+  //   key: 'hideSidePanel',
+  // },
 ];
 
 export const ThemeSelector = ({

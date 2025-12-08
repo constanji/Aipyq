@@ -8,11 +8,17 @@ export default function usePersonalizationAccess() {
     permission: Permissions.OPT_OUT,
   });
 
-  // 当前实现：始终启用个性化 Tab（记忆已集成到个人中心），Opt-out 只控制是否显示记忆开关
-  const hasAnyPersonalizationFeature = true;
+  // 检查是否有读取记忆的权限，如果没有则隐藏个性化标签页
+  const hasReadMemoryAccess = useHasAccess({
+    permissionType: PermissionTypes.MEMORIES,
+    permission: Permissions.READ,
+  });
+
+  // 只有当用户有读取记忆权限时，才显示个性化标签页
+  const hasAnyPersonalizationFeature = hasReadMemoryAccess;
 
   return {
     hasMemoryOptOut,
     hasAnyPersonalizationFeature,
-  };
+   };
 }

@@ -85,7 +85,7 @@ export default function AgentTool({
             </div>
           )}
           <div
-            className="grow px-2 py-1.5"
+            className="grow px-2 py-1.5 text-text-primary"
             style={{ textOverflow: 'ellipsis', wordBreak: 'break-all', overflow: 'hidden' }}
           >
             {currentTool.name}
