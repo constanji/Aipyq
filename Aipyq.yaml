@@ -5,7 +5,7 @@ mcpServers:
     type: streamable-http
     url: https://mcp.api-inference.modelscope.net/f39be3cde8434c/mcp
     chatMenu: true
-    startup: true
+    startup: false
     customUserVars: {}
   fetch:
     type: streamable-http
@@ -30,8 +30,14 @@ mcpServers:
     chatMenu: true
     startup: false
     customUserVars: {}
+  yijing-bazi:
+    type: streamable-http
+    url: https://mcp.api-inference.modelscope.net/30917074765441/mcp
+    chatMenu: true
+    startup: false
+    customUserVars: {}
 interface:
-  customWelcome: 欢迎使用 AI朋友圈！祝您体验愉快。
+  customWelcome: 欢迎使用 每日AI朋友圈！祝您体验愉快。
   fileSearch: true
   endpointsMenu: true
   modelSelect: true
