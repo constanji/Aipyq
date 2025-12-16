@@ -6,6 +6,10 @@
 </p>
 
 
+本仓库已迁移至https://github.com/constanji/Aipyqchat
+此版本已废弃
+
+
 # ✨ 核心功能
 
 - 🖥️ **界面与体验**：灵感源自 ChatGPT，兼具增强型设计与丰富功能
